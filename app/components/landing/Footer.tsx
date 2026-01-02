@@ -1,6 +1,11 @@
-import { Container } from "@/app/components/ui/container";
+import { Container } from "@/app/components/ui/Container";
 import { Mail, MessageCircle } from "lucide-react";
-import { APP_NAME, CONTACT_EMAIL, CONTACT_WHATSAPP, CONTACT_WHATSAPP_NUMBER } from "@/app/lib/constants";
+import {
+  APP_NAME,
+  CONTACT_EMAIL,
+  CONTACT_WHATSAPP,
+  CONTACT_WHATSAPP_NUMBER,
+} from "@/app/lib/constants";
 
 const footerLinks = {
   product: [
@@ -26,20 +31,29 @@ export function Footer() {
       <Container>
         <div className="grid gap-8 py-12 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <div className="mb-4 text-2xl font-bold text-primary">{APP_NAME}</div>
+            <div className="mb-4 text-2xl font-bold text-primary">
+              {APP_NAME}
+            </div>
             <p className="mb-6 max-w-xs text-sm text-text-secondary">
-              Solusi keuangan pintar untuk UMKM Indonesia. Kelola bisnis dengan lebih efisien dan profesional.
+              Solusi keuangan pintar untuk UMKM Indonesia. Kelola bisnis dengan
+              lebih efisien dan profesional.
             </p>
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm text-text-secondary">
                 <Mail className="h-4 w-4 text-primary" />
-                <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-primary">
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="hover:text-primary"
+                >
                   {CONTACT_EMAIL}
                 </a>
               </div>
               <div className="flex items-center gap-2 text-sm text-text-secondary">
                 <MessageCircle className="h-4 w-4 text-primary" />
-                <a href={`https://wa.me/${CONTACT_WHATSAPP_NUMBER}`} className="hover:text-primary">
+                <a
+                  href={`https://wa.me/${CONTACT_WHATSAPP_NUMBER}`}
+                  className="hover:text-primary"
+                >
                   {CONTACT_WHATSAPP}
                 </a>
               </div>
@@ -47,7 +61,9 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-4 text-sm font-semibold text-foreground">Produk</h3>
+            <h3 className="mb-4 text-sm font-semibold text-foreground">
+              Produk
+            </h3>
             <ul className="space-y-3">
               {footerLinks.product.map((link) => (
                 <li key={link.name}>
@@ -63,7 +79,9 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-4 text-sm font-semibold text-foreground">Perusahaan</h3>
+            <h3 className="mb-4 text-sm font-semibold text-foreground">
+              Perusahaan
+            </h3>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
@@ -79,7 +97,9 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="mb-4 text-sm font-semibold text-foreground">Resources</h3>
+            <h3 className="mb-4 text-sm font-semibold text-foreground">
+              Resources
+            </h3>
             <ul className="space-y-3">
               {footerLinks.resources.map((link) => (
                 <li key={link.name}>

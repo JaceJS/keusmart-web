@@ -1,5 +1,5 @@
-import { Button } from "@/app/components/ui/button";
-import { Container } from "@/app/components/ui/container";
+import { Button } from "@/app/components/ui/Button";
+import { Container } from "@/app/components/ui/Container";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { APP_NAME } from "@/app/lib/constants";
 
@@ -15,7 +15,9 @@ export function FinalCTA() {
           </h2>
 
           <p className="mb-8 text-lg text-text-secondary sm:text-xl">
-            Bergabung dengan ribuan UMKM yang sudah merasakan kemudahan mengelola keuangan dengan {APP_NAME}. Mulai gratis hari ini, upgrade kapan saja.
+            Bergabung dengan ribuan UMKM yang sudah merasakan kemudahan
+            mengelola keuangan dengan {APP_NAME}. Mulai gratis hari ini, upgrade
+            kapan saja.
           </p>
 
           <div className="mb-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Container } from "@/app/components/ui/container";
-import { Button } from "@/app/components/ui/button";
+import Link from "next/link";
+import { Container } from "@/app/components/ui/Container";
+import { Button } from "@/app/components/ui/Button";
 import { Menu, X } from "lucide-react";
 import { APP_NAME } from "@/app/lib/constants";
 
@@ -29,9 +30,7 @@ export function Navbar() {
   return (
     <nav
       className={`fixed top-0 z-50 w-full transition-all duration-300 ${
-        isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-sm"
-          : "bg-transparent"
+        isScrolled ? "bg-white/95 backdrop-blur-md shadow-sm" : "bg-transparent"
       }`}
     >
       <Container>
@@ -56,10 +55,14 @@ export function Navbar() {
 
           {/* Desktop CTA */}
           <div className="hidden items-center gap-4 md:flex">
-            <Button variant="ghost" size="sm">
-              Masuk
-            </Button>
-            <Button size="sm">Mulai Gratis</Button>
+            <Link href="/login">
+              <Button variant="ghost" size="sm">
+                Masuk
+              </Button>
+            </Link>
+            <Link href="/login">
+              <Button size="sm">Mulai Gratis</Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -91,12 +94,16 @@ export function Navbar() {
                 </a>
               ))}
               <div className="flex flex-col gap-2 pt-4">
-                <Button variant="ghost" size="sm" className="w-full">
-                  Masuk
-                </Button>
-                <Button size="sm" className="w-full">
-                  Mulai Gratis
-                </Button>
+                <Link href="/login">
+                  <Button variant="ghost" size="sm" className="w-full">
+                    Masuk
+                  </Button>
+                </Link>
+                <Link href="/login">
+                  <Button size="sm" className="w-full">
+                    Mulai Gratis
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

@@ -1,6 +1,6 @@
-import { Button } from "@/app/components/ui/button";
-import { Card } from "@/app/components/ui/card";
-import { Container } from "@/app/components/ui/container";
+import { Button } from "@/app/components/ui/Button";
+import { Card } from "@/app/components/ui/Card";
+import { Container } from "@/app/components/ui/Container";
 import { Check } from "lucide-react";
 import { cn } from "@/app/lib/utils";
 
@@ -27,7 +27,7 @@ const plans = [
     description: "Untuk UMKM yang sedang berkembang",
     features: [
       "Semua fitur Gratis",
-      "3 tenant/bisnis",
+      "2 tenant/bisnis",
       "WhatsApp notifications",
       "AI analytics & insights",
       "Export Excel/CSV",
@@ -63,7 +63,8 @@ export function Pricing() {
             Harga Transparan, Tanpa Biaya Tersembunyi
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-text-secondary">
-            Pilih paket yang sesuai dengan kebutuhan bisnis Anda. Upgrade atau downgrade kapan saja.
+            Pilih paket yang sesuai dengan kebutuhan bisnis Anda. Upgrade atau
+            downgrade kapan saja.
           </p>
         </div>
 
@@ -86,15 +87,23 @@ export function Pricing() {
 
               <div className="flex-1 space-y-6">
                 <div>
-                  <h3 className="text-2xl font-bold text-foreground">{plan.name}</h3>
-                  <p className="mt-2 text-sm text-text-secondary">{plan.description}</p>
+                  <h3 className="text-2xl font-bold text-foreground">
+                    {plan.name}
+                  </h3>
+                  <p className="mt-2 text-sm text-text-secondary">
+                    {plan.description}
+                  </p>
                 </div>
 
                 <div className="flex items-baseline gap-1">
                   {plan.price !== "Custom" && (
-                    <span className="text-lg font-medium text-text-secondary">Rp</span>
+                    <span className="text-lg font-medium text-text-secondary">
+                      Rp
+                    </span>
                   )}
-                  <span className="text-4xl font-bold text-foreground">{plan.price}</span>
+                  <span className="text-4xl font-bold text-foreground">
+                    {plan.price}
+                  </span>
                   <span className="text-text-secondary">{plan.period}</span>
                 </div>
 

@@ -1,5 +1,5 @@
-import { Button } from "@/app/components/ui/button";
-import { Container } from "@/app/components/ui/container";
+import { Button } from "@/app/components/ui/Button";
+import { Container } from "@/app/components/ui/Container";
 import { ArrowRight, BarChart3, MessageCircle, Sparkles } from "lucide-react";
 
 export function Hero() {
@@ -20,7 +20,8 @@ export function Hero() {
             </h1>
 
             <p className="text-lg text-text-secondary sm:text-xl">
-              Catat transaksi harian, terima laporan otomatis via WhatsApp, dan dapatkan insight AI untuk mengembangkan bisnis Anda.
+              Catat transaksi harian, terima laporan otomatis via WhatsApp, dan
+              dapatkan insight AI untuk mengembangkan bisnis Anda.
             </p>
 
             <div className="flex flex-col gap-4 sm:flex-row">
@@ -61,25 +62,36 @@ export function Hero() {
 
               <div className="relative flex h-full flex-col justify-center space-y-4">
                 <div className="rounded-xl bg-white p-4 shadow-lg">
-                  <div className="mb-2 text-sm font-medium text-text-secondary">Penjualan Hari Ini</div>
-                  <div className="text-3xl font-bold text-primary">Rp 2.450.000</div>
-                  <div className="mt-1 text-sm text-primary">+18% dari kemarin</div>
+                  <div className="mb-2 text-sm font-medium text-text-secondary">
+                    Penjualan Hari Ini
+                  </div>
+                  <div className="text-3xl font-bold text-primary">
+                    Rp 2.450.000
+                  </div>
+                  <div className="mt-1 text-sm text-primary">
+                    +18% dari kemarin
+                  </div>
                 </div>
 
                 <div className="rounded-xl bg-white p-4 shadow-lg">
                   <div className="mb-2 flex items-center gap-2">
                     <Sparkles className="h-4 w-4 text-primary" />
-                    <div className="text-sm font-medium text-text-secondary">AI Insight</div>
+                    <div className="text-sm font-medium text-text-secondary">
+                      AI Insight
+                    </div>
                   </div>
                   <div className="text-sm text-foreground">
-                    Stok "Kopi Arabica" menipis. Rekomendasi restock 20kg minggu ini.
+                    Stok "Kopi Arabica" menipis. Rekomendasi restock 20kg minggu
+                    ini.
                   </div>
                 </div>
 
                 <div className="rounded-xl bg-white p-4 shadow-lg">
                   <div className="mb-2 flex items-center gap-2">
                     <MessageCircle className="h-4 w-4 text-primary" />
-                    <div className="text-sm font-medium text-text-secondary">WhatsApp Report</div>
+                    <div className="text-sm font-medium text-text-secondary">
+                      WhatsApp Report
+                    </div>
                   </div>
                   <div className="text-sm text-foreground">
                     Laporan harian dikirim setiap jam 20:00 WIB

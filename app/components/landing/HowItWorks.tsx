@@ -1,4 +1,4 @@
-import { Container } from "@/app/components/ui/container";
+import { Container } from "@/app/components/ui/Container";
 import { UserPlus, FileText, Bell } from "lucide-react";
 import { APP_NAME } from "@/app/lib/constants";
 
@@ -35,7 +35,8 @@ export function HowItWorks() {
             Mulai dalam 3 Langkah Mudah
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-text-secondary">
-            Tidak perlu keahlian khusus. Siapapun bisa langsung menggunakan {APP_NAME}.
+            Tidak perlu keahlian khusus. Siapapun bisa langsung menggunakan{" "}
+            {APP_NAME}.
           </p>
         </div>
 

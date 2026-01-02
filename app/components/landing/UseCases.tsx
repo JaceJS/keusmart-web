@@ -1,5 +1,5 @@
-import { Card } from "@/app/components/ui/card";
-import { Container } from "@/app/components/ui/container";
+import { Card } from "@/app/components/ui/Card";
+import { Container } from "@/app/components/ui/Container";
 import { Coffee, ShoppingBag, Package, Store } from "lucide-react";
 import { APP_NAME } from "@/app/lib/constants";
 
@@ -7,22 +7,26 @@ const useCases = [
   {
     icon: Store,
     title: "Warung & Toko Kelontong",
-    description: "Catat penjualan harian, kelola stok barang, dan pantau keuntungan dengan mudah.",
+    description:
+      "Catat penjualan harian, kelola stok barang, dan pantau keuntungan dengan mudah.",
   },
   {
     icon: Coffee,
     title: "Café & Restoran",
-    description: "Kelola menu, lacak stok bahan baku, dan analisa item terlaris.",
+    description:
+      "Kelola menu, lacak stok bahan baku, dan analisa item terlaris.",
   },
   {
     icon: ShoppingBag,
     title: "Fashion & Retail",
-    description: "Kelola produk dengan variasi ukuran/warna, lacak penjualan, dan prediksi permintaan.",
+    description:
+      "Kelola produk dengan variasi ukuran/warna, lacak penjualan, dan prediksi permintaan.",
   },
   {
     icon: Package,
     title: "Distributor & Grosir",
-    description: "Kelola banyak klien, transaksi massal, dan pelacakan inventori yang kompleks.",
+    description:
+      "Kelola banyak klien, transaksi massal, dan pelacakan inventori yang kompleks.",
   },
 ];
 
@@ -35,7 +39,8 @@ export function UseCases() {
             Cocok untuk Berbagai Jenis Bisnis
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-text-secondary">
-            Dari warung kecil hingga distributor, {APP_NAME} dapat disesuaikan dengan kebutuhan bisnis Anda.
+            Dari warung kecil hingga distributor, {APP_NAME} dapat disesuaikan
+            dengan kebutuhan bisnis Anda.
           </p>
         </div>
 

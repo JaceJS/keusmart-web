@@ -1,5 +1,5 @@
-import { Card } from "@/app/components/ui/card";
-import { Container } from "@/app/components/ui/container";
+import { Card } from "@/app/components/ui/Card";
+import { Container } from "@/app/components/ui/Container";
 import { MessageCircle, Sparkles, Store, TrendingUp } from "lucide-react";
 
 const features = [
@@ -38,7 +38,8 @@ export function Features() {
             Fitur Lengkap untuk UMKM Modern
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-text-secondary">
-            Semua yang Anda butuhkan untuk mengelola keuangan bisnis dengan lebih efisien dan profesional.
+            Semua yang Anda butuhkan untuk mengelola keuangan bisnis dengan
+            lebih efisien dan profesional.
           </p>
         </div>
 
@@ -46,10 +47,7 @@ export function Features() {
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <Card
-                key={index}
-                className="group relative overflow-hidden"
-              >
+              <Card key={index} className="group relative overflow-hidden">
                 <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary-light">
                   <Icon className="h-6 w-6 text-primary" />
                 </div>

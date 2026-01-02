@@ -1,7 +1,8 @@
 // Application Constants
-export const APP_NAME = "KeusMART";
+export const APP_NAME = "KeuSmart";
 export const APP_TAGLINE = "Aplikasi Keuangan UMKM Pintar";
-export const APP_DESCRIPTION = "Kelola keuangan UMKM dengan mudah. Catat transaksi, terima laporan WhatsApp, dan dapatkan AI insights untuk bisnis lebih smart. Mulai gratis!";
+export const APP_DESCRIPTION =
+  "Kelola keuangan UMKM dengan mudah. Catat transaksi, terima laporan WhatsApp, dan dapatkan AI insights untuk bisnis lebih smart. Mulai gratis!";
 
 // Contact Information
 export const CONTACT_EMAIL = "hello@keusmart.id";
