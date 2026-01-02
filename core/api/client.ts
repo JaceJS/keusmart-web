@@ -18,7 +18,7 @@ interface ApiError {
   message: string;
   code?: string;
   details?: any;
-  statusCode: number; // Keep this for internal use
+  statusCode: number;
 }
 
 interface RequestOptions extends RequestInit {
@@ -38,14 +38,12 @@ class ApiClient {
   ): Promise<T> {
     const { params, ...fetchOptions } = options;
 
-    // Build URL with query params
     let url = `${this.baseUrl}${endpoint}`;
     if (params) {
       const searchParams = new URLSearchParams(params);
       url += `?${searchParams.toString()}`;
     }
 
-    // Get token and tenantId from localStorage
     const token =
       typeof window !== "undefined"
         ? localStorage.getItem(config.auth.tokenKey)
@@ -77,7 +75,6 @@ class ApiClient {
       if (!response.ok) {
         const errorBody = await response.json().catch(() => ({}));
 
-        // Simply throw the error, let the component handle it
         const error: ApiError = {
           message: errorBody.message || "An error occurred",
           code: errorBody.code,
@@ -96,7 +93,6 @@ class ApiClient {
       const data = json.data;
       return data;
     } catch (error) {
-      // Minimal logging with custom logger
       const msg = error instanceof Error ? error.message : "Network error";
       logger.error(`[API Error] ${url} : ${msg}`, error);
       throw error;

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { authService } from "../services/auth.service";
 import type { LoginRequest, LoginResponse } from "../types/auth.types";
-
 import { config } from "@/core/config";
 
 interface UseLoginResult {

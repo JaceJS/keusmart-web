@@ -2,11 +2,15 @@
 
 import { useState } from "react";
 import { authService } from "../services/auth.service";
-import type { SendOtpRequest, VerifyOtpRequest } from "../types/auth.types";
+import type {
+  SendOtpRequest,
+  VerifyOtpRequest,
+  VerifyOtpResponse,
+} from "../types/auth.types";
 
 interface UseOtpResult {
   sendOtp: (data: SendOtpRequest) => Promise<void>;
-  verifyOtp: (data: VerifyOtpRequest) => Promise<boolean>;
+  verifyOtp: (data: VerifyOtpRequest) => Promise<VerifyOtpResponse>;
   isLoading: boolean;
   error: string | null;
 }
@@ -29,12 +33,14 @@ export function useOtp(): UseOtpResult {
     }
   };
 
-  const verifyOtp = async (data: VerifyOtpRequest): Promise<boolean> => {
+  const verifyOtp = async (
+    data: VerifyOtpRequest
+  ): Promise<VerifyOtpResponse> => {
     setIsLoading(true);
     setError(null);
     try {
       const response = await authService.verifyOtp(data);
-      return response.verified;
+      return response;
     } catch (err) {
       const message = err instanceof Error ? err.message : "Invalid OTP";
       setError(message);

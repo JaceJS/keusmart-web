@@ -10,7 +10,7 @@ export type RegisterStep = 1 | 2 | 3;
 export const getRegisterStepTitle = (registerStep: RegisterStep): string => {
   switch (registerStep) {
     case 1:
-      return "Masukkan Email";
+      return "Isi Data Diri";
     case 2:
       return "Verifikasi Email";
     case 3:
@@ -27,7 +27,7 @@ export const getRegisterStepDescription = (
 ): string => {
   switch (registerStep) {
     case 1:
-      return "Masukkan email untuk memulai pendaftaran";
+      return "Lengkapi data diri & bisnis Anda";
     case 2:
       return `Kode OTP telah dikirim ke ${email}`;
     case 3:

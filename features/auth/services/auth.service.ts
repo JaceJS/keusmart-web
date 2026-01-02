@@ -4,8 +4,10 @@ import type {
   LoginRequest,
   LoginResponse,
   RegisterRequest,
+  RegisterResponse,
   SendOtpRequest,
   VerifyOtpRequest,
+  VerifyOtpResponse,
 } from "../types/auth.types";
 
 // API Calls
@@ -21,7 +23,7 @@ export const authService = {
    * Register new account
    */
   register: (data: RegisterRequest) => {
-    return apiClient.post<LoginResponse>(AUTH_ENDPOINTS.REGISTER, data);
+    return apiClient.post<RegisterResponse>(AUTH_ENDPOINTS.REGISTER, data);
   },
 
   /**
@@ -35,10 +37,7 @@ export const authService = {
    * Verify OTP code
    */
   verifyOtp: (data: VerifyOtpRequest) => {
-    return apiClient.post<{ verified: boolean }>(
-      AUTH_ENDPOINTS.VERIFY_OTP,
-      data
-    );
+    return apiClient.post<VerifyOtpResponse>(AUTH_ENDPOINTS.VERIFY_OTP, data);
   },
 
   /**

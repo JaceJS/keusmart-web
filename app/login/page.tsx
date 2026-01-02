@@ -26,7 +26,10 @@ export default function AuthPage() {
 
   // Form data
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [businessName, setBusinessName] = useState("");
   const [otp, setOtp] = useState("");
+  const [verificationToken, setVerificationToken] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -41,6 +44,7 @@ export default function AuthPage() {
     setMode(newMode);
     setRegisterStep(1);
     setOtp("");
+    setVerificationToken("");
     setPassword("");
     setConfirmPassword("");
     setErrorMessage(null);
@@ -52,29 +56,40 @@ export default function AuthPage() {
     try {
       await login({ email, password });
     } catch (error: any) {
-      // Capture error message from API
       setErrorMessage(error.message || "Terjadi kesalahan saat login");
     }
   };
 
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage(null);
     try {
       if (registerStep === 1) {
-        await sendOtp({ email });
+        await sendOtp({ login_id: email, name, businessName });
         setRegisterStep(2);
       } else if (registerStep === 2) {
-        const verified = await verifyOtp({ email, otp });
-        if (verified) {
+        if (otp.length !== 6) {
+          throw new Error("Kode OTP harus 6 digit");
+        }
+        const response = await verifyOtp({ login_id: email, otp });
+        if (response?.verificationToken) {
+          setVerificationToken(response.verificationToken);
           setRegisterStep(3);
         }
       } else {
-        await register({ email, password });
-        // After register, maybe auto login or redirect
+        if (password !== confirmPassword) {
+          throw new Error("Password tidak cocok");
+        }
+        await register({
+          login_id: email,
+          password,
+          verificationToken,
+        });
+
+        // TODO: Redirect to dashboard
       }
-    } catch (error) {
-      console.error(error);
-      // Handle error
+    } catch (error: any) {
+      setErrorMessage(error.message || "Terjadi kesalahan saat registrasi");
     }
   };
 
@@ -127,7 +142,7 @@ export default function AuthPage() {
             </div>
           )}
 
-          <div className="h-[400px] space-y-4">
+          <div className="space-y-4 pb-8">
             {/* Register Step Indicator */}
             {mode === "register" && (
               <StepIndicator
@@ -155,17 +170,24 @@ export default function AuthPage() {
               <RegisterForm
                 step={registerStep}
                 email={email}
+                name={name}
+                businessName={businessName}
                 otp={otp}
                 password={password}
                 confirmPassword={confirmPassword}
                 agreeTerms={agreeTerms}
                 onEmailChange={setEmail}
+                onNameChange={setName}
+                onBusinessNameChange={setBusinessName}
                 onOtpChange={setOtp}
                 onPasswordChange={setPassword}
                 onConfirmPasswordChange={setConfirmPassword}
                 onAgreeTermsChange={setAgreeTerms}
                 onSubmit={handleRegisterSubmit}
-                onResendOtp={() => sendOtp({ email })}
+                onResendOtp={() =>
+                  sendOtp({ login_id: email, name, businessName })
+                }
+                isLoading={isOtpLoading || isRegisterLoading}
               />
             )}
 

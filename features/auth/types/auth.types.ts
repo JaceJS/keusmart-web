@@ -46,15 +46,27 @@ export interface AuthState {
 }
 
 export interface RegisterRequest {
-  email: string;
+  login_id: string;
   password: string;
+  verificationToken: string;
 }
 
 export interface SendOtpRequest {
-  email: string;
+  login_id: string;
+  name: string;
+  businessName: string;
 }
 
 export interface VerifyOtpRequest {
-  email: string;
+  login_id: string;
   otp: string;
 }
+
+export interface VerifyOtpResponse {
+  login_id: string;
+  type: string;
+  verificationToken: string;
+  requiresPassword: boolean;
+}
+
+export type RegisterResponse = LoginResponse;

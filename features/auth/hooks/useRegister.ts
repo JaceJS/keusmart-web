@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { authService } from "../services/auth.service";
-import type { RegisterRequest } from "../types/auth.types";
+import type { RegisterRequest, RegisterResponse } from "../types/auth.types";
 
 interface UseRegisterResult {
-  register: (data: RegisterRequest) => Promise<void>;
+  register: (data: RegisterRequest) => Promise<RegisterResponse | undefined>;
   isLoading: boolean;
   error: string | null;
 }
@@ -19,8 +19,10 @@ export function useRegister(): UseRegisterResult {
     setError(null);
 
     try {
-      await authService.register(data);
+      // Data matches the new interface directly
+      const response = await authService.register(data);
       // Registration successful, usually followed by OTP step or auto-login
+      return response;
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Registration failed";
