@@ -42,7 +42,7 @@ export default function AuthPage() {
 
   const handleModeChange = (newMode: AuthMode) => {
     setMode(newMode);
-    setRegisterStep(3);
+    setRegisterStep(1);
     setOtp("");
     setVerificationToken("");
     setPassword("");
@@ -162,6 +162,7 @@ export default function AuthPage() {
                 onPasswordChange={setPassword}
                 onRememberMeChange={setRememberMe}
                 onSubmit={handleLoginSubmit}
+                isLoading={isLoginLoading}
               />
             )}
 

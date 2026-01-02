@@ -13,6 +13,7 @@ interface LoginFormProps {
   onPasswordChange: (value: string) => void;
   onRememberMeChange: (value: boolean) => void;
   onSubmit: (e: React.FormEvent) => void;
+  isLoading?: boolean;
 }
 
 export function LoginForm({
@@ -23,6 +24,7 @@ export function LoginForm({
   onPasswordChange,
   onRememberMeChange,
   onSubmit,
+  isLoading = false,
 }: LoginFormProps) {
   return (
     <form onSubmit={onSubmit} className="space-y-4">
@@ -60,8 +62,8 @@ export function LoginForm({
         </Link>
       </div>
 
-      <Button type="submit" className="w-full" size="lg">
-        Masuk
+      <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
+        {isLoading ? "Masuk..." : "Masuk"}
       </Button>
     </form>
   );
