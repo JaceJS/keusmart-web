@@ -12,6 +12,9 @@ import {
   RegisterForm,
   StepIndicator,
   GoogleAuthButton,
+  useLogin,
+  useRegister,
+  useOtp,
 } from "@/features/auth";
 import financeAnimation from "./finance-animation.json";
 
@@ -27,6 +30,11 @@ export default function AuthPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // Hooks
+  const { login, isLoading: isLoginLoading } = useLogin();
+  const { register, isLoading: isRegisterLoading } = useRegister();
+  const { sendOtp, verifyOtp, isLoading: isOtpLoading } = useOtp();
+
   const handleModeChange = (newMode: AuthMode) => {
     setMode(newMode);
     setRegisterStep(1);
@@ -35,25 +43,34 @@ export default function AuthPage() {
     setConfirmPassword("");
   };
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement login logic
-    console.log("Login:", { email, password });
+    try {
+      await login({ email, password });
+    } catch (error) {
+      console.error(error);
+      // Handle error (show toast etc)
+    }
   };
 
-  const handleRegisterSubmit = (e: React.FormEvent) => {
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (registerStep === 1) {
-      // TODO: Send OTP to email
-      console.log("Sending OTP to:", email);
-      setRegisterStep(2);
-    } else if (registerStep === 2) {
-      // TODO: Verify OTP
-      console.log("Verifying OTP:", otp);
-      setRegisterStep(3);
-    } else {
-      // TODO: Create account
-      console.log("Creating account:", { email, password });
+    try {
+      if (registerStep === 1) {
+        await sendOtp({ email });
+        setRegisterStep(2);
+      } else if (registerStep === 2) {
+        const verified = await verifyOtp({ email, otp });
+        if (verified) {
+          setRegisterStep(3);
+        }
+      } else {
+        await register({ email, password });
+        // After register, maybe auto login or redirect
+      }
+    } catch (error) {
+      console.error(error);
+      // Handle error
     }
   };
 
@@ -137,6 +154,7 @@ export default function AuthPage() {
                 onConfirmPasswordChange={setConfirmPassword}
                 onAgreeTermsChange={setAgreeTerms}
                 onSubmit={handleRegisterSubmit}
+                onResendOtp={() => sendOtp({ email })}
               />
             )}
 
