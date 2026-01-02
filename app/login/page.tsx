@@ -42,7 +42,7 @@ export default function AuthPage() {
 
   const handleModeChange = (newMode: AuthMode) => {
     setMode(newMode);
-    setRegisterStep(1);
+    setRegisterStep(3);
     setOtp("");
     setVerificationToken("");
     setPassword("");

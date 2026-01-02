@@ -1,9 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Input } from "@/app/components/ui/Input";
 import { PasswordInput } from "@/app/components/ui/PasswordInput";
 import { Button } from "@/app/components/ui/Button";
+import { Modal } from "@/app/components/ui/Modal";
+import { TermsContent } from "@/features/auth/components/TermsContent";
+import { PrivacyContent } from "@/features/auth/components/PrivacyContent";
 import type { RegisterStep } from "@/features/auth";
 
 interface RegisterFormProps {
@@ -47,138 +51,161 @@ export function RegisterForm({
   onResendOtp,
   isLoading = false,
 }: RegisterFormProps) {
+  const [showTerms, setShowTerms] = useState(false);
+  const [showPrivacy, setShowPrivacy] = useState(false);
+
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
-      {/* STEP 1: Email */}
-      {step === 1 && (
-        <>
-          <Input
-            label="Nama Lengkap"
-            type="text"
-            placeholder="John Doe"
-            value={name}
-            onChange={(e) => onNameChange(e.target.value)}
-            required
-          />
-
-          <Input
-            label="Nama Bisnis"
-            type="text"
-            placeholder="Toko Maju Jaya"
-            value={businessName}
-            onChange={(e) => onBusinessNameChange(e.target.value)}
-            required
-          />
-
-          <Input
-            label="Email"
-            type="email"
-            placeholder="nama@email.com"
-            value={email}
-            onChange={(e) => onEmailChange(e.target.value)}
-            required
-          />
-
-          <Button
-            type="submit"
-            className="w-full"
-            size="lg"
-            disabled={isLoading}
-          >
-            {isLoading ? "Mengirim..." : "Kirim Kode OTP"}
-          </Button>
-        </>
-      )}
-
-      {/* STEP 2: OTP */}
-      {step === 2 && (
-        <>
-          <Input
-            label="Kode OTP"
-            type="text"
-            placeholder="Masukkan 6 digit kode"
-            value={otp}
-            onChange={(e) => onOtpChange(e.target.value)}
-            maxLength={6}
-            required
-          />
-
-          <p className="text-sm text-text-secondary">
-            Tidak menerima kode?{" "}
-            <button
-              type="button"
-              onClick={onResendOtp}
-              disabled={isLoading || !onResendOtp}
-            >
-              Kirim ulang
-            </button>
-          </p>
-
-          <Button
-            type="submit"
-            className="w-full"
-            size="lg"
-            disabled={isLoading}
-          >
-            {isLoading ? "Memverifikasi..." : "Verifikasi"}
-          </Button>
-        </>
-      )}
-
-      {/* STEP 3: Create Password */}
-      {step === 3 && (
-        <>
-          <PasswordInput
-            placeholder="Minimal 8 karakter"
-            value={password}
-            onChange={(e) => onPasswordChange(e.target.value)}
-            required
-          />
-
-          <PasswordInput
-            label="Konfirmasi Password"
-            placeholder="Ulangi password"
-            value={confirmPassword}
-            onChange={(e) => onConfirmPasswordChange(e.target.value)}
-            required
-          />
-
-          <label className="flex items-start gap-3 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={agreeTerms}
-              onChange={(e) => onAgreeTermsChange(e.target.checked)}
-              className="mt-1 w-4 h-4 rounded border-border text-primary focus:ring-primary/20 cursor-pointer"
+    <>
+      <form onSubmit={onSubmit} className="space-y-4">
+        {/* STEP 1: Email */}
+        {step === 1 && (
+          <>
+            <Input
+              label="Nama Lengkap"
+              type="text"
+              placeholder="John Doe"
+              value={name}
+              onChange={(e) => onNameChange(e.target.value)}
               required
             />
-            <span className="text-sm text-text-secondary">
-              Saya setuju dengan{" "}
-              <Link
-                href="/terms"
-                className="text-primary hover:text-primary-dark"
-              >
-                Syarat & Ketentuan
-              </Link>{" "}
-              dan{" "}
-              <Link
-                href="/privacy"
-                className="text-primary hover:text-primary-dark"
-              >
-                Kebijakan Privasi
-              </Link>
-            </span>
-          </label>
 
-          <Button
-            type="submit"
-            className="w-full"
-            size="lg"
-            disabled={isLoading}
-          >
-            {isLoading ? "Memproses..." : "Buat Akun"}
-          </Button>
-        </>
-      )}
-    </form>
+            <Input
+              label="Nama Bisnis"
+              type="text"
+              placeholder="Toko Maju Jaya"
+              value={businessName}
+              onChange={(e) => onBusinessNameChange(e.target.value)}
+              required
+            />
+
+            <Input
+              label="Email"
+              type="email"
+              placeholder="nama@email.com"
+              value={email}
+              onChange={(e) => onEmailChange(e.target.value)}
+              required
+            />
+
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              disabled={isLoading}
+            >
+              {isLoading ? "Mengirim..." : "Kirim Kode OTP"}
+            </Button>
+          </>
+        )}
+
+        {/* STEP 2: OTP */}
+        {step === 2 && (
+          <>
+            <Input
+              label="Kode OTP"
+              type="text"
+              placeholder="Masukkan 6 digit kode"
+              value={otp}
+              onChange={(e) => onOtpChange(e.target.value)}
+              maxLength={6}
+              required
+            />
+
+            <p className="text-sm text-text-secondary">
+              Tidak menerima kode?{" "}
+              <button
+                type="button"
+                onClick={onResendOtp}
+                disabled={isLoading || !onResendOtp}
+              >
+                Kirim ulang
+              </button>
+            </p>
+
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              disabled={isLoading}
+            >
+              {isLoading ? "Memverifikasi..." : "Verifikasi"}
+            </Button>
+          </>
+        )}
+
+        {/* STEP 3: Create Password */}
+        {step === 3 && (
+          <>
+            <PasswordInput
+              placeholder="Minimal 8 karakter"
+              value={password}
+              onChange={(e) => onPasswordChange(e.target.value)}
+              required
+            />
+
+            <PasswordInput
+              label="Konfirmasi Password"
+              placeholder="Ulangi password"
+              value={confirmPassword}
+              onChange={(e) => onConfirmPasswordChange(e.target.value)}
+              required
+            />
+
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={agreeTerms}
+                onChange={(e) => onAgreeTermsChange(e.target.checked)}
+                className="mt-1 w-4 h-4 rounded border-border text-primary focus:ring-primary/20 cursor-pointer"
+                required
+              />
+              <span className="text-sm text-text-secondary">
+                Saya setuju dengan{" "}
+                <button
+                  type="button"
+                  onClick={() => setShowTerms(true)}
+                  className="text-primary hover:text-primary-dark hover:underline"
+                >
+                  Syarat & Ketentuan
+                </button>{" "}
+                dan{" "}
+                <button
+                  type="button"
+                  onClick={() => setShowPrivacy(true)}
+                  className="text-primary hover:text-primary-dark hover:underline"
+                >
+                  Kebijakan Privasi
+                </button>
+              </span>
+            </label>
+
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              disabled={isLoading}
+            >
+              {isLoading ? "Memproses..." : "Buat Akun"}
+            </Button>
+          </>
+        )}
+      </form>
+
+      <Modal
+        isOpen={showTerms}
+        onClose={() => setShowTerms(false)}
+        title="Syarat & Ketentuan"
+      >
+        <TermsContent />
+      </Modal>
+
+      <Modal
+        isOpen={showPrivacy}
+        onClose={() => setShowPrivacy(false)}
+        title="Kebijakan Privasi"
+      >
+        <PrivacyContent />
+      </Modal>
+    </>
   );
 }
