@@ -1,7 +1,3 @@
-/**
- * Auth feature - public API
- */
-
 // Types
 export type AuthMode = "login" | "register";
 

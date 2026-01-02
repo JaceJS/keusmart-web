@@ -30,6 +30,8 @@ export default function AuthPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   // Hooks
   const { login, isLoading: isLoginLoading } = useLogin();
   const { register, isLoading: isRegisterLoading } = useRegister();
@@ -41,15 +43,17 @@ export default function AuthPage() {
     setOtp("");
     setPassword("");
     setConfirmPassword("");
+    setErrorMessage(null);
   };
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage(null);
     try {
       await login({ email, password });
-    } catch (error) {
-      console.error(error);
-      // Handle error (show toast etc)
+    } catch (error: any) {
+      // Capture error message from API
+      setErrorMessage(error.message || "Terjadi kesalahan saat login");
     }
   };
 
@@ -115,6 +119,13 @@ export default function AuthPage() {
 
           {/* Tabs */}
           <AuthTabs mode={mode} onModeChange={handleModeChange} />
+
+          {/* Error Message */}
+          {errorMessage && (
+            <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm text-center">
+              {errorMessage}
+            </div>
+          )}
 
           <div className="h-[400px] space-y-4">
             {/* Register Step Indicator */}

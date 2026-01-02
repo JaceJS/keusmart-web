@@ -1,5 +1,5 @@
 import { apiClient } from "@/core/api/client";
-import { AUTH_ENDPOINTS } from "../endpoints";
+import { AUTH_ENDPOINTS } from "../auth.endpoints";
 import type {
   LoginRequest,
   LoginResponse,

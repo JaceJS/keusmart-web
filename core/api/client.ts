@@ -1,10 +1,24 @@
 import { config } from "@/core/config";
+import { logger } from "@/core/logger";
 
 const API_BASE_URL = config.api.baseUrl;
 
+interface ApiResponse<T = any> {
+  message: string;
+  data: T;
+  meta?: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
 interface ApiError {
   message: string;
-  statusCode: number;
+  code?: string;
+  details?: any;
+  statusCode: number; // Keep this for internal use
 }
 
 interface RequestOptions extends RequestInit {
@@ -54,22 +68,39 @@ class ApiClient {
       (headers as Record<string, string>)["x-tenant-id"] = tenantId;
     }
 
-    const response = await fetch(url, {
-      ...fetchOptions,
-      headers,
-    });
+    try {
+      const response = await fetch(url, {
+        ...fetchOptions,
+        headers,
+      });
 
-    if (!response.ok) {
-      const error: ApiError = await response.json().catch(() => ({
-        message: "An error occurred",
-        statusCode: response.status,
-      }));
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({}));
+
+        // Simply throw the error, let the component handle it
+        const error: ApiError = {
+          message: errorBody.message || "An error occurred",
+          code: errorBody.code,
+          details: errorBody.details,
+          statusCode: response.status,
+        };
+        throw error;
+      }
+
+      // Unwrap response
+      const text = await response.text();
+      const json: ApiResponse<T> = text
+        ? JSON.parse(text)
+        : { message: "", data: null as T };
+
+      const data = json.data;
+      return data;
+    } catch (error) {
+      // Minimal logging with custom logger
+      const msg = error instanceof Error ? error.message : "Network error";
+      logger.error(`[API Error] ${url} : ${msg}`, error);
       throw error;
     }
-
-    // Handle empty response
-    const text = await response.text();
-    return text ? JSON.parse(text) : (null as T);
   }
 
   async get<T>(endpoint: string, options?: RequestOptions): Promise<T> {
