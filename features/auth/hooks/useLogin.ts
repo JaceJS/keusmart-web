@@ -1,49 +1,39 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Cookies from "js-cookie";
+import { LoginRequest, LoginResponse } from "../types/auth.types";
 import { authService } from "../services/auth.service";
-import type { LoginRequest, LoginResponse } from "../types/auth.types";
-import { config } from "@/core/config";
 
-interface UseLoginResult {
-  login: (data: LoginRequest) => Promise<void>;
-  isLoading: boolean;
-  error: string | null;
-}
-
-export function useLogin(): UseLoginResult {
-  const [isLoading, setIsLoading] = useState(false);
+export const useLogin = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const login = async (data: LoginRequest) => {
-    setIsLoading(true);
+    setLoading(true);
     setError(null);
-
     try {
       const response: LoginResponse = await authService.login(data);
 
-      // Store tokens
-      localStorage.setItem(config.auth.tokenKey, response.tokens.accessToken);
-      localStorage.setItem(
-        config.auth.refreshTokenKey,
-        response.tokens.refreshToken
-      );
+      Cookies.set("accessToken", response.tokens.accessToken, { expires: 1 }); // 1 day
+      Cookies.set("refreshToken", response.tokens.refreshToken, { expires: 7 }); // 7 days
 
-      // Store tenantId
       if (response.tenant?.id) {
-        localStorage.setItem(config.auth.tenantIdKey, response.tenant.id);
+        Cookies.set("tenantId", response.tenant.id, { expires: 7 });
       }
 
-      // Redirect or update state as needed
-      window.location.href = "/dashboard";
+      const from = searchParams.get("from") || "/dashboard";
+      router.push(from);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Login failed";
       setError(message);
-      throw err;
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  return { login, isLoading, error };
-}
+  return { login, loading, error };
+};

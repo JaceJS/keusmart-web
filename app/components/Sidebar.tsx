@@ -51,7 +51,7 @@ const menuItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  // Mock tenant state for now
+
   const [currentTenant] = useState({ name: "KeuSmart Demo", type: "Pusat" });
 
   return (
