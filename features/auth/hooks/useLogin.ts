@@ -35,5 +35,5 @@ export const useLogin = () => {
     }
   };
 
-  return { login, loading, error };
+  return { login, isLoading: loading, error };
 };

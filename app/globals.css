@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FEFDF8;
-  --foreground: #065F46;
-  --primary: #10B981;
+  --background: #fefdf8;
+  --foreground: #065f46;
+  --primary: #10b981;
   --primary-dark: #059669;
-  --primary-light: #D1FAE5;
-  --primary-text: #065F46;
-  --secondary: #ECFDF5;
-  --text-secondary: #4B5563;
-  --text-tertiary: #9CA3AF;
-  --border-default: #E2E8F0;
-  --border-focused: #10B981;
+  --primary-light: #d1fae5;
+  --primary-text: #065f46;
+  --secondary: #ecfdf5;
+  --text-secondary: #4b5563;
+  --text-tertiary: #9ca3af;
+  --border-default: #e2e8f0;
+  --border-focused: #10b981;
 }
 
 @theme {
@@ -31,7 +31,8 @@
   --color-border: var(--border-default);
   --color-border-focused: var(--border-focused);
 
-  --font-family-sans: 'Plus Jakarta Sans', var(--font-geist-sans), system-ui, sans-serif;
+  --font-family-sans: "Plus Jakarta Sans", var(--font-geist-sans), system-ui,
+    sans-serif;
   --font-family-mono: var(--font-geist-mono);
 }
 
@@ -43,4 +44,8 @@ body {
 
 html {
   scroll-behavior: smooth;
+}
+
+button {
+  cursor: pointer;
 }

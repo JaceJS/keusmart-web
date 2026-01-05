@@ -13,7 +13,7 @@ export interface User {
 export interface Tenant {
   id: string;
   name: string;
-  plan: "free" | "pro";
+  plan: string;
 }
 
 export interface TenantWithRole extends Tenant {
@@ -70,3 +70,15 @@ export interface VerifyOtpResponse {
 }
 
 export type RegisterResponse = LoginResponse;
+
+export interface JwtPayload {
+  sub: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  tenantId: string;
+  tenantName: string;
+  tenantPlan: string;
+  exp: number;
+  iat: number;
+}
