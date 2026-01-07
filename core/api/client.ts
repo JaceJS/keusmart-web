@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import { config } from "@/core/config";
 import { logger } from "@/core/logger";
 
@@ -44,14 +45,8 @@ class ApiClient {
       url += `?${searchParams.toString()}`;
     }
 
-    const token =
-      typeof window !== "undefined"
-        ? localStorage.getItem(config.auth.tokenKey)
-        : null;
-    const tenantId =
-      typeof window !== "undefined"
-        ? localStorage.getItem(config.auth.tenantIdKey)
-        : null;
+    const token = Cookies.get(config.auth.tokenKey);
+    const tenantId = Cookies.get(config.auth.tenantIdKey);
 
     const headers: HeadersInit = {
       "Content-Type": "application/json",

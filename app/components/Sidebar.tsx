@@ -6,56 +6,63 @@ import {
   LayoutDashboard,
   Building2,
   Users,
-  Database,
   CreditCard,
   Settings,
   LogOut,
-  ChevronDown,
-  Store,
 } from "lucide-react";
 import { cn } from "@/app/lib/utils";
 import { useAuthData } from "@/features/auth/hooks/useAuthData";
 import Cookies from "js-cookie";
 import { useState } from "react";
 import { ConfirmationModal } from "./ui/ConfirmationModal";
+import type { UserRole } from "@/features/auth/types/auth.types";
+import type { LucideIcon } from "lucide-react";
+import { TenantSwitcher } from "@/features/tenants";
 
-const menuItems = [
+interface MenuItem {
+  title: string;
+  href: string;
+  icon: LucideIcon;
+  roles: UserRole[]; // Which roles can see this menu
+}
+
+const menuItems: MenuItem[] = [
   {
     title: "Dasbor",
     href: "/dashboard",
     icon: LayoutDashboard,
+    roles: ["owner", "admin"],
   },
   {
-    title: "Manajemen Bisnis",
+    title: "Manajemen Tim",
+    href: "/dashboard/team",
+    icon: Users,
+    roles: ["owner", "admin"],
+  },
+  {
+    title: "Profil Bisnis",
     href: "/dashboard/business",
     icon: Building2,
-  },
-  {
-    title: "Manajemen Pengguna",
-    href: "/dashboard/users",
-    icon: Users,
-  },
-  {
-    title: "Master Data",
-    href: "/dashboard/master-data",
-    icon: Database,
+    roles: ["owner"],
   },
   {
     title: "Langganan",
     href: "/dashboard/billing",
     icon: CreditCard,
+    roles: ["owner"],
   },
   {
     title: "Pengaturan",
     href: "/dashboard/settings",
     icon: Settings,
+    roles: ["owner", "admin"],
   },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, tenant, isLoading } = useAuthData();
+  const { user, isLoading } = useAuthData();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
   const confirmLogout = () => {
@@ -83,54 +90,45 @@ export function Sidebar() {
       <aside className="fixed inset-y-0 left-0 z-50 w-72 bg-background border-r border-border flex flex-col transition-all duration-300 ease-in-out shadow-sm h-screen">
         {/* Header / Tenant Switcher */}
         <div className="h-16 flex items-center px-6 border-b border-border">
-          <button className="flex items-center gap-3 w-full hover:bg-secondary p-2 -ml-2 rounded-lg transition-colors group">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white shadow-md transition-all">
-              <Store className="w-5 h-5" />
-            </div>
-            <div className="flex-1 text-left">
-              <h2 className="text-sm font-semibold text-foreground leading-none">
-                {tenant?.name || "KeuSmart"}
-              </h2>
-              <span className="text-xs text-text-secondary mt-0.5 block">
-                {user?.role === "owner" ? "Owner" : "Admin"}
-              </span>
-            </div>
-            <ChevronDown className="w-4 h-4 text-text-tertiary group-hover:text-text-secondary" />
-          </button>
+          <div className="w-full">
+            <TenantSwitcher />
+          </div>
         </div>
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-1">
-          {menuItems.map((item) => {
-            const isActive =
-              pathname === item.href ||
-              (item.href !== "/dashboard" && pathname?.startsWith(item.href));
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative",
-                  isActive
-                    ? "text-foreground bg-primary-light/50"
-                    : "text-text-secondary hover:text-foreground hover:bg-secondary"
-                )}
-              >
-                <item.icon
+          {menuItems
+            .filter((item) => user?.role && item.roles.includes(user.role))
+            .map((item) => {
+              const isActive =
+                pathname === item.href ||
+                (item.href !== "/dashboard" && pathname?.startsWith(item.href));
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
                   className={cn(
-                    "w-5 h-5 transition-colors",
+                    "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group relative",
                     isActive
-                      ? "text-foreground"
-                      : "text-text-tertiary group-hover:text-text-secondary"
+                      ? "text-foreground bg-primary-light/50"
+                      : "text-text-secondary hover:text-foreground hover:bg-secondary"
                   )}
-                />
-                {item.title}
-                {isActive && (
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-l-full" />
-                )}
-              </Link>
-            );
-          })}
+                >
+                  <item.icon
+                    className={cn(
+                      "w-5 h-5 transition-colors",
+                      isActive
+                        ? "text-foreground"
+                        : "text-text-tertiary group-hover:text-text-secondary"
+                    )}
+                  />
+                  {item.title}
+                  {isActive && (
+                    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-l-full" />
+                  )}
+                </Link>
+              );
+            })}
         </nav>
 
         {/* Footer / User Profile */}
