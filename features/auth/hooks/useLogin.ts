@@ -19,7 +19,6 @@ export const useLogin = () => {
       const response: LoginResponse = await authService.login(data);
 
       Cookies.set("accessToken", response.tokens.accessToken, { expires: 1 }); // 1 day
-      Cookies.set("refreshToken", response.tokens.refreshToken, { expires: 7 }); // 7 days
 
       if (response.tenant?.id) {
         Cookies.set("tenantId", response.tenant.id, { expires: 7 });

@@ -22,7 +22,6 @@ export interface TenantWithRole extends Tenant {
 
 export interface Token {
   accessToken: string;
-  refreshToken: string;
 }
 
 export interface LoginRequest {

@@ -60,7 +60,6 @@ export function Sidebar() {
 
   const confirmLogout = () => {
     Cookies.remove("accessToken");
-    Cookies.remove("refreshToken");
     Cookies.remove("tenantId");
     router.push("/login");
   };
@@ -135,9 +134,9 @@ export function Sidebar() {
         </nav>
 
         {/* Footer / User Profile */}
-        <div className="p-4 border-t border-border bg-secondary/30">
-          <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-background hover:shadow-sm transition-all cursor-pointer border border-transparent hover:border-border">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-primary-light to-secondary flex items-center justify-center text-primary-text font-semibold text-sm border border-white shadow-sm uppercase">
+        <div className="p-4 border-t border-border">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-primary-light to-secondary flex items-center justify-center text-primary-text font-semibold text-sm shadow-sm uppercase">
               {user?.name?.substring(0, 2) || "JD"}
             </div>
             <div className="flex-1 min-w-0">
@@ -150,9 +149,10 @@ export function Sidebar() {
             </div>
             <button
               onClick={() => setShowLogoutDialog(true)}
-              className="p-1.5 rounded-lg text-text-tertiary hover:text-red-500 hover:bg-red-50 transition-colors"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-text-secondary text-xs font-medium hover:text-red-600 hover:bg-red-50 transition-colors"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-3.5 h-3.5" />
+              Keluar
             </button>
           </div>
         </div>
