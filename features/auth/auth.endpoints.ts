@@ -4,5 +4,5 @@ export const AUTH_ENDPOINTS = {
   SEND_OTP: "/auth/register/otp",
   VERIFY_OTP: "/auth/register/otp/verify",
   LOGOUT: "/auth/logout",
-  ME: "/auth/me",
+  REFRESH: "/auth/refresh",
 } as const;

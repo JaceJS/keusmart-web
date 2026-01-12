@@ -1,22 +1,31 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+const PROTECTED_ROUTES = ["/dashboard"];
+const AUTH_ROUTES = ["/login", "/register"];
+
 export function middleware(request: NextRequest) {
   const accessToken = request.cookies.get("accessToken")?.value;
+  const refreshToken = request.cookies.get("refreshToken")?.value;
   const { pathname } = request.nextUrl;
 
-  // Protected routes: /dashboard and its sub-paths
-  if (pathname.startsWith("/dashboard")) {
-    if (!accessToken) {
+  const isProtectedRoute = PROTECTED_ROUTES.some((route) =>
+    pathname.startsWith(route)
+  );
+  const isAuthRoute = AUTH_ROUTES.some((route) => pathname.startsWith(route));
+
+  // 1. Protected Routes Handling
+  if (isProtectedRoute) {
+    if (!accessToken && !refreshToken) {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("from", pathname);
       return NextResponse.redirect(loginUrl);
     }
   }
 
-  // If user is already logged in, redirect them to dashboard
-  if (pathname.startsWith("/login") || pathname.startsWith("/register")) {
-    if (accessToken) {
+  // 2. Auth Routes Handling (Login/Register)
+  if (isAuthRoute) {
+    if (accessToken || refreshToken) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   }
