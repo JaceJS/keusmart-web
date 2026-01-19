@@ -6,6 +6,7 @@ export { PeriodSelector } from "./components/PeriodSelector";
 
 // Hooks
 export { useDashboardData } from "./hooks/useDashboardData";
+export { useReportSummary } from "./hooks/useReportSummary";
 
 // Services
 export { analyticsService } from "./services/analytics.service";
@@ -20,7 +21,7 @@ export type {
   SalesTrendResponse,
   TopProductItem,
   TopProductsResponse,
-  FinancialSummaryResponse,
+  ReportSummaryResponse,
   ExpenseBreakdownResponse,
 } from "./types/analytics.types";
 

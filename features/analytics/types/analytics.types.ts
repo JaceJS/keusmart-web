@@ -42,7 +42,7 @@ export interface TopProductsResponse {
   data: TopProductItem[];
 }
 
-export interface FinancialSummaryResponse {
+export interface ReportSummaryResponse {
   summary: {
     totalRevenue: number;
     totalExpenses: number;

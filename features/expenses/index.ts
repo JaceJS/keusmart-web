@@ -1,3 +1,9 @@
+// Components
+export { ExpenseReportTable } from "./components/ExpenseReportTable";
+
+// Hooks
+export { useExpenses } from "./hooks/useExpenses";
+
 // Services
 export { expenseService } from "./services/expense.service";
 

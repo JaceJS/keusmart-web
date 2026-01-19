@@ -1,5 +1,5 @@
 import { KpiCard } from "@/features/analytics/components/KpiCard";
-import { useReportSummary } from "../hooks/useReportSummary";
+import { useReportSummary } from "@/features/analytics";
 import { DollarSign, TrendingUp, TrendingDown, Wallet } from "lucide-react";
 
 interface SummaryViewProps {

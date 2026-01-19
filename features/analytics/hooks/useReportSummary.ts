@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { analyticsService } from "@/features/analytics";
-import type { FinancialSummaryResponse } from "@/features/analytics";
+import { analyticsService } from "../services/analytics.service";
+import type { ReportSummaryResponse } from "../types/analytics.types";
 
 export function useReportSummary(startDate: string, endDate: string) {
-  const [data, setData] = useState<FinancialSummaryResponse["summary"] | null>(
+  const [data, setData] = useState<ReportSummaryResponse["summary"] | null>(
     null,
   );
   const [isLoading, setIsLoading] = useState(false);
@@ -14,10 +14,7 @@ export function useReportSummary(startDate: string, endDate: string) {
       if (!startDate || !endDate) return;
       try {
         setIsLoading(true);
-        const res = await analyticsService.getFinancialSummary(
-          startDate,
-          endDate,
-        );
+        const res = await analyticsService.getReportSummary(startDate, endDate);
         setData(res.summary);
         setError(null);
       } catch (err) {

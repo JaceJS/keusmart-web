@@ -4,7 +4,7 @@ import {
   DashboardSummaryResponse,
   SalesTrendResponse,
   TopProductsResponse,
-  FinancialSummaryResponse,
+  ReportSummaryResponse,
   ExpenseBreakdownResponse,
 } from "../types/analytics.types";
 import { ANALYTICS_ENDPOINTS } from "../analytics.endpoints";
@@ -36,12 +36,12 @@ export const analyticsService = {
     );
   },
 
-  getFinancialSummary: async (
+  getReportSummary: async (
     startDate: string,
     endDate: string,
-  ): Promise<FinancialSummaryResponse> => {
-    return apiClient.get<FinancialSummaryResponse>(
-      `${ANALYTICS_ENDPOINTS.FINANCIAL_SUMMARY}?startDate=${startDate}&endDate=${endDate}`,
+  ): Promise<ReportSummaryResponse> => {
+    return apiClient.get<ReportSummaryResponse>(
+      `${ANALYTICS_ENDPOINTS.REPORT_SUMMARY}?startDate=${startDate}&endDate=${endDate}`,
     );
   },
 
