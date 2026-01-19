@@ -52,3 +52,5 @@ logs/
 # Cache
 .cache/
 .eslintcache
+
+CLAUDE.md

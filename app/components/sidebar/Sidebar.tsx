@@ -1,0 +1,94 @@
+"use client";
+
+import { usePathname, useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
+import { useAuthData } from "@/features/auth/hooks/useAuthData";
+import { TenantSwitcher } from "@/features/tenants";
+import { ConfirmationModal } from "../ui/ConfirmationModal";
+import { SidebarSkeleton } from "./SidebarSkeleton";
+import { NavMenuItem } from "./NavMenuItem";
+import { UserProfile } from "./UserProfile";
+import { menuItems } from "./menu-config";
+
+export function Sidebar() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const { user, isLoading } = useAuthData();
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
+
+  // Auto-expand parent menu if child is active
+  useEffect(() => {
+    menuItems.forEach((item) => {
+      if (item.children && pathname?.startsWith(item.href)) {
+        setExpandedMenus((prev) =>
+          prev.includes(item.href) ? prev : [...prev, item.href],
+        );
+      }
+    });
+  }, [pathname]);
+
+  const toggleMenu = (href: string) => {
+    setExpandedMenus((prev) =>
+      prev.includes(href) ? prev.filter((h) => h !== href) : [...prev, href],
+    );
+  };
+
+  const handleLogout = () => {
+    Cookies.remove("accessToken");
+    Cookies.remove("tenantId");
+    router.push("/login");
+  };
+
+  if (isLoading) {
+    return <SidebarSkeleton />;
+  }
+
+  const visibleMenuItems = menuItems.filter(
+    (item) => user?.role && item.roles.includes(user.role),
+  );
+
+  return (
+    <>
+      <aside className="fixed inset-y-0 left-0 z-50 w-72 bg-background border-r border-border flex flex-col transition-all duration-300 ease-in-out shadow-sm h-screen">
+        {/* Header / Tenant Switcher */}
+        <div className="h-16 flex items-center px-6 border-b border-border">
+          <div className="w-full">
+            <TenantSwitcher />
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-1">
+          {visibleMenuItems.map((item) => (
+            <NavMenuItem
+              key={item.href}
+              item={item}
+              userRole={user!.role}
+              isExpanded={expandedMenus.includes(item.href)}
+              onToggle={() => toggleMenu(item.href)}
+            />
+          ))}
+        </nav>
+
+        {/* Footer / User Profile */}
+        <UserProfile
+          name={user?.name}
+          email={user?.email}
+          onLogout={() => setShowLogoutDialog(true)}
+        />
+      </aside>
+
+      <ConfirmationModal
+        isOpen={showLogoutDialog}
+        onClose={() => setShowLogoutDialog(false)}
+        onConfirm={handleLogout}
+        title="Konfirmasi Keluar"
+        message="Apakah Anda yakin ingin keluar dari aplikasi?"
+        confirmText="Keluar"
+        variant="danger"
+      />
+    </>
+  );
+}
