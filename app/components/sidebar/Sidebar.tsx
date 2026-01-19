@@ -10,8 +10,14 @@ import { SidebarSkeleton } from "./SidebarSkeleton";
 import { NavMenuItem } from "./NavMenuItem";
 import { UserProfile } from "./UserProfile";
 import { menuItems } from "./menu-config";
+import { cn } from "@/app/lib/utils";
 
-export function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { user, isLoading } = useAuthData();
@@ -51,9 +57,25 @@ export function Sidebar() {
 
   return (
     <>
-      <aside className="fixed inset-y-0 left-0 z-50 w-72 bg-background border-r border-border flex flex-col transition-all duration-300 ease-in-out shadow-sm h-screen">
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm transition-opacity"
+          onClick={onClose}
+        />
+      )}
+
+      <aside
+        className={cn(
+          "fixed inset-y-0 left-0 z-50 w-72 bg-background border-r border-border flex flex-col transition-transform duration-300 ease-in-out shadow-sm h-screen",
+          // Desktop: Always visible
+          "md:translate-x-0",
+          // Mobile: Conditional visibility
+          isOpen ? "translate-x-0" : "-translate-x-full",
+        )}
+      >
         {/* Header / Tenant Switcher */}
-        <div className="h-16 flex items-center px-6 border-b border-border">
+        <div className="h-16 flex items-center pl-6 border-b border-border">
           <div className="w-full">
             <TenantSwitcher />
           </div>
