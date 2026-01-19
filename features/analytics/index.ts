@@ -20,6 +20,8 @@ export type {
   SalesTrendResponse,
   TopProductItem,
   TopProductsResponse,
+  FinancialSummaryResponse,
+  ExpenseBreakdownResponse,
 } from "./types/analytics.types";
 
 // Constants

@@ -5,6 +5,7 @@ interface KpiCardProps {
   title: string;
   value: string | number;
   change?: number;
+  trendLabel?: string;
   icon: LucideIcon;
   iconColor?: string;
   iconBgColor?: string;
@@ -15,6 +16,7 @@ export function KpiCard({
   title,
   value,
   change,
+  trendLabel = "vs periode lalu",
   icon: Icon,
   iconColor = "text-blue-600",
   iconBgColor = "bg-blue-50",
@@ -41,8 +43,8 @@ export function KpiCard({
     <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <p className="text-sm font-medium text-gray-500">{title}</p>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
+          <p className="text-sm font-medium text-text-secondary">{title}</p>
+          <p className="text-2xl font-bold text-foreground">{value}</p>
           {change !== undefined && (
             <p
               className={cn(
@@ -52,7 +54,9 @@ export function KpiCard({
             >
               <span>{isPositive ? "↑" : "↓"}</span>
               <span>{Math.abs(change).toFixed(1)}%</span>
-              <span className="text-gray-400 font-normal">vs periode lalu</span>
+              <span className="text-text-tertiary font-normal">
+                {trendLabel}
+              </span>
             </p>
           )}
         </div>

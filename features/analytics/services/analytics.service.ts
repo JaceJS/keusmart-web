@@ -4,6 +4,8 @@ import {
   DashboardSummaryResponse,
   SalesTrendResponse,
   TopProductsResponse,
+  FinancialSummaryResponse,
+  ExpenseBreakdownResponse,
 } from "../types/analytics.types";
 import { ANALYTICS_ENDPOINTS } from "../analytics.endpoints";
 
@@ -31,6 +33,24 @@ export const analyticsService = {
   ): Promise<TopProductsResponse> => {
     return apiClient.get<TopProductsResponse>(
       `${ANALYTICS_ENDPOINTS.TOP_PRODUCTS}?period=${period}&limit=${limit}`,
+    );
+  },
+
+  getFinancialSummary: async (
+    startDate: string,
+    endDate: string,
+  ): Promise<FinancialSummaryResponse> => {
+    return apiClient.get<FinancialSummaryResponse>(
+      `${ANALYTICS_ENDPOINTS.FINANCIAL_SUMMARY}?startDate=${startDate}&endDate=${endDate}`,
+    );
+  },
+
+  getExpenseBreakdown: async (
+    startDate: string,
+    endDate: string,
+  ): Promise<ExpenseBreakdownResponse> => {
+    return apiClient.get<ExpenseBreakdownResponse>(
+      `${ANALYTICS_ENDPOINTS.EXPENSE_BREAKDOWN}?startDate=${startDate}&endDate=${endDate}`,
     );
   },
 };

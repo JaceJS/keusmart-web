@@ -23,7 +23,7 @@ interface ApiError {
 }
 
 interface RequestOptions extends RequestInit {
-  params?: Record<string, string>;
+  params?: Record<string, string | number | boolean | undefined>;
 }
 
 class ApiClient {
@@ -43,7 +43,7 @@ class ApiClient {
    */
   private async request<T>(
     endpoint: string,
-    options: RequestOptions = {}
+    options: RequestOptions = {},
   ): Promise<T> {
     const url = this.buildUrl(endpoint, options.params);
     const headers = this.getHeaders(options);
@@ -74,10 +74,18 @@ class ApiClient {
   /**
    * Helper: Build URL with query params
    */
-  private buildUrl(endpoint: string, params?: Record<string, string>): string {
+  private buildUrl(
+    endpoint: string,
+    params?: Record<string, string | number | boolean | undefined>,
+  ): string {
     let url = `${this.baseUrl}${endpoint}`;
     if (params) {
-      const searchParams = new URLSearchParams(params);
+      const searchParams = new URLSearchParams();
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          searchParams.append(key, String(value));
+        }
+      });
       url += `?${searchParams.toString()}`;
     }
     return url;
@@ -111,7 +119,7 @@ class ApiClient {
    */
   private async handleUnauthorized<T>(
     endpoint: string,
-    options: RequestOptions
+    options: RequestOptions,
   ): Promise<T> {
     if (this.isRefreshing) {
       return new Promise((resolve, reject) => {
@@ -225,7 +233,7 @@ class ApiClient {
   async post<T>(
     endpoint: string,
     data?: unknown,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<T> {
     return this.request<T>(endpoint, {
       ...options,
@@ -237,7 +245,7 @@ class ApiClient {
   async put<T>(
     endpoint: string,
     data?: unknown,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<T> {
     return this.request<T>(endpoint, {
       ...options,

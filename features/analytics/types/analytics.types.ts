@@ -41,3 +41,24 @@ export interface TopProductItem {
 export interface TopProductsResponse {
   data: TopProductItem[];
 }
+
+export interface FinancialSummaryResponse {
+  summary: {
+    totalRevenue: number;
+    totalExpenses: number;
+    grossProfit: number;
+    netProfit: number;
+    transactionCount: number;
+    expenseCount: number;
+  };
+}
+
+export interface ExpenseBreakdownItem {
+  category: string;
+  amount: number;
+  percentage: number;
+}
+
+export interface ExpenseBreakdownResponse {
+  data: ExpenseBreakdownItem[];
+}
