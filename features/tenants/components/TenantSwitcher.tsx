@@ -58,7 +58,7 @@ export function TenantSwitcher() {
         <ChevronDown
           className={cn(
             "w-4 h-4 text-text-tertiary group-hover:text-text-secondary transition-transform duration-200",
-            isOpen && "rotate-180"
+            isOpen && "-rotate-180",
           )}
         />
       </button>
@@ -90,7 +90,7 @@ export function TenantSwitcher() {
                     "flex items-center gap-3 w-full p-2 rounded-md text-sm transition-colors",
                     currentTenant?.id === tenant.id
                       ? "bg-primary text-primary-light"
-                      : "text-foreground hover:bg-secondary"
+                      : "text-foreground hover:bg-secondary",
                   )}
                 >
                   <div className="w-6 h-6 rounded bg-gray-100 flex items-center justify-center text-text-secondary">

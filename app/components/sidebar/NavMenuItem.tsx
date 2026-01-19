@@ -66,7 +66,7 @@ export function NavMenuItem({
           <ChevronDown
             className={cn(
               "w-4 h-4 transition-transform duration-200",
-              isExpanded && "rotate-180",
+              isExpanded && "-rotate-180",
             )}
           />
         </button>

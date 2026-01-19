@@ -48,6 +48,11 @@ export const menuItems: MenuItem[] = [
     roles: ["owner", "admin"],
     children: [
       {
+        title: "Profil Bisnis",
+        href: "/settings/profile",
+        roles: ["owner", "admin"],
+      },
+      {
         title: "Langganan",
         href: "/settings/billing",
         roles: ["owner"],
