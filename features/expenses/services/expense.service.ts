@@ -15,12 +15,4 @@ export const expenseService = {
       params,
     });
   },
-
-  createExpense: async (data: CreateExpenseRequest): Promise<Expense> => {
-    return apiClient.post<Expense>(EXPENSE_ENDPOINTS.CREATE, data);
-  },
-
-  deleteExpense: async (id: string): Promise<void> => {
-    return apiClient.delete(`${EXPENSE_ENDPOINTS.DELETE}/${id}`);
-  },
 };

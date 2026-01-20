@@ -28,7 +28,6 @@ export function useExpenses(initialParams: ExpenseParams = {}) {
     }
   }, []);
 
-  // Initial fetch if params provided, or expose fetcher for manual triggering
   useEffect(() => {
     if (initialParams.startDate && initialParams.endDate) {
       fetchExpenses(initialParams);

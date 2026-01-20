@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { DateRangePicker } from "@/app/components/ui/DateRangePicker";
-import { ReportTabs } from "@/features/reports/components/ReportTabs";
-import { SummaryView } from "@/features/reports/components/SummaryView";
-import { SalesView } from "@/features/reports/components/SalesView";
-import { ExpensesView } from "@/features/reports/components/ExpensesView";
-import type { ReportTab } from "@/features/reports/constants";
+import { ReportTabs } from "./components/ReportTabs";
+import { SummaryView } from "./components/SummaryView";
+import { SalesView } from "./components/SalesView";
+import { ExpensesView } from "./components/ExpensesView";
+import type { ReportTab } from "./constants";
 import { Download } from "lucide-react";
 
 export default function ReportsPage() {

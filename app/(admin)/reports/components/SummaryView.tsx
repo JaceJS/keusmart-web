@@ -1,5 +1,4 @@
-import { KpiCard } from "@/features/analytics/components/KpiCard";
-import { useReportSummary } from "@/features/analytics";
+import { KpiCard, useReportSummary } from "@/features/analytics";
 import { DollarSign, TrendingUp, TrendingDown, Wallet } from "lucide-react";
 
 interface SummaryViewProps {
@@ -30,7 +29,6 @@ export function SummaryView({ startDate, endDate }: SummaryViewProps) {
           value={fmt(data?.totalRevenue)}
           loading={isLoading}
           icon={DollarSign}
-          // trend={{ value: 0, label: "vs periode lalu", direction: "neutral" }} // Comparison data not yet available
           trendLabel="vs periode lalu"
         />
         <KpiCard
