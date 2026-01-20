@@ -5,11 +5,10 @@ import { DollarSign, ShoppingCart, Package, TrendingUp } from "lucide-react";
 import {
   useDashboardData,
   KpiCard,
-  PeriodSelector,
   SalesTrendChart,
   TopProductsList,
-  AnalyticsPeriod,
 } from "@/features/analytics";
+import { PeriodSelector, Period } from "@/app/components/ui/PeriodSelector";
 
 // Format currency helper
 const formatCurrency = (value: number): string => {
@@ -26,7 +25,7 @@ const formatCurrency = (value: number): string => {
 };
 
 export default function DashboardPage() {
-  const [period, setPeriod] = useState<AnalyticsPeriod>("today");
+  const [period, setPeriod] = useState<Period>("today");
   const { summary, salesTrend, topProducts, isLoading, error } =
     useDashboardData(period);
 

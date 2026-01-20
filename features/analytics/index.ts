@@ -2,7 +2,6 @@
 export { KpiCard } from "./components/KpiCard";
 export { SalesTrendChart } from "./components/SalesTrendChart";
 export { TopProductsList } from "./components/TopProductsList";
-export { PeriodSelector } from "./components/PeriodSelector";
 
 // Hooks
 export { useDashboardData } from "./hooks/useDashboardData";
@@ -13,7 +12,6 @@ export { analyticsService } from "./services/analytics.service";
 
 // Types
 export type {
-  AnalyticsPeriod,
   AnalyticsSummary,
   AnalyticsComparison,
   DashboardSummaryResponse,

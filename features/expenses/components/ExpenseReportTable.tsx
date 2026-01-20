@@ -1,5 +1,4 @@
 import type { Expense } from "../types/expense.types";
-import { cn } from "@/app/lib/utils";
 
 interface ExpenseReportTableProps {
   data: Expense[];

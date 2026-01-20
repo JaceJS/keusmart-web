@@ -1,24 +1,29 @@
 "use client";
 
 import { cn } from "@/app/lib/utils";
-import { Calendar } from "lucide-react";
-import type { AnalyticsPeriod } from "../types/analytics.types";
+
+export type Period = "today" | "week" | "month" | "year";
 
 interface PeriodSelectorProps {
-  value: AnalyticsPeriod;
-  onChange: (period: AnalyticsPeriod) => void;
+  value: Period;
+  onChange: (period: Period) => void;
+  className?: string;
 }
 
-const periods: { value: AnalyticsPeriod; label: string }[] = [
+const periods: { value: Period; label: string }[] = [
   { value: "today", label: "Hari Ini" },
   { value: "week", label: "Minggu Ini" },
   { value: "month", label: "Bulan Ini" },
   { value: "year", label: "Tahun Ini" },
 ];
 
-export function PeriodSelector({ value, onChange }: PeriodSelectorProps) {
+export function PeriodSelector({
+  value,
+  onChange,
+  className,
+}: PeriodSelectorProps) {
   return (
-    <div className="flex items-center gap-3 w-full sm:w-auto">
+    <div className={cn("flex items-center gap-3 w-full sm:w-auto", className)}>
       <div className="flex p-1 bg-gray-100/80 rounded-xl w-full sm:w-auto border border-gray-200/50">
         {periods.map((period) => (
           <button
