@@ -73,7 +73,7 @@ export function TopProductsList({
               </div>
               <div className="ml-9 h-2 bg-gray-100 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full transition-all duration-300"
+                  className="h-full bg-linear-to-r from-blue-500 to-blue-400 rounded-full transition-all duration-300"
                   style={{ width: `${percentage}%` }}
                 />
               </div>

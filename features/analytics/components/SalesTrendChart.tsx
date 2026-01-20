@@ -58,7 +58,7 @@ export function SalesTrendChart({
             >
               <div className="w-full flex flex-col items-center justify-end h-48">
                 <div
-                  className="w-full max-w-12 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-lg transition-all duration-300 hover:from-blue-700 hover:to-blue-500"
+                  className="w-full max-w-12 bg-linear-to-t from-blue-600 to-blue-400 rounded-t-lg transition-all duration-300 hover:from-blue-700 hover:to-blue-500"
                   style={{ height: `${Math.max(height, 4)}%` }}
                   title={`Rp ${item.revenue.toLocaleString("id-ID")}`}
                 />
