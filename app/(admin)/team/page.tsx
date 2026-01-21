@@ -17,7 +17,7 @@ export default function TeamPage() {
   const handleInvite = async (inviteData: {
     name: string;
     email: string;
-    role: "admin" | "cashier";
+    role: "admin" | "staff";
   }) => {
     setIsInviting(true);
     try {
@@ -98,12 +98,12 @@ export default function TeamPage() {
           </div>
           <div>
             <p className="text-xs text-text-secondary uppercase font-medium">
-              Kasir
+              Staff
             </p>
             <p className="text-lg font-semibold text-gray-900">
               {isLoading
                 ? "..."
-                : data.filter((m) => m.role === "cashier").length}
+                : data.filter((m) => m.role === "staff").length}
             </p>
           </div>
         </div>

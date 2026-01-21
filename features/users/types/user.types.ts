@@ -16,11 +16,11 @@ export interface TeamMember {
 export interface InviteMemberRequest {
   email: string;
   name: string;
-  role: "admin" | "cashier";
+  role: "admin" | "staff";
 }
 
 export interface UpdateMemberRoleRequest {
-  role: "admin" | "cashier";
+  role: "admin" | "staff";
 }
 
 export interface UserParams {

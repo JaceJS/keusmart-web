@@ -16,7 +16,7 @@ const getRoleBadge = (role: string) => {
       return "bg-purple-50 text-purple-700 border-purple-200";
     case "admin":
       return "bg-blue-50 text-blue-700 border-blue-200";
-    case "cashier":
+    case "staff":
       return "bg-green-50 text-green-700 border-green-200";
     default:
       return "bg-gray-50 text-gray-700 border-gray-200";
@@ -29,8 +29,8 @@ const getRoleLabel = (role: string) => {
       return "Pemilik";
     case "admin":
       return "Admin";
-    case "cashier":
-      return "Kasir";
+    case "staff":
+      return "Staff";
     default:
       return role;
   }
@@ -132,7 +132,7 @@ export function TeamMemberList({
                           className="w-10 h-10 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-primary/40 flex items-center justify-center text-sm font-semibold text-primary">
+                        <div className="w-10 h-10 rounded-full bg-linear-to-br from-primary/20 to-primary/40 flex items-center justify-center text-sm font-semibold text-primary">
                           {getInitials(member.name)}
                         </div>
                       )}

@@ -19,7 +19,7 @@ export function InviteMemberModal({
 }: InviteMemberModalProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState<"admin" | "cashier">("cashier");
+  const [role, setRole] = useState<"admin" | "staff">("staff");
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -40,7 +40,7 @@ export function InviteMemberModal({
       // Reset form
       setName("");
       setEmail("");
-      setRole("cashier");
+      setRole("staff");
       onClose();
     } catch (err) {
       setError("Gagal mengundang anggota. Silakan coba lagi.");
@@ -132,10 +132,10 @@ export function InviteMemberModal({
             <div className="relative">
               <select
                 value={role}
-                onChange={(e) => setRole(e.target.value as "admin" | "cashier")}
+                onChange={(e) => setRole(e.target.value as "admin" | "staff")}
                 className="w-full px-4 py-2.5 pl-10 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all appearance-none bg-white"
               >
-                <option value="cashier">Kasir - Akses kasir saja</option>
+                <option value="staff">Staff - Akses terbatas</option>
                 <option value="admin">Admin - Akses penuh</option>
               </select>
               <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
@@ -143,7 +143,7 @@ export function InviteMemberModal({
             <p className="text-xs text-text-tertiary mt-1.5">
               {role === "admin"
                 ? "Admin dapat mengelola produk, laporan, dan pengaturan."
-                : "Kasir hanya dapat melakukan transaksi penjualan."}
+                : "Staff hanya dapat melihat data tanpa mengubah."}
             </p>
           </div>
 
