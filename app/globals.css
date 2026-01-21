@@ -58,6 +58,6 @@ button {
 
 @layer utilities {
   .animate-shimmer {
-    animation: shimmer 0.8s infinite;
+    animation: shimmer 1.3s infinite;
   }
 }

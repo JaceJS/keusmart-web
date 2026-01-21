@@ -30,12 +30,17 @@ export const authService = {
   },
 
   refreshToken: () => {
-    return apiClient.post<LoginResponse>(AUTH_ENDPOINTS.REFRESH);
-  },
-
-  logout: () => {
-    return apiClient.post<void>(AUTH_ENDPOINTS.LOGOUT, undefined, {
+    return apiClient.post<LoginResponse>(AUTH_ENDPOINTS.REFRESH, undefined, {
       credentials: "include",
     });
+  },
+
+  logout: (refreshToken?: string) => {
+    // Send refreshToken in body if provided, also include credentials for HttpOnly cookies
+    return apiClient.post<void>(
+      AUTH_ENDPOINTS.LOGOUT,
+      refreshToken ? { refreshToken } : undefined,
+      { credentials: "include" },
+    );
   },
 };

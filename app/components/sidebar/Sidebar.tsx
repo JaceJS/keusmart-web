@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { useAuthData } from "@/features/auth/hooks/useAuthData";
+import { authService } from "@/features/auth/services/auth.service";
 import { TenantSwitcher } from "@/features/tenants";
 import { ConfirmationModal } from "../ui/ConfirmationModal";
 import { SidebarSkeleton } from "./SidebarSkeleton";
@@ -22,9 +23,9 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const router = useRouter();
   const { user, isLoading } = useAuthData();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
 
-  // Auto-expand parent menu if child is active
   useEffect(() => {
     menuItems.forEach((item) => {
       if (item.children && pathname?.startsWith(item.href)) {
@@ -41,10 +42,19 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
     );
   };
 
-  const handleLogout = () => {
-    Cookies.remove("accessToken");
-    Cookies.remove("tenantId");
-    router.push("/login");
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await authService.logout();
+    } catch (error) {
+      console.error("Logout API failed:", error);
+    } finally {
+      Cookies.remove("accessToken");
+      Cookies.remove("tenantId");
+      setIsLoggingOut(false);
+      setShowLogoutDialog(false);
+      router.push("/login");
+    }
   };
 
   if (isLoading) {

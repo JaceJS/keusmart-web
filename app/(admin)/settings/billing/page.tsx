@@ -1,24 +1,76 @@
+"use client";
+
+import { useState } from "react";
+import {
+  CurrentPlanCard,
+  PlanSelector,
+  BillingHistory,
+  usePlans,
+  useCurrentSubscription,
+} from "@/features/subscriptions";
+import { Invoice } from "@/features/subscriptions";
+
 export default function BillingPage() {
+  const { plans, isLoading: isLoadingPlans } = usePlans();
+  const {
+    subscription,
+    isLoading: isLoadingSubscription,
+    isUpgrading,
+    upgradePlan,
+  } = useCurrentSubscription();
+
+  // Mock invoices for now - will be fetched from API later
+  const [invoices] = useState<Invoice[]>([]);
+  const [isLoadingInvoices] = useState(false);
+
+  // Handle plan selection
+  const handleSelectPlan = async (planId: string) => {
+    const success = await upgradePlan(planId);
+    if (success) {
+      // Could show a success toast here
+      console.log("Plan upgraded successfully");
+    }
+  };
+
+  // Scroll to plan selector
+  const scrollToPlanSelector = () => {
+    document.getElementById("plan-selector")?.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      {/* Header */}
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-gray-900">
           Langganan & Tagihan
         </h1>
-        <p className="text-sm text-muted-foreground text-gray-500">
-          Informasi paket aktif dan riwayat pembayaran.
+        <p className="text-sm text-gray-500 mt-1">
+          Kelola paket langganan dan lihat riwayat pembayaran Anda.
         </p>
       </div>
 
-      <div className="min-h-[60vh] flex flex-col items-center justify-center bg-white rounded-2xl border border-dashed border-gray-200 p-12 text-center animate-in fade-in zoom-in duration-500">
-        <h3 className="text-lg font-semibold text-gray-900">
-          Status Langganan
-        </h3>
-        <p className="text-gray-500 max-w-sm mt-2">
-          Detail paket KeuSmart Anda dan invoice tagihan akan muncul di halaman
-          ini.
-        </p>
+      {/* Current Plan */}
+      <CurrentPlanCard
+        subscription={subscription}
+        isLoading={isLoadingSubscription}
+        onUpgradeClick={scrollToPlanSelector}
+      />
+
+      {/* Plan Selector */}
+      <div id="plan-selector">
+        <PlanSelector
+          plans={plans}
+          currentPlanId={subscription?.planId}
+          isLoading={isLoadingPlans}
+          isUpgrading={isUpgrading}
+          onSelectPlan={handleSelectPlan}
+        />
       </div>
+
+      {/* Billing History */}
+      <BillingHistory invoices={invoices} isLoading={isLoadingInvoices} />
     </div>
   );
 }

@@ -13,44 +13,60 @@ export const analyticsService = {
   getSummary: async (
     period: AnalyticsPeriod = "today",
   ): Promise<DashboardSummaryResponse> => {
-    return apiClient.get<DashboardSummaryResponse>(
-      `${ANALYTICS_ENDPOINTS.SUMMARY}?period=${period}`,
-    );
+    const response = await apiClient.get<{
+      message: string;
+      data: DashboardSummaryResponse;
+    }>(`${ANALYTICS_ENDPOINTS.SUMMARY}?period=${period}`);
+    return response.data;
   },
 
   getSalesTrend: async (
     period: AnalyticsPeriod = "week",
     groupBy: "day" | "week" | "month" = "day",
   ): Promise<SalesTrendResponse> => {
-    return apiClient.get<SalesTrendResponse>(
+    const response = await apiClient.get<{
+      message: string;
+      data: SalesTrendResponse["data"];
+    }>(
       `${ANALYTICS_ENDPOINTS.SALES_TREND}?period=${period}&groupBy=${groupBy}`,
     );
+    return { data: response.data };
   },
 
   getTopProducts: async (
     period: AnalyticsPeriod = "week",
     limit: number = 5,
   ): Promise<TopProductsResponse> => {
-    return apiClient.get<TopProductsResponse>(
-      `${ANALYTICS_ENDPOINTS.TOP_PRODUCTS}?period=${period}&limit=${limit}`,
-    );
+    const response = await apiClient.get<{
+      message: string;
+      data: TopProductsResponse["data"];
+    }>(`${ANALYTICS_ENDPOINTS.TOP_PRODUCTS}?period=${period}&limit=${limit}`);
+    return { data: response.data };
   },
 
   getReportSummary: async (
     startDate: string,
     endDate: string,
   ): Promise<ReportSummaryResponse> => {
-    return apiClient.get<ReportSummaryResponse>(
+    const response = await apiClient.get<{
+      message: string;
+      data: ReportSummaryResponse;
+    }>(
       `${ANALYTICS_ENDPOINTS.REPORT_SUMMARY}?startDate=${startDate}&endDate=${endDate}`,
     );
+    return response.data;
   },
 
   getExpenseBreakdown: async (
     startDate: string,
     endDate: string,
   ): Promise<ExpenseBreakdownResponse> => {
-    return apiClient.get<ExpenseBreakdownResponse>(
+    const response = await apiClient.get<{
+      message: string;
+      data: ExpenseBreakdownResponse["data"];
+    }>(
       `${ANALYTICS_ENDPOINTS.EXPENSE_BREAKDOWN}?startDate=${startDate}&endDate=${endDate}`,
     );
+    return { data: response.data };
   },
 };

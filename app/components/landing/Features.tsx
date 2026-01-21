@@ -17,9 +17,9 @@ const features = [
   },
   {
     icon: Store,
-    title: "Multi Cabang",
+    title: "Multi Tenant",
     description:
-      "Kelola banyak toko atau cabang dalam satu dashboard terpusat. Cocok untuk bisnis yang sedang berkembang.",
+      "Kelola banyak toko atau tenant dalam satu dashboard terpusat. Cocok untuk bisnis yang sedang berkembang.",
   },
   {
     icon: TrendingUp,
