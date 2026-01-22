@@ -91,20 +91,12 @@ export default function DashboardPage() {
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Sales Trend - Takes 2 columns */}
         <div className="lg:col-span-2">
-          <SalesTrendChart
-            data={salesTrend?.data ?? null}
-            loading={isLoading}
-          />
+          <SalesTrendChart data={salesTrend} loading={isLoading} />
         </div>
 
-        {/* Top Products - Takes 1 column */}
         <div>
-          <TopProductsList
-            data={topProducts?.data ?? null}
-            loading={isLoading}
-          />
+          <TopProductsList data={topProducts} loading={isLoading} />
         </div>
       </div>
     </div>

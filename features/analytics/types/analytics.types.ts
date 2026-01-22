@@ -27,9 +27,7 @@ export interface SalesTrendItem {
   profit: number;
 }
 
-export interface SalesTrendResponse {
-  data: SalesTrendItem[];
-}
+export type SalesTrendResponse = SalesTrendItem[];
 
 export interface TopProductItem {
   productId: string;
@@ -38,9 +36,7 @@ export interface TopProductItem {
   revenue: number;
 }
 
-export interface TopProductsResponse {
-  data: TopProductItem[];
-}
+export type TopProductsResponse = TopProductItem[];
 
 export interface ReportSummaryResponse {
   summary: {
@@ -59,6 +55,4 @@ export interface ExpenseBreakdownItem {
   percentage: number;
 }
 
-export interface ExpenseBreakdownResponse {
-  data: ExpenseBreakdownItem[];
-}
+export type ExpenseBreakdownResponse = ExpenseBreakdownItem[];
