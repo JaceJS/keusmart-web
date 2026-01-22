@@ -26,7 +26,7 @@ export function KpiCard({
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm animate-pulse">
+      <div className="bg-white rounded-2xl border border-border p-6 shadow-sm animate-pulse">
         <div className="flex items-center justify-between">
           <div className="space-y-3 flex-1">
             <div className="h-4 bg-gray-200 rounded w-24" />
@@ -40,7 +40,7 @@ export function KpiCard({
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div className="bg-white rounded-2xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <p className="text-sm font-medium text-text-secondary">{title}</p>

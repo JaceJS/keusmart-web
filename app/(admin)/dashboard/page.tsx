@@ -56,8 +56,8 @@ export default function DashboardPage() {
           value={formatCurrency(summary?.summary.totalRevenue ?? 0)}
           change={summary?.comparison?.revenueChange}
           icon={DollarSign}
-          iconColor="text-green-600"
-          iconBgColor="bg-green-50"
+          iconColor="text-primary-dark"
+          iconBgColor="bg-primary-light"
           loading={isLoading}
         />
         <KpiCard
@@ -65,8 +65,8 @@ export default function DashboardPage() {
           value={summary?.summary.totalTransactions ?? 0}
           change={summary?.comparison?.transactionChange}
           icon={ShoppingCart}
-          iconColor="text-blue-600"
-          iconBgColor="bg-blue-50"
+          iconColor="text-primary-dark"
+          iconBgColor="bg-primary-light"
           loading={isLoading}
         />
         <KpiCard
@@ -74,8 +74,8 @@ export default function DashboardPage() {
           value={summary?.summary.totalItemsSold ?? 0}
           change={summary?.comparison?.itemsSoldChange}
           icon={Package}
-          iconColor="text-purple-600"
-          iconBgColor="bg-purple-50"
+          iconColor="text-primary-dark"
+          iconBgColor="bg-primary-light"
           loading={isLoading}
         />
         <KpiCard
@@ -83,19 +83,23 @@ export default function DashboardPage() {
           value={formatCurrency(summary?.summary.grossProfit ?? 0)}
           change={summary?.comparison?.profitChange}
           icon={TrendingUp}
-          iconColor="text-orange-600"
-          iconBgColor="bg-orange-50"
+          iconColor="text-primary-dark"
+          iconBgColor="bg-primary-light"
           loading={isLoading}
         />
       </div>
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <SalesTrendChart data={salesTrend} loading={isLoading} />
+        <div className="lg:col-span-2 h-full">
+          <SalesTrendChart
+            data={salesTrend}
+            loading={isLoading}
+            period={period}
+          />
         </div>
 
-        <div>
+        <div className="h-full">
           <TopProductsList data={topProducts} loading={isLoading} />
         </div>
       </div>

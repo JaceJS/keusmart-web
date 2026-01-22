@@ -33,10 +33,28 @@ export const useDashboardData = (
     setIsLoading(true);
     setError(null);
 
+    // Map period to correct groupBy value
+    const getGroupByForPeriod = (
+      p: AnalyticsPeriod,
+    ): "hour" | "day" | "week" | "month" => {
+      switch (p) {
+        case "today":
+          return "hour";
+        case "week":
+          return "day";
+        case "month":
+          return "week";
+        case "year":
+          return "month";
+        default:
+          return "day";
+      }
+    };
+
     try {
       const [summaryData, trendData, productsData] = await Promise.all([
         analyticsService.getSummary(period),
-        analyticsService.getSalesTrend(period === "today" ? "week" : period),
+        analyticsService.getSalesTrend(period, getGroupByForPeriod(period)),
         analyticsService.getTopProducts(period),
       ]);
 

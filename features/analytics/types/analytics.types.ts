@@ -24,7 +24,6 @@ export interface SalesTrendItem {
   date: string;
   revenue: number;
   transactions: number;
-  profit: number;
 }
 
 export type SalesTrendResponse = SalesTrendItem[];

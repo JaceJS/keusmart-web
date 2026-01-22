@@ -20,7 +20,7 @@ export const analyticsService = {
 
   getSalesTrend: async (
     period: AnalyticsPeriod = "week",
-    groupBy: "day" | "week" | "month" = "day",
+    groupBy: "hour" | "day" | "week" | "month" = "day",
   ): Promise<SalesTrendResponse> => {
     return apiClient.get<SalesTrendResponse>(
       `${ANALYTICS_ENDPOINTS.SALES_TREND}?period=${period}&groupBy=${groupBy}`,
