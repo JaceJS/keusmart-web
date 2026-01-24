@@ -28,10 +28,13 @@ export interface SaleItem {
   updatedAt: string;
 }
 
+export type SalePeriod = "today" | "week" | "month" | "year";
+
 export interface SaleParams {
   [key: string]: string | number | undefined;
   page?: number;
   limit?: number;
+  period?: SalePeriod;
   startDate?: string;
   endDate?: string;
   paymentStatus?: string;

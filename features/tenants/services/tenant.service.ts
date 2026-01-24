@@ -1,4 +1,4 @@
-import { apiClient } from "@/core/api/client";
+import { apiClient, ApiResponse } from "@/core/api/client";
 import {
   GetTenantsResponse,
   SwitchTenantResponse,
@@ -9,20 +9,32 @@ import { TENANT_ENDPOINTS } from "../tenant.endpoints";
 
 export const tenantService = {
   getMyTenants: async (): Promise<GetTenantsResponse> => {
-    return apiClient.get<GetTenantsResponse>(TENANT_ENDPOINTS.LIST);
+    const response = await apiClient.get<ApiResponse<GetTenantsResponse>>(
+      TENANT_ENDPOINTS.LIST,
+    );
+    return response.data;
   },
 
   switchTenant: async (tenantId: string): Promise<SwitchTenantResponse> => {
-    return apiClient.post<SwitchTenantResponse>(TENANT_ENDPOINTS.SWITCH, {
-      tenantId,
-    });
+    const response = await apiClient.post<ApiResponse<SwitchTenantResponse>>(
+      TENANT_ENDPOINTS.SWITCH,
+      { tenantId },
+    );
+    return response.data;
   },
 
   getCurrentTenant: async (): Promise<TenantProfile> => {
-    return apiClient.get<TenantProfile>(TENANT_ENDPOINTS.ME);
+    const response = await apiClient.get<ApiResponse<TenantProfile>>(
+      TENANT_ENDPOINTS.ME,
+    );
+    return response.data;
   },
 
   updateTenant: async (data: UpdateTenantRequest): Promise<TenantProfile> => {
-    return apiClient.put<TenantProfile>(TENANT_ENDPOINTS.ME, data);
+    const response = await apiClient.put<ApiResponse<TenantProfile>>(
+      TENANT_ENDPOINTS.ME,
+      data,
+    );
+    return response.data;
   },
 };

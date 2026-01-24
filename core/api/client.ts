@@ -4,15 +4,24 @@ import { AUTH_ENDPOINTS } from "@/features/auth/auth.endpoints";
 
 const API_BASE_URL = config.api.baseUrl;
 
-interface ApiResponse<T = any> {
+// Exported types for services to use
+export interface PaginatedMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+export interface ApiResponse<T = unknown> {
   message: string;
   data: T;
-  meta?: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
+  meta?: PaginatedMeta;
+}
+
+// Helper type for paginated responses after extraction
+export interface PaginatedResponse<T> {
+  data: T[];
+  meta: PaginatedMeta;
 }
 
 interface ApiError {
@@ -54,8 +63,6 @@ class ApiClient {
         headers,
       });
 
-      // Handle 401 Unauthorized (Token Expired)
-      // Skip for Auth endpoints (Login should throw 401, Refresh should throw 401)
       const isAuthEndpoint =
         endpoint === AUTH_ENDPOINTS.LOGIN ||
         endpoint === AUTH_ENDPOINTS.REFRESH ||
@@ -203,6 +210,7 @@ class ApiClient {
 
   /**
    * Helper: Unwrap API Response and handle errors
+   * Returns full response object with data and meta for pagination support
    */
   private async unwrapResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
@@ -221,7 +229,9 @@ class ApiClient {
       ? JSON.parse(text)
       : { message: "", data: null as T };
 
-    return json.data;
+    // Return full response for paginated endpoints, just data for others
+    // Using 'as T' to maintain type safety while allowing flexible response handling
+    return json as unknown as T;
   }
 
   // --- Public Public Methods ---

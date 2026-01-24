@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { saleService } from "../services/sale.service";
-import type { Sale, SaleParams, GetSalesResponse } from "../types/sale.types";
+import type { Sale, SaleParams } from "../types/sale.types";
+import type { PaginatedMeta } from "@/core/api/client";
 
 export function useSales(initialParams: SaleParams = {}) {
   const [data, setData] = useState<Sale[]>([]);
-  const [meta, setMeta] = useState<GetSalesResponse["meta"] | null>(null);
+  const [meta, setMeta] = useState<PaginatedMeta | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -13,8 +14,8 @@ export function useSales(initialParams: SaleParams = {}) {
     setError(null);
     try {
       const res = await saleService.getSales(params);
-      setData(res?.data || []);
-      setMeta(res?.meta || null);
+      setData(res.data);
+      setMeta(res.meta);
     } catch (err) {
       console.error(err);
       setError("Gagal memuat data penjualan");
@@ -25,7 +26,10 @@ export function useSales(initialParams: SaleParams = {}) {
   }, []);
 
   useEffect(() => {
-    if (initialParams.startDate && initialParams.endDate) {
+    if (
+      initialParams.period ||
+      (initialParams.startDate && initialParams.endDate)
+    ) {
       fetchSales(initialParams);
     }
   }, [JSON.stringify(initialParams), fetchSales]);

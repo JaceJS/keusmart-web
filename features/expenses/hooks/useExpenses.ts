@@ -1,14 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { expenseService } from "../services/expense.service";
-import type {
-  Expense,
-  ExpenseParams,
-  GetExpensesResponse,
-} from "../types/expense.types";
+import type { Expense, ExpenseParams } from "../types/expense.types";
+import type { PaginatedMeta } from "@/core/api/client";
 
 export function useExpenses(initialParams: ExpenseParams = {}) {
   const [data, setData] = useState<Expense[]>([]);
-  const [meta, setMeta] = useState<GetExpensesResponse["meta"] | null>(null);
+  const [meta, setMeta] = useState<PaginatedMeta | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,8 +14,8 @@ export function useExpenses(initialParams: ExpenseParams = {}) {
     setError(null);
     try {
       const res = await expenseService.getExpenses(params);
-      setData(res?.data || []);
-      setMeta(res?.meta || null);
+      setData(res.data);
+      setMeta(res.meta);
     } catch (err) {
       console.error(err);
       setError("Gagal memuat data pengeluaran");
@@ -29,7 +26,11 @@ export function useExpenses(initialParams: ExpenseParams = {}) {
   }, []);
 
   useEffect(() => {
-    if (initialParams.startDate && initialParams.endDate) {
+    // Fetch when period is provided OR when startDate and endDate are provided
+    if (
+      initialParams.period ||
+      (initialParams.startDate && initialParams.endDate)
+    ) {
       fetchExpenses(initialParams);
     }
   }, [JSON.stringify(initialParams), fetchExpenses]);

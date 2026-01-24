@@ -1,11 +1,21 @@
-import { apiClient } from "@/core/api/client";
-import type { GetSalesResponse, SaleParams } from "../types/sale.types";
+import { apiClient, ApiResponse, PaginatedResponse } from "@/core/api/client";
+import type { Sale, SaleParams } from "../types/sale.types";
 import { SALES_ENDPOINTS } from "../sales.endpoints";
 
 export const saleService = {
-  getSales: async (params: SaleParams = {}): Promise<GetSalesResponse> => {
-    return apiClient.get<GetSalesResponse>(SALES_ENDPOINTS.LIST, {
-      params,
-    });
+  getSales: async (
+    params: SaleParams = {},
+  ): Promise<PaginatedResponse<Sale>> => {
+    const response = await apiClient.get<ApiResponse<Sale[]>>(
+      SALES_ENDPOINTS.LIST,
+      {
+        params,
+      },
+    );
+    // Extract from ApiResponse and return clean paginated response
+    return {
+      data: response.data || [],
+      meta: response.meta || { page: 1, limit: 10, total: 0, totalPages: 0 },
+    };
   },
 };

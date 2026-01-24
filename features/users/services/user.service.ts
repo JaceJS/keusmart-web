@@ -1,6 +1,5 @@
-import { apiClient } from "@/core/api/client";
+import { apiClient, ApiResponse, PaginatedResponse } from "@/core/api/client";
 import type {
-  GetUsersResponse,
   UserParams,
   InviteMemberRequest,
   UpdateMemberRoleRequest,
@@ -9,22 +8,39 @@ import type {
 import { USER_ENDPOINTS } from "../users.endpoints";
 
 export const userService = {
-  getUsers: async (params: UserParams = {}): Promise<GetUsersResponse> => {
-    return apiClient.get<GetUsersResponse>(USER_ENDPOINTS.LIST, { params });
+  getUsers: async (
+    params: UserParams = {},
+  ): Promise<PaginatedResponse<TeamMember>> => {
+    const response = await apiClient.get<ApiResponse<TeamMember[]>>(
+      USER_ENDPOINTS.LIST,
+      { params },
+    );
+    return {
+      data: response.data || [],
+      meta: response.meta || { page: 1, limit: 10, total: 0, totalPages: 0 },
+    };
   },
 
   inviteMember: async (data: InviteMemberRequest): Promise<TeamMember> => {
-    return apiClient.post<TeamMember>(USER_ENDPOINTS.INVITE, data);
+    const response = await apiClient.post<ApiResponse<TeamMember>>(
+      USER_ENDPOINTS.INVITE,
+      data,
+    );
+    return response.data;
   },
 
   updateMemberRole: async (
     id: string,
     data: UpdateMemberRoleRequest,
   ): Promise<TeamMember> => {
-    return apiClient.patch<TeamMember>(`${USER_ENDPOINTS.UPDATE}/${id}`, data);
+    const response = await apiClient.patch<ApiResponse<TeamMember>>(
+      `${USER_ENDPOINTS.UPDATE}/${id}`,
+      data,
+    );
+    return response.data;
   },
 
   removeMember: async (id: string): Promise<void> => {
-    return apiClient.delete(`${USER_ENDPOINTS.DELETE}/${id}`);
+    await apiClient.delete(`${USER_ENDPOINTS.DELETE}/${id}`);
   },
 };

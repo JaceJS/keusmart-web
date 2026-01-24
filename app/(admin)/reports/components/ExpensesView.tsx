@@ -1,14 +1,13 @@
 import { useExpenses, ExpenseReportTable } from "@/features/expenses";
+import type { Period } from "@/app/components/ui/PeriodSelector";
 
 interface ExpensesViewProps {
-  startDate: string;
-  endDate: string;
+  period: Period;
 }
 
-export function ExpensesView({ startDate, endDate }: ExpensesViewProps) {
+export function ExpensesView({ period }: ExpensesViewProps) {
   const { data, isLoading } = useExpenses({
-    startDate,
-    endDate,
+    period,
     page: 1,
     limit: 100,
   });

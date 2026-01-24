@@ -1,11 +1,10 @@
 import { useSales, SalesReportTable } from "@/features/sales";
+import type { Period } from "@/app/components/ui/PeriodSelector";
 
 interface SalesViewProps {
-  startDate: string;
-  endDate: string;
+  period: Period;
 }
 
-// Helper to format currency
 const formatCurrency = (value: number): string => {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
@@ -14,15 +13,13 @@ const formatCurrency = (value: number): string => {
   }).format(value);
 };
 
-export function SalesView({ startDate, endDate }: SalesViewProps) {
+export function SalesView({ period }: SalesViewProps) {
   const { data, meta, isLoading, error } = useSales({
-    startDate,
-    endDate,
+    period,
     page: 1,
-    limit: 100,
+    limit: 10,
   });
 
-  // Calculate summary stats
   const totalTransactions = meta?.total ?? data.length;
   const totalRevenue = data.reduce((sum, sale) => sum + sale.total, 0);
   const avgTransaction =

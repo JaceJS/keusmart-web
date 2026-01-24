@@ -23,10 +23,13 @@ export interface CreateExpenseRequest {
   notes?: string;
 }
 
+export type ExpensePeriod = "today" | "week" | "month" | "year";
+
 export interface ExpenseParams {
   [key: string]: string | number | undefined;
   page?: number;
   limit?: number;
+  period?: ExpensePeriod;
   startDate?: string;
   endDate?: string;
   categoryId?: string;

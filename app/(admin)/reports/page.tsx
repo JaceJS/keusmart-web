@@ -9,48 +9,9 @@ import { ExpensesView } from "./components/ExpensesView";
 import type { ReportTab } from "./constants";
 import { Download } from "lucide-react";
 
-function getDateRangeFromPeriod(period: Period): {
-  startDate: string;
-  endDate: string;
-} {
-  const now = new Date();
-  const today = now.toISOString().split("T")[0];
-
-  switch (period) {
-    case "today":
-      return { startDate: today, endDate: today };
-    case "week": {
-      const weekAgo = new Date(now);
-      weekAgo.setDate(now.getDate() - 7);
-      return {
-        startDate: weekAgo.toISOString().split("T")[0],
-        endDate: today,
-      };
-    }
-    case "month": {
-      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-      return {
-        startDate: monthStart.toISOString().split("T")[0],
-        endDate: today,
-      };
-    }
-    case "year": {
-      const yearStart = new Date(now.getFullYear(), 0, 1);
-      return {
-        startDate: yearStart.toISOString().split("T")[0],
-        endDate: today,
-      };
-    }
-    default:
-      return { startDate: today, endDate: today };
-  }
-}
-
 export default function ReportsPage() {
   const [activeTab, setActiveTab] = useState<ReportTab>("summary");
   const [period, setPeriod] = useState<Period>("month");
-
-  const { startDate, endDate } = getDateRangeFromPeriod(period);
 
   return (
     <div className="space-y-6">
@@ -80,12 +41,8 @@ export default function ReportsPage() {
       {/* Content */}
       <div className="min-h-[400px]">
         {activeTab === "summary" && <SummaryView period={period} />}
-        {activeTab === "sales" && (
-          <SalesView startDate={startDate} endDate={endDate} />
-        )}
-        {activeTab === "expenses" && (
-          <ExpensesView startDate={startDate} endDate={endDate} />
-        )}
+        {activeTab === "sales" && <SalesView period={period} />}
+        {activeTab === "expenses" && <ExpensesView period={period} />}
       </div>
     </div>
   );

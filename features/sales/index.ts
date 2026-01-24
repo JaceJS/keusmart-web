@@ -12,6 +12,7 @@ export type {
   Sale,
   SaleItem,
   SaleParams,
+  SalePeriod,
   GetSalesResponse,
 } from "./types/sale.types";
 

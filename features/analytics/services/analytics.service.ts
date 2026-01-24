@@ -1,4 +1,4 @@
-import { apiClient } from "@/core/api/client";
+import { apiClient, ApiResponse } from "@/core/api/client";
 import {
   AnalyticsPeriod,
   DashboardSummaryResponse,
@@ -13,43 +13,48 @@ export const analyticsService = {
   getSummary: async (
     period: AnalyticsPeriod = "today",
   ): Promise<DashboardSummaryResponse> => {
-    return apiClient.get<DashboardSummaryResponse>(
+    const response = await apiClient.get<ApiResponse<DashboardSummaryResponse>>(
       `${ANALYTICS_ENDPOINTS.SUMMARY}?period=${period}`,
     );
+    return response.data;
   },
 
   getSalesTrend: async (
     period: AnalyticsPeriod = "week",
     groupBy: "hour" | "day" | "week" | "month" = "day",
   ): Promise<SalesTrendResponse> => {
-    return apiClient.get<SalesTrendResponse>(
+    const response = await apiClient.get<ApiResponse<SalesTrendResponse>>(
       `${ANALYTICS_ENDPOINTS.SALES_TREND}?period=${period}&groupBy=${groupBy}`,
     );
+    return response.data;
   },
 
   getTopProducts: async (
     period: AnalyticsPeriod = "week",
     limit: number = 5,
   ): Promise<TopProductsResponse> => {
-    return apiClient.get<TopProductsResponse>(
+    const response = await apiClient.get<ApiResponse<TopProductsResponse>>(
       `${ANALYTICS_ENDPOINTS.TOP_PRODUCTS}?period=${period}&limit=${limit}`,
     );
+    return response.data;
   },
 
   getReportSummary: async (
     period: AnalyticsPeriod = "month",
   ): Promise<ReportSummaryResponse> => {
-    return apiClient.get<ReportSummaryResponse>(
+    const response = await apiClient.get<ApiResponse<ReportSummaryResponse>>(
       `${ANALYTICS_ENDPOINTS.REPORT_SUMMARY}?period=${period}`,
     );
+    return response.data;
   },
 
   getExpenseBreakdown: async (
     startDate: string,
     endDate: string,
   ): Promise<ExpenseBreakdownResponse> => {
-    return apiClient.get<ExpenseBreakdownResponse>(
+    const response = await apiClient.get<ApiResponse<ExpenseBreakdownResponse>>(
       `${ANALYTICS_ENDPOINTS.EXPENSE_BREAKDOWN}?startDate=${startDate}&endDate=${endDate}`,
     );
+    return response.data;
   },
 };

@@ -12,6 +12,7 @@ export type {
   Expense,
   CreateExpenseRequest,
   ExpenseParams,
+  ExpensePeriod,
   GetExpensesResponse,
 } from "./types/expense.types";
 

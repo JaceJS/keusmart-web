@@ -1,4 +1,4 @@
-import { apiClient } from "@/core/api/client";
+import { apiClient, ApiResponse } from "@/core/api/client";
 import { AUTH_ENDPOINTS } from "../auth.endpoints";
 import type {
   LoginRequest,
@@ -11,33 +11,50 @@ import type {
 } from "../types/auth.types";
 
 export const authService = {
-  login: (data: LoginRequest) => {
-    return apiClient.post<LoginResponse>(AUTH_ENDPOINTS.LOGIN, data, {
-      credentials: "include",
-    });
+  login: async (data: LoginRequest): Promise<LoginResponse> => {
+    const response = await apiClient.post<ApiResponse<LoginResponse>>(
+      AUTH_ENDPOINTS.LOGIN,
+      data,
+      { credentials: "include" },
+    );
+    return response.data;
   },
 
-  register: (data: RegisterRequest) => {
-    return apiClient.post<RegisterResponse>(AUTH_ENDPOINTS.REGISTER, data);
+  register: async (data: RegisterRequest): Promise<RegisterResponse> => {
+    const response = await apiClient.post<ApiResponse<RegisterResponse>>(
+      AUTH_ENDPOINTS.REGISTER,
+      data,
+    );
+    return response.data;
   },
 
-  sendOtp: (data: SendOtpRequest) => {
-    return apiClient.post<{ message: string }>(AUTH_ENDPOINTS.SEND_OTP, data);
+  sendOtp: async (data: SendOtpRequest): Promise<{ message: string }> => {
+    const response = await apiClient.post<ApiResponse<{ message: string }>>(
+      AUTH_ENDPOINTS.SEND_OTP,
+      data,
+    );
+    return response.data;
   },
 
-  verifyOtp: (data: VerifyOtpRequest) => {
-    return apiClient.post<VerifyOtpResponse>(AUTH_ENDPOINTS.VERIFY_OTP, data);
+  verifyOtp: async (data: VerifyOtpRequest): Promise<VerifyOtpResponse> => {
+    const response = await apiClient.post<ApiResponse<VerifyOtpResponse>>(
+      AUTH_ENDPOINTS.VERIFY_OTP,
+      data,
+    );
+    return response.data;
   },
 
-  refreshToken: () => {
-    return apiClient.post<LoginResponse>(AUTH_ENDPOINTS.REFRESH, undefined, {
-      credentials: "include",
-    });
+  refreshToken: async (): Promise<LoginResponse> => {
+    const response = await apiClient.post<ApiResponse<LoginResponse>>(
+      AUTH_ENDPOINTS.REFRESH,
+      undefined,
+      { credentials: "include" },
+    );
+    return response.data;
   },
 
-  logout: (refreshToken?: string) => {
-    // Send refreshToken in body if provided, also include credentials for HttpOnly cookies
-    return apiClient.post<void>(
+  logout: async (refreshToken?: string): Promise<void> => {
+    await apiClient.post<ApiResponse<void>>(
       AUTH_ENDPOINTS.LOGOUT,
       refreshToken ? { refreshToken } : undefined,
       { credentials: "include" },

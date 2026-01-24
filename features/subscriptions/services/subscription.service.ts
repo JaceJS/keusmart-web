@@ -1,4 +1,4 @@
-import { apiClient } from "@/core/api/client";
+import { apiClient, ApiResponse } from "@/core/api/client";
 import {
   GetPlansResponse,
   GetSubscriptionResponse,
@@ -9,25 +9,33 @@ import { SUBSCRIPTION_ENDPOINTS } from "../subscription.endpoints";
 
 export const subscriptionService = {
   getPlans: async (): Promise<GetPlansResponse> => {
-    return apiClient.get<GetPlansResponse>(SUBSCRIPTION_ENDPOINTS.PLANS);
+    const response = await apiClient.get<ApiResponse<GetPlansResponse>>(
+      SUBSCRIPTION_ENDPOINTS.PLANS,
+    );
+    return response.data;
   },
 
   getCurrentSubscription: async (): Promise<GetSubscriptionResponse> => {
-    return apiClient.get<GetSubscriptionResponse>(
+    const response = await apiClient.get<ApiResponse<GetSubscriptionResponse>>(
       SUBSCRIPTION_ENDPOINTS.CURRENT,
     );
+    return response.data;
   },
 
   upgradePlan: async (
     data: UpgradePlanRequest,
   ): Promise<GetSubscriptionResponse> => {
-    return apiClient.post<GetSubscriptionResponse>(
+    const response = await apiClient.post<ApiResponse<GetSubscriptionResponse>>(
       SUBSCRIPTION_ENDPOINTS.UPGRADE,
       data,
     );
+    return response.data;
   },
 
   getInvoices: async (): Promise<GetInvoicesResponse> => {
-    return apiClient.get<GetInvoicesResponse>(SUBSCRIPTION_ENDPOINTS.INVOICES);
+    const response = await apiClient.get<ApiResponse<GetInvoicesResponse>>(
+      SUBSCRIPTION_ENDPOINTS.INVOICES,
+    );
+    return response.data;
   },
 };

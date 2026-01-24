@@ -1,14 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { userService } from "../services/user.service";
-import type {
-  TeamMember,
-  UserParams,
-  GetUsersResponse,
-} from "../types/user.types";
+import type { TeamMember, UserParams } from "../types/user.types";
+import type { PaginatedMeta } from "@/core/api/client";
 
 export function useUsers(initialParams: UserParams = {}) {
   const [data, setData] = useState<TeamMember[]>([]);
-  const [meta, setMeta] = useState<GetUsersResponse["meta"] | null>(null);
+  const [meta, setMeta] = useState<PaginatedMeta | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -17,8 +14,8 @@ export function useUsers(initialParams: UserParams = {}) {
     setError(null);
     try {
       const res = await userService.getUsers(params);
-      setData(res?.data || []);
-      setMeta(res?.meta || null);
+      setData(res.data);
+      setMeta(res.meta);
     } catch (err) {
       console.error(err);
       setError("Gagal memuat data anggota tim");
