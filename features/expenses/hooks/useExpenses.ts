@@ -13,9 +13,10 @@ export function useExpenses(initialParams: ExpenseParams = {}) {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await expenseService.getExpenses(params);
-      setData(res.data);
-      setMeta(res.meta);
+      const { data, meta } = await expenseService.getExpenses(params);
+
+      setData(data);
+      setMeta(meta);
     } catch (err) {
       console.error(err);
       setError("Gagal memuat data pengeluaran");
@@ -26,7 +27,6 @@ export function useExpenses(initialParams: ExpenseParams = {}) {
   }, []);
 
   useEffect(() => {
-    // Fetch when period is provided OR when startDate and endDate are provided
     if (
       initialParams.period ||
       (initialParams.startDate && initialParams.endDate)

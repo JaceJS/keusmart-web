@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { useSales, SalesReportTable } from "@/features/sales";
 import type { Period } from "@/app/components/ui/PeriodSelector";
 
@@ -5,25 +8,26 @@ interface SalesViewProps {
   period: Period;
 }
 
-const formatCurrency = (value: number): string => {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    maximumFractionDigits: 0,
-  }).format(value);
-};
+const ITEMS_PER_PAGE = 10;
 
 export function SalesView({ period }: SalesViewProps) {
-  const { data, meta, isLoading, error } = useSales({
+  const [page, setPage] = useState(1);
+
+  // Reset page when period changes
+  useEffect(() => {
+    setPage(1);
+  }, [period]);
+
+  const { data, meta, isLoading, error, fetchSales } = useSales({
     period,
-    page: 1,
-    limit: 10,
+    page,
+    limit: ITEMS_PER_PAGE,
   });
 
-  const totalTransactions = meta?.total ?? data.length;
-  const totalRevenue = data.reduce((sum, sale) => sum + sale.total, 0);
-  const avgTransaction =
-    totalTransactions > 0 ? totalRevenue / totalTransactions : 0;
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    fetchSales({ period, page: newPage, limit: ITEMS_PER_PAGE });
+  };
 
   if (error) {
     return (
@@ -34,56 +38,15 @@ export function SalesView({ period }: SalesViewProps) {
   }
 
   return (
-    <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      {/* Summary Stats */}
-      <div className="bg-white rounded-xl border border-border shadow-sm p-4">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-              <span className="text-lg">📊</span>
-            </div>
-            <div>
-              <p className="text-xs text-text-secondary uppercase font-medium">
-                Total Transaksi
-              </p>
-              <p className="text-lg font-semibold text-gray-900">
-                {isLoading ? "..." : totalTransactions}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
-              <span className="text-lg">💰</span>
-            </div>
-            <div>
-              <p className="text-xs text-text-secondary uppercase font-medium">
-                Total Penjualan
-              </p>
-              <p className="text-lg font-semibold text-green-600">
-                {isLoading ? "..." : formatCurrency(totalRevenue)}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
-              <span className="text-lg">📈</span>
-            </div>
-            <div>
-              <p className="text-xs text-text-secondary uppercase font-medium">
-                Rata-rata
-              </p>
-              <p className="text-lg font-semibold text-gray-900">
-                {isLoading ? "..." : formatCurrency(avgTransaction)}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Sales Table */}
-      <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
-        <SalesReportTable data={data} isLoading={isLoading} />
-      </div>
+    <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <SalesReportTable
+        data={data}
+        isLoading={isLoading}
+        meta={meta}
+        currentPage={page}
+        itemsPerPage={ITEMS_PER_PAGE}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 }

@@ -1,17 +1,52 @@
 "use client";
 
-import { useState } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useCallback } from "react";
 import { PeriodSelector, Period } from "@/app/components/ui/PeriodSelector";
 import { ReportTabs } from "./components/ReportTabs";
 import { SummaryView } from "./components/SummaryView";
 import { SalesView } from "./components/SalesView";
 import { ExpensesView } from "./components/ExpensesView";
 import type { ReportTab } from "./constants";
+import { REPORT_TABS } from "./constants";
 import { Download } from "lucide-react";
 
+const VALID_PERIODS: Period[] = ["today", "week", "month", "year"];
+
 export default function ReportsPage() {
-  const [activeTab, setActiveTab] = useState<ReportTab>("summary");
-  const [period, setPeriod] = useState<Period>("month");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  // Read tab and period from URL, with defaults
+  const tabParam = searchParams.get("tab") as ReportTab | null;
+  const periodParam = searchParams.get("period") as Period | null;
+
+  const activeTab: ReportTab = REPORT_TABS.some((t) => t.id === tabParam)
+    ? tabParam!
+    : "summary";
+  const period: Period = VALID_PERIODS.includes(periodParam!)
+    ? periodParam!
+    : "month";
+
+  // Update URL when tab or period changes
+  const updateURL = useCallback(
+    (newTab: ReportTab, newPeriod: Period) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("tab", newTab);
+      params.set("period", newPeriod);
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    },
+    [router, pathname, searchParams],
+  );
+
+  const handleTabChange = (tab: ReportTab) => {
+    updateURL(tab, period);
+  };
+
+  const handlePeriodChange = (newPeriod: Period) => {
+    updateURL(activeTab, newPeriod);
+  };
 
   return (
     <div className="space-y-6">
@@ -34,8 +69,8 @@ export default function ReportsPage() {
 
       {/* Controls */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-border shadow-sm">
-        <ReportTabs activeTab={activeTab} onChange={setActiveTab} />
-        <PeriodSelector value={period} onChange={setPeriod} />
+        <ReportTabs activeTab={activeTab} onChange={handleTabChange} />
+        <PeriodSelector value={period} onChange={handlePeriodChange} />
       </div>
 
       {/* Content */}

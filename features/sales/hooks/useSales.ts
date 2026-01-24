@@ -13,9 +13,10 @@ export function useSales(initialParams: SaleParams = {}) {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await saleService.getSales(params);
-      setData(res.data);
-      setMeta(res.meta);
+      const { data, meta } = await saleService.getSales(params);
+
+      setData(data);
+      setMeta(meta);
     } catch (err) {
       console.error(err);
       setError("Gagal memuat data penjualan");

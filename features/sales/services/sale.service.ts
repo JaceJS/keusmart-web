@@ -12,7 +12,7 @@ export const saleService = {
         params,
       },
     );
-    // Extract from ApiResponse and return clean paginated response
+
     return {
       data: response.data || [],
       meta: response.meta || { page: 1, limit: 10, total: 0, totalPages: 0 },
