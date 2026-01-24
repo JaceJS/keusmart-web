@@ -37,11 +37,10 @@ export const analyticsService = {
   },
 
   getReportSummary: async (
-    startDate: string,
-    endDate: string,
+    period: AnalyticsPeriod = "month",
   ): Promise<ReportSummaryResponse> => {
     return apiClient.get<ReportSummaryResponse>(
-      `${ANALYTICS_ENDPOINTS.REPORT_SUMMARY}?startDate=${startDate}&endDate=${endDate}`,
+      `${ANALYTICS_ENDPOINTS.REPORT_SUMMARY}?period=${period}`,
     );
   },
 

@@ -1,21 +1,19 @@
 import { useState, useEffect } from "react";
 import { analyticsService } from "../services/analytics.service";
 import type { ReportSummaryResponse } from "../types/analytics.types";
+import type { AnalyticsPeriod } from "../types/analytics.types";
 
-export function useReportSummary(startDate: string, endDate: string) {
-  const [data, setData] = useState<ReportSummaryResponse["summary"] | null>(
-    null,
-  );
+export function useReportSummary(period: AnalyticsPeriod) {
+  const [data, setData] = useState<ReportSummaryResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetch() {
-      if (!startDate || !endDate) return;
       try {
         setIsLoading(true);
-        const res = await analyticsService.getReportSummary(startDate, endDate);
-        setData(res.summary);
+        const res = await analyticsService.getReportSummary(period);
+        setData(res);
         setError(null);
       } catch (err) {
         console.error(err);
@@ -26,7 +24,7 @@ export function useReportSummary(startDate: string, endDate: string) {
     }
 
     fetch();
-  }, [startDate, endDate]);
+  }, [period]);
 
   return { data, isLoading, error };
 }

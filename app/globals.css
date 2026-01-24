@@ -61,3 +61,36 @@ button {
     animation: shimmer 1.3s infinite;
   }
 }
+
+/* Remove focus outline from Recharts */
+.recharts-wrapper,
+.recharts-wrapper *,
+.recharts-wrapper:focus,
+.recharts-wrapper:focus-visible,
+.recharts-wrapper *:focus,
+.recharts-wrapper *:focus-visible,
+.recharts-surface,
+.recharts-surface:focus,
+.recharts-surface:focus-visible,
+.recharts-layer,
+.recharts-layer:focus,
+.recharts-layer:focus-visible,
+.recharts-bar-rectangle,
+.recharts-bar-rectangle:focus,
+.recharts-bar-rectangle:focus-visible,
+.recharts-rectangle,
+.recharts-rectangle:focus,
+.recharts-rectangle:focus-visible,
+.recharts-bar rect,
+.recharts-bar rect:focus,
+.recharts-bar rect:focus-visible,
+.recharts-bar path,
+.recharts-bar path:focus,
+.recharts-bar path:focus-visible,
+.recharts-active-bar,
+.recharts-active-bar:focus,
+.recharts-active-bar:focus-visible {
+  outline: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}

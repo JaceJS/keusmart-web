@@ -319,6 +319,8 @@ export function SalesTrendChart({
               fill={revenueColor}
               radius={[4, 4, 0, 0]}
               maxBarSize={40}
+              stroke="none"
+              activeBar={{ stroke: "none", strokeWidth: 0 }}
             />
           </BarChart>
         </ResponsiveContainer>

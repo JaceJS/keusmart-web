@@ -1,13 +1,14 @@
 import { KpiCard, useReportSummary } from "@/features/analytics";
+import { FinancialSummaryChart } from "@/features/analytics/components/FinancialSummaryChart";
 import { DollarSign, TrendingUp, TrendingDown, Wallet } from "lucide-react";
+import type { Period } from "@/app/components/ui/PeriodSelector";
 
 interface SummaryViewProps {
-  startDate: string;
-  endDate: string;
+  period: Period;
 }
 
-export function SummaryView({ startDate, endDate }: SummaryViewProps) {
-  const { data, isLoading, error } = useReportSummary(startDate, endDate);
+export function SummaryView({ period }: SummaryViewProps) {
+  const { data, isLoading, error } = useReportSummary(period);
 
   if (error) {
     return <div className="text-red-500 p-4 bg-red-50 rounded-lg">{error}</div>;
@@ -26,40 +27,51 @@ export function SummaryView({ startDate, endDate }: SummaryViewProps) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard
           title="Total Penjualan"
-          value={fmt(data?.totalRevenue)}
+          value={fmt(data?.summary?.totalRevenue)}
           loading={isLoading}
           icon={DollarSign}
+          iconColor="text-primary-dark"
+          iconBgColor="bg-primary-light"
           trendLabel="vs periode lalu"
+          change={data?.comparison?.revenueChange}
         />
         <KpiCard
           title="Total Pengeluaran"
-          value={fmt(data?.totalExpenses)}
+          value={fmt(data?.summary?.totalExpenses)}
           loading={isLoading}
           icon={Wallet}
+          iconColor="text-red-500"
+          iconBgColor="bg-red-50"
+          change={data?.comparison?.expenseChange}
+          trendLabel="vs periode lalu"
         />
         <KpiCard
           title="Laba Kotor"
-          value={fmt(data?.grossProfit)}
+          value={fmt(data?.summary?.grossProfit)}
           loading={isLoading}
           icon={TrendingUp}
+          iconColor="text-primary-dark"
+          iconBgColor="bg-primary-light"
         />
         <KpiCard
           title="Laba Bersih"
-          value={fmt(data?.netProfit)}
+          value={fmt(data?.summary?.netProfit)}
           loading={isLoading}
           icon={TrendingDown}
+          iconColor="text-primary-dark"
+          iconBgColor="bg-primary-light"
           trendLabel="margin bersih"
         />
       </div>
 
-      <div className="bg-white p-6 rounded-xl border border-border shadow-sm">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">
-          Analisa Laba Rugi
-        </h3>
-        <div className="min-h-[300px] flex items-center justify-center text-gray-400 bg-gray-50 rounded-lg border border-dashed border-gray-200">
-          <p>Grafik Sales vs Expense akan muncul di sini</p>
-          {/* TODO: Add SalesTrendChart here with correct props */}
-        </div>
+      <div className="h-[400px]">
+        <FinancialSummaryChart
+          revenue={data?.summary?.totalRevenue || 0}
+          expenses={data?.summary?.totalExpenses || 0}
+          revenueChange={data?.comparison?.revenueChange}
+          expenseChange={data?.comparison?.expenseChange}
+          loading={isLoading}
+        />
       </div>
     </div>
   );

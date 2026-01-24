@@ -9,7 +9,6 @@ import { ExpensesView } from "./components/ExpensesView";
 import type { ReportTab } from "./constants";
 import { Download } from "lucide-react";
 
-// Helper to get date range from period
 function getDateRangeFromPeriod(period: Period): {
   startDate: string;
   endDate: string;
@@ -80,9 +79,7 @@ export default function ReportsPage() {
 
       {/* Content */}
       <div className="min-h-[400px]">
-        {activeTab === "summary" && (
-          <SummaryView startDate={startDate} endDate={endDate} />
-        )}
+        {activeTab === "summary" && <SummaryView period={period} />}
         {activeTab === "sales" && (
           <SalesView startDate={startDate} endDate={endDate} />
         )}

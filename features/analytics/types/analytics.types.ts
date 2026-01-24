@@ -46,6 +46,10 @@ export interface ReportSummaryResponse {
     transactionCount: number;
     expenseCount: number;
   };
+  comparison: {
+    revenueChange: number;
+    expenseChange: number;
+  };
 }
 
 export interface ExpenseBreakdownItem {
