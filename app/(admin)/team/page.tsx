@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { UserPlus, Users } from "lucide-react";
 import {
   useUsers,
@@ -9,10 +9,24 @@ import {
   userService,
 } from "@/features/users";
 
+const ITEMS_PER_PAGE = 10;
+
 export default function TeamPage() {
-  const { data, isLoading, error, refetch } = useUsers();
+  const [page, setPage] = useState(1);
+  const { data, meta, isLoading, error, fetchUsers, refetch } = useUsers({
+    page,
+    limit: ITEMS_PER_PAGE,
+  });
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [isInviting, setIsInviting] = useState(false);
+
+  const handlePageChange = useCallback(
+    (newPage: number) => {
+      setPage(newPage);
+      fetchUsers({ page: newPage, limit: ITEMS_PER_PAGE });
+    },
+    [fetchUsers],
+  );
 
   const handleInvite = async (inviteData: {
     name: string;
@@ -72,7 +86,7 @@ export default function TeamPage() {
               Total Anggota
             </p>
             <p className="text-lg font-semibold text-gray-900">
-              {isLoading ? "..." : data.length}
+              {isLoading ? "..." : (meta?.total ?? data.length)}
             </p>
           </div>
         </div>
@@ -121,6 +135,10 @@ export default function TeamPage() {
         data={data}
         isLoading={isLoading}
         onRemove={handleRemove}
+        meta={meta}
+        currentPage={page}
+        itemsPerPage={ITEMS_PER_PAGE}
+        onPageChange={handlePageChange}
       />
 
       {/* Invite Modal */}

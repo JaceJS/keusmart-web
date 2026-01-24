@@ -1,12 +1,19 @@
 import type { TeamMember } from "../types/user.types";
-import { MoreHorizontal, Mail, Shield, UserMinus } from "lucide-react";
+import type { PaginatedMeta } from "@/core/api/client";
+import { MoreHorizontal, Shield, UserMinus } from "lucide-react";
 import { useState } from "react";
+import { Pagination } from "@/app/components/ui/Pagination";
 
 interface TeamMemberListProps {
   data: TeamMember[];
   isLoading: boolean;
   onEditRole?: (member: TeamMember) => void;
   onRemove?: (member: TeamMember) => void;
+  // Pagination props
+  meta?: PaginatedMeta | null;
+  currentPage?: number;
+  itemsPerPage?: number;
+  onPageChange?: (page: number) => void;
 }
 
 // Role badge colors
@@ -78,11 +85,15 @@ export function TeamMemberList({
   isLoading,
   onEditRole,
   onRemove,
+  meta,
+  currentPage = 1,
+  itemsPerPage = 10,
+  onPageChange,
 }: TeamMemberListProps) {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   return (
-    <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
+    <div className="bg-white rounded-xl border border-border shadow-sm">
       <div className="overflow-x-auto">
         <table className="w-full text-sm text-left">
           <thead className="bg-gray-50 border-b border-border text-xs uppercase text-text-secondary font-semibold">
@@ -194,7 +205,7 @@ export function TeamMemberList({
                               className="fixed inset-0 z-10"
                               onClick={() => setOpenMenuId(null)}
                             />
-                            <div className="absolute right-0 mt-1 w-44 bg-white rounded-lg shadow-lg border border-border py-1 z-20">
+                            <div className="absolute right-0 bottom-full mb-1 w-44 bg-white rounded-lg shadow-lg border border-border py-1 z-20">
                               <button
                                 onClick={() => {
                                   onEditRole?.(member);
@@ -227,6 +238,17 @@ export function TeamMemberList({
           </tbody>
         </table>
       </div>
+
+      {/* Pagination Controls */}
+      {meta && onPageChange && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={meta.totalPages}
+          totalItems={meta.total}
+          itemsPerPage={itemsPerPage}
+          onPageChange={onPageChange}
+        />
+      )}
     </div>
   );
 }

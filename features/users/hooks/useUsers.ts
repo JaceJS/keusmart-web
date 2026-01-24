@@ -13,9 +13,10 @@ export function useUsers(initialParams: UserParams = {}) {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await userService.getUsers(params);
-      setData(res.data);
-      setMeta(res.meta);
+      const { data, meta } = await userService.getUsers(params);
+
+      setData(data);
+      setMeta(meta);
     } catch (err) {
       console.error(err);
       setError("Gagal memuat data anggota tim");
