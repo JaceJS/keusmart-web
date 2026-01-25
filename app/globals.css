@@ -12,6 +12,40 @@
   --text-tertiary: #9ca3af;
   --border-default: #e2e8f0;
   --border-focused: #10b981;
+
+  /* Semantic Colors */
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --success-dark: #059669;
+
+  --warning: #f59e0b;
+  --warning-light: #fef3c7;
+  --warning-dark: #d97706;
+
+  --danger: #ef4444;
+  --danger-light: #fee2e2;
+  --danger-dark: #dc2626;
+
+  --info: #3b82f6;
+  --info-light: #dbeafe;
+  --info-dark: #2563eb;
+
+  /* Accent Colors for variety */
+  --accent-purple: #8b5cf6;
+  --accent-purple-light: #ede9fe;
+  --accent-purple-dark: #7c3aed;
+
+  --accent-pink: #ec4899;
+  --accent-pink-light: #fce7f3;
+  --accent-pink-dark: #db2777;
+
+  --accent-cyan: #06b6d4;
+  --accent-cyan-light: #cffafe;
+  --accent-cyan-dark: #0891b2;
+
+  --accent-orange: #f97316;
+  --accent-orange-light: #ffedd5;
+  --accent-orange-dark: #ea580c;
 }
 
 @theme {
@@ -30,6 +64,40 @@
 
   --color-border: var(--border-default);
   --color-border-focused: var(--border-focused);
+
+  /* Semantic Colors */
+  --color-success: var(--success);
+  --color-success-light: var(--success-light);
+  --color-success-dark: var(--success-dark);
+
+  --color-warning: var(--warning);
+  --color-warning-light: var(--warning-light);
+  --color-warning-dark: var(--warning-dark);
+
+  --color-danger: var(--danger);
+  --color-danger-light: var(--danger-light);
+  --color-danger-dark: var(--danger-dark);
+
+  --color-info: var(--info);
+  --color-info-light: var(--info-light);
+  --color-info-dark: var(--info-dark);
+
+  /* Accent Colors */
+  --color-accent-purple: var(--accent-purple);
+  --color-accent-purple-light: var(--accent-purple-light);
+  --color-accent-purple-dark: var(--accent-purple-dark);
+
+  --color-accent-pink: var(--accent-pink);
+  --color-accent-pink-light: var(--accent-pink-light);
+  --color-accent-pink-dark: var(--accent-pink-dark);
+
+  --color-accent-cyan: var(--accent-cyan);
+  --color-accent-cyan-light: var(--accent-cyan-light);
+  --color-accent-cyan-dark: var(--accent-cyan-dark);
+
+  --color-accent-orange: var(--accent-orange);
+  --color-accent-orange-light: var(--accent-orange-light);
+  --color-accent-orange-dark: var(--accent-orange-dark);
 
   --font-family-sans:
     "Plus Jakarta Sans", var(--font-geist-sans), system-ui, sans-serif;

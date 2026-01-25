@@ -56,8 +56,8 @@ export default function DashboardPage() {
           value={formatCurrency(summary?.summary.totalRevenue ?? 0)}
           change={summary?.comparison?.revenueChange}
           icon={DollarSign}
-          iconColor="text-primary-dark"
-          iconBgColor="bg-primary-light"
+          iconColor="text-success-dark"
+          iconBgColor="bg-success-light"
           loading={isLoading}
         />
         <KpiCard
@@ -65,8 +65,8 @@ export default function DashboardPage() {
           value={summary?.summary.totalTransactions ?? 0}
           change={summary?.comparison?.transactionChange}
           icon={ShoppingCart}
-          iconColor="text-primary-dark"
-          iconBgColor="bg-primary-light"
+          iconColor="text-info-dark"
+          iconBgColor="bg-info-light"
           loading={isLoading}
         />
         <KpiCard
@@ -74,8 +74,8 @@ export default function DashboardPage() {
           value={summary?.summary.totalItemsSold ?? 0}
           change={summary?.comparison?.itemsSoldChange}
           icon={Package}
-          iconColor="text-primary-dark"
-          iconBgColor="bg-primary-light"
+          iconColor="text-accent-purple-dark"
+          iconBgColor="bg-accent-purple-light"
           loading={isLoading}
         />
         <KpiCard
@@ -83,8 +83,8 @@ export default function DashboardPage() {
           value={formatCurrency(summary?.summary.grossProfit ?? 0)}
           change={summary?.comparison?.profitChange}
           icon={TrendingUp}
-          iconColor="text-primary-dark"
-          iconBgColor="bg-primary-light"
+          iconColor="text-accent-orange-dark"
+          iconBgColor="bg-accent-orange-light"
           loading={isLoading}
         />
       </div>

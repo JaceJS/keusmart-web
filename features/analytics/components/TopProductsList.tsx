@@ -60,7 +60,7 @@ export function TopProductsList({
             <div key={product.productId} className="group">
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-3">
-                  <span className="w-6 h-6 flex items-center justify-center bg-primary-light rounded text-xs font-bold text-primary-dark">
+                  <span className="w-6 h-6 flex items-center justify-center bg-accent-cyan-light rounded text-xs font-bold text-accent-cyan-dark">
                     {index + 1}
                   </span>
                   <span className="font-medium text-foreground group-hover:text-primary transition-colors">
@@ -73,7 +73,7 @@ export function TopProductsList({
               </div>
               <div className="ml-9 h-2 bg-secondary rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-linear-to-r from-primary-dark to-primary rounded-full transition-all duration-300"
+                  className="h-full bg-linear-to-r from-accent-cyan-dark to-accent-cyan rounded-full transition-all duration-300"
                   style={{ width: `${percentage}%` }}
                 />
               </div>

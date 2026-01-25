@@ -268,8 +268,8 @@ export function SalesTrendChart({
     originalDate: item.date,
   }));
 
-  const revenueColor = "#10B981";
-  const transactionsColor = "#6366F1";
+  const revenueColor = "var(--success)";
+  const transactionsColor = "var(--info)";
 
   return (
     <div className="bg-white rounded-2xl border border-border p-6 shadow-sm h-full flex flex-col">
