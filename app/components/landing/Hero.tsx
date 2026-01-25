@@ -26,11 +26,11 @@ export function Hero() {
 
             <div className="flex flex-col gap-4 sm:flex-row">
               <Button size="lg" className="group">
-                Mulai Gratis
+                Coba Gratis 14 Hari
                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
               <Button size="lg" variant="secondary">
-                Lihat Demo
+                Lihat Harga
               </Button>
             </div>
 
@@ -57,8 +57,8 @@ export function Hero() {
           </div>
 
           <div className="relative">
-            <div className="relative aspect-square rounded-2xl bg-gradient-to-br from-primary-light to-secondary p-8">
-              <div className="absolute inset-0 rounded-2xl bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+            <div className="relative aspect-square rounded-2xl bg-linear-to-br from-primary-light to-secondary p-8">
+              <div className="absolute inset-0 rounded-2xl bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px]"></div>
 
               <div className="relative flex h-full flex-col justify-center space-y-4">
                 <div className="rounded-xl bg-white p-4 shadow-lg">
