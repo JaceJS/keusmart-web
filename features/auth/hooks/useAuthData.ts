@@ -41,6 +41,7 @@ export function useAuthData(): AuthState {
         id: decoded.tenantId,
         name: decoded.tenantName || "KeuSmart Business",
         plan: decoded.tenantPlan || "free",
+        logoUrl: decoded.tenantLogoUrl || "",
       };
 
       setData({

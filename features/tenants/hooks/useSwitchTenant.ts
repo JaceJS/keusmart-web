@@ -13,15 +13,12 @@ export const useSwitchTenant = () => {
     try {
       const response = await tenantService.switchTenant(tenantId);
 
-      // Update cookies with new tokens
       if (response.accessToken) {
         Cookies.set(config.auth.tokenKey, response.accessToken, { expires: 1 });
       }
 
-      // Update tenant ID
       Cookies.set(config.auth.tenantIdKey, response.tenant.id, { expires: 3 });
 
-      // Force reload to refresh all application state with new tenant context
       window.location.href = "/dashboard";
     } catch (error) {
       console.error("Failed to switch tenant", error);

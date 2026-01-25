@@ -25,7 +25,6 @@ export type SwitchTenantResponse = {
 
 export type GetTenantsResponse = Tenant[];
 
-// Profile detail (response from GET /tenants/me)
 export interface TenantProfile {
   id: string;
   name: string;
@@ -41,7 +40,6 @@ export interface TenantProfile {
   updatedAt: string;
 }
 
-// Update request (for PUT /tenants/me)
 export interface UpdateTenantRequest {
   name?: string;
   phone?: string;
