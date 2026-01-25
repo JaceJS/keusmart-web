@@ -101,24 +101,27 @@ class ApiClient {
   /**
    * Helper: Prepare headers with Tokens
    */
-  private getHeaders(options: RequestOptions): HeadersInit {
+  private getHeaders(options: RequestOptions, isFormData = false): HeadersInit {
     const token = Cookies.get(config.auth.tokenKey);
-    const tenantId = Cookies.get(config.auth.tenantIdKey); // Get tenantId
+    const tenantId = Cookies.get(config.auth.tenantIdKey);
 
-    const headers: HeadersInit = {
-      "Content-Type": "application/json",
-      ...options.headers,
-    };
+    const headers: Record<string, string> = {};
+
+    // Don't set Content-Type for FormData - browser sets it with boundary
+    if (!isFormData) {
+      headers["Content-Type"] = "application/json";
+    }
 
     if (token) {
-      (headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
+      headers["Authorization"] = `Bearer ${token}`;
     }
 
     if (tenantId) {
-      (headers as Record<string, string>)["x-tenant-id"] = tenantId;
+      headers["x-tenant-id"] = tenantId;
     }
 
-    return headers;
+    // Merge with any custom headers from options
+    return { ...headers, ...(options.headers as Record<string, string>) };
   }
 
   /**
@@ -250,6 +253,32 @@ class ApiClient {
       method: "POST",
       body: data ? JSON.stringify(data) : undefined,
     });
+  }
+
+  async postFormData<T>(
+    endpoint: string,
+    formData: FormData,
+    options?: RequestOptions,
+  ): Promise<T> {
+    const url = this.buildUrl(endpoint, options?.params);
+    const headers = this.getHeaders(options || {}, true);
+
+    const response = await fetch(url, {
+      ...options,
+      method: "POST",
+      headers,
+      body: formData,
+    });
+
+    if (response.status === 401) {
+      return this.handleUnauthorized<T>(endpoint, {
+        ...options,
+        method: "POST",
+        body: formData as unknown as BodyInit,
+      });
+    }
+
+    return this.unwrapResponse<T>(response);
   }
 
   async put<T>(

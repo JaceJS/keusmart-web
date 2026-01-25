@@ -6,6 +6,7 @@ import { Button } from "@/app/components/ui/Button";
 import { Card } from "@/app/components/ui/Card";
 import { useTenantProfile } from "../hooks/useTenantProfile";
 import { UpdateTenantRequest } from "../types/tenant.types";
+import { uploadService } from "@/core/upload";
 import {
   Building2,
   FileText,
@@ -21,11 +22,9 @@ import {
 import { cn } from "@/app/lib/utils";
 import Link from "next/link";
 
-// Skeleton component for loading state
 function FormSkeleton() {
   return (
     <div className="space-y-6 animate-pulse">
-      {/* Logo skeleton */}
       <div className="flex items-center gap-4">
         <div className="w-20 h-20 rounded-xl bg-gray-200" />
         <div className="space-y-2">
@@ -66,7 +65,7 @@ function SubscriptionBadge({
   return (
     <Link
       href="/settings/billing"
-      className="flex items-center justify-between p-4 bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl border border-primary/20 hover:border-primary/40 transition-all group"
+      className="flex items-center justify-between p-4 bg-linear-to-r from-primary/5 to-primary/10 rounded-xl border border-primary/20 hover:border-primary/40 transition-all group"
     >
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -109,7 +108,7 @@ export function BusinessProfileForm() {
     email: "",
     address: "",
     description: "",
-    logo: "",
+    logoUrl: "",
   });
 
   const [hasChanges, setHasChanges] = useState(false);
@@ -129,10 +128,10 @@ export function BusinessProfileForm() {
         email: profile.email || "",
         address: profile.address || "",
         description: profile.description || "",
-        logo: profile.logo || "",
+        logoUrl: profile.logoUrl || "",
       });
-      if (profile.logo) {
-        setLogoPreview(profile.logo);
+      if (profile.logoUrl) {
+        setLogoPreview(profile.logoUrl);
       }
     }
   }, [profile]);
@@ -164,30 +163,25 @@ export function BusinessProfileForm() {
       return;
     }
 
-    // Create preview
+    // Create preview immediately
     const reader = new FileReader();
     reader.onloadend = () => {
-      const result = reader.result as string;
-      setLogoPreview(result);
-      setHasChanges(true);
-      setSuccessMessage(null);
+      setLogoPreview(reader.result as string);
     };
     reader.readAsDataURL(file);
 
     // Upload file to server
     setIsUploadingLogo(true);
     try {
-      // For now, we'll use the base64 data URL as the logo
-      // In production, you would upload to Cloudinary or your backend
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const result = reader.result as string;
-        setFormData((prev) => ({ ...prev, logo: result }));
-        setIsUploadingLogo(false);
-      };
-      reader.readAsDataURL(file);
+      const response = await uploadService.uploadImage(file, "tenants");
+      setFormData((prev) => ({ ...prev, logoUrl: response.imageUrl }));
+      setHasChanges(true);
+      setSuccessMessage(null);
     } catch (err) {
       console.error("Failed to upload logo:", err);
+      alert("Gagal mengupload logo. Silakan coba lagi.");
+      setLogoPreview(profile?.logoUrl || null);
+    } finally {
       setIsUploadingLogo(false);
     }
   };
@@ -195,7 +189,7 @@ export function BusinessProfileForm() {
   // Remove logo
   const handleRemoveLogo = () => {
     setLogoPreview(null);
-    setFormData((prev) => ({ ...prev, logo: "" }));
+    setFormData((prev) => ({ ...prev, logoUrl: "" }));
     setHasChanges(true);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -238,7 +232,7 @@ export function BusinessProfileForm() {
       {/* Logo Section */}
       <div className="flex items-start gap-6">
         <div className="relative group">
-          <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-dashed border-primary/30 flex items-center justify-center overflow-hidden transition-all group-hover:border-primary/50">
+          <div className="w-24 h-24 rounded-2xl bg-linear-to-br from-primary/10 to-primary/5 border-2 border-dashed border-primary/30 flex items-center justify-center overflow-hidden transition-all group-hover:border-primary/50">
             {isUploadingLogo ? (
               <Loader2 className="w-8 h-8 text-primary/40 animate-spin" />
             ) : logoPreview ? (

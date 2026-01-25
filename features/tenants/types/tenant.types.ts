@@ -4,7 +4,7 @@ export interface Tenant {
   id: string;
   name: string;
   plan: string;
-  logo?: string;
+  logoUrl?: string;
   role: UserRole;
 }
 
@@ -34,7 +34,7 @@ export interface TenantProfile {
   plan: string;
   subscriptionStatus: string;
   subscriptionEndDate?: string;
-  logo?: string;
+  logoUrl?: string;
   address?: string;
   description?: string;
   createdAt: string;
@@ -46,7 +46,7 @@ export interface UpdateTenantRequest {
   name?: string;
   phone?: string;
   email?: string;
-  logo?: string;
+  logoUrl?: string;
   address?: string;
   description?: string;
 }
