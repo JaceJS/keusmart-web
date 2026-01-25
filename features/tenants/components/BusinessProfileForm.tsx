@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/app/components/ui/Input";
 import { Button } from "@/app/components/ui/Button";
 import { Card } from "@/app/components/ui/Card";
 import { useTenantProfile } from "../hooks/useTenantProfile";
 import { UpdateTenantRequest } from "../types/tenant.types";
-import { uploadService } from "@/core/upload";
+import { BusinessProfileFormSkeleton } from "./BusinessProfileFormSkeleton";
+import { SubscriptionBadge } from "./SubscriptionBadge";
+import { LogoUploader } from "./LogoUploader";
 import {
   Building2,
   FileText,
@@ -14,94 +16,12 @@ import {
   AlertCircle,
   Loader2,
   Save,
-  ImagePlus,
-  Crown,
-  ChevronRight,
-  X,
 } from "lucide-react";
-import { cn } from "@/app/lib/utils";
-import Link from "next/link";
-
-function FormSkeleton() {
-  return (
-    <div className="space-y-6 animate-pulse">
-      <div className="flex items-center gap-4">
-        <div className="w-20 h-20 rounded-xl bg-gray-200" />
-        <div className="space-y-2">
-          <div className="h-4 w-32 bg-gray-200 rounded" />
-          <div className="h-3 w-24 bg-gray-200 rounded" />
-        </div>
-      </div>
-
-      {/* Form fields skeleton */}
-      <div className="grid gap-4 md:grid-cols-2">
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="space-y-2">
-            <div className="h-4 w-20 bg-gray-200 rounded" />
-            <div className="h-11 bg-gray-200 rounded-lg" />
-          </div>
-        ))}
-      </div>
-
-      {/* Textarea skeleton */}
-      <div className="space-y-2">
-        <div className="h-4 w-20 bg-gray-200 rounded" />
-        <div className="h-24 bg-gray-200 rounded-lg" />
-      </div>
-    </div>
-  );
-}
-
-// Subscription badge component - minimal indicator
-function SubscriptionBadge({
-  plan,
-  status,
-}: {
-  plan?: string;
-  status?: string;
-}) {
-  const isActive = status?.toLowerCase() === "active";
-
-  return (
-    <Link
-      href="/settings/billing"
-      className="flex items-center justify-between p-4 bg-linear-to-r from-primary/5 to-primary/10 rounded-xl border border-primary/20 hover:border-primary/40 transition-all group"
-    >
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-          <Crown className="w-5 h-5 text-primary" />
-        </div>
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-gray-900 capitalize">
-              Paket {plan || "Free"}
-            </span>
-            <span
-              className={cn(
-                "inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium",
-                isActive
-                  ? "bg-green-100 text-green-700"
-                  : "bg-amber-100 text-amber-700",
-              )}
-            >
-              {isActive ? "Aktif" : status || "Inactive"}
-            </span>
-          </div>
-          <p className="text-sm text-gray-500">
-            Kelola langganan dan tagihan Anda
-          </p>
-        </div>
-      </div>
-      <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-primary group-hover:translate-x-1 transition-all" />
-    </Link>
-  );
-}
 
 export function BusinessProfileForm() {
   const { profile, isLoading, isUpdating, error, updateProfile } =
     useTenantProfile();
 
-  // Form state
   const [formData, setFormData] = useState<UpdateTenantRequest>({
     name: "",
     phone: "",
@@ -114,12 +34,6 @@ export function BusinessProfileForm() {
   const [hasChanges, setHasChanges] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // Logo upload state
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
-  const [isUploadingLogo, setIsUploadingLogo] = useState(false);
-
-  // Sync form data when profile loads
   useEffect(() => {
     if (profile) {
       setFormData({
@@ -130,13 +44,9 @@ export function BusinessProfileForm() {
         description: profile.description || "",
         logoUrl: profile.logoUrl || "",
       });
-      if (profile.logoUrl) {
-        setLogoPreview(profile.logoUrl);
-      }
     }
   }, [profile]);
 
-  // Track changes
   const handleInputChange = (
     field: keyof UpdateTenantRequest,
     value: string,
@@ -146,57 +56,17 @@ export function BusinessProfileForm() {
     setSuccessMessage(null);
   };
 
-  // Handle logo file selection
-  const handleLogoSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Validate file type
-    if (!file.type.startsWith("image/")) {
-      alert("Silakan pilih file gambar (JPG, PNG, dll)");
-      return;
-    }
-
-    // Validate file size (max 2MB)
-    if (file.size > 2 * 1024 * 1024) {
-      alert("Ukuran file maksimal 2MB");
-      return;
-    }
-
-    // Create preview immediately
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setLogoPreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-
-    // Upload file to server
-    setIsUploadingLogo(true);
-    try {
-      const response = await uploadService.uploadImage(file, "tenants");
-      setFormData((prev) => ({ ...prev, logoUrl: response.imageUrl }));
-      setHasChanges(true);
-      setSuccessMessage(null);
-    } catch (err) {
-      console.error("Failed to upload logo:", err);
-      alert("Gagal mengupload logo. Silakan coba lagi.");
-      setLogoPreview(profile?.logoUrl || null);
-    } finally {
-      setIsUploadingLogo(false);
-    }
+  const handleLogoUpload = (imageUrl: string) => {
+    setFormData((prev) => ({ ...prev, logoUrl: imageUrl }));
+    setHasChanges(true);
+    setSuccessMessage(null);
   };
 
-  // Remove logo
-  const handleRemoveLogo = () => {
-    setLogoPreview(null);
+  const handleLogoRemove = () => {
     setFormData((prev) => ({ ...prev, logoUrl: "" }));
     setHasChanges(true);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
   };
 
-  // Handle form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const success = await updateProfile(formData);
@@ -208,12 +78,11 @@ export function BusinessProfileForm() {
   };
 
   if (isLoading) {
-    return <FormSkeleton />;
+    return <BusinessProfileFormSkeleton />;
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      {/* Error message */}
       {error && (
         <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
@@ -221,7 +90,6 @@ export function BusinessProfileForm() {
         </div>
       )}
 
-      {/* Success message */}
       {successMessage && (
         <div className="p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm flex items-center gap-2 animate-in fade-in slide-in-from-top-2 duration-300">
           <CheckCircle className="w-4 h-4 shrink-0" />
@@ -229,68 +97,12 @@ export function BusinessProfileForm() {
         </div>
       )}
 
-      {/* Logo Section */}
-      <div className="flex items-start gap-6">
-        <div className="relative group">
-          <div className="w-24 h-24 rounded-2xl bg-linear-to-br from-primary/10 to-primary/5 border-2 border-dashed border-primary/30 flex items-center justify-center overflow-hidden transition-all group-hover:border-primary/50">
-            {isUploadingLogo ? (
-              <Loader2 className="w-8 h-8 text-primary/40 animate-spin" />
-            ) : logoPreview ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={logoPreview}
-                alt="Logo Bisnis"
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <Building2 className="w-10 h-10 text-primary/40" />
-            )}
-          </div>
+      <LogoUploader
+        currentLogoUrl={profile?.logoUrl}
+        onUploadSuccess={handleLogoUpload}
+        onRemove={handleLogoRemove}
+      />
 
-          {/* Upload button */}
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={isUploadingLogo}
-            className="absolute -bottom-2 -right-2 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center shadow-lg hover:bg-primary-dark transition-colors disabled:opacity-50"
-            title="Upload Logo"
-          >
-            <ImagePlus className="w-4 h-4" />
-          </button>
-
-          {/* Remove button (when logo exists) */}
-          {logoPreview && !isUploadingLogo && (
-            <button
-              type="button"
-              onClick={handleRemoveLogo}
-              className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors"
-              title="Hapus Logo"
-            >
-              <X className="w-3 h-3" />
-            </button>
-          )}
-
-          {/* Hidden file input */}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleLogoSelect}
-            className="hidden"
-          />
-        </div>
-        <div className="flex-1 pt-2">
-          <h3 className="font-semibold text-gray-900">Logo Bisnis</h3>
-          <p className="text-sm text-gray-500 mt-1">
-            Upload logo bisnis Anda. Ukuran maksimal 2MB.
-          </p>
-          <p className="text-xs text-gray-400 mt-2">
-            Format: JPG, PNG, atau SVG
-          </p>
-        </div>
-      </div>
-
-      {/* Main Form Fields */}
       <Card className="p-6 space-y-6">
         <h3 className="font-semibold text-gray-900 flex items-center gap-2">
           <Building2 className="w-5 h-5 text-primary" />
@@ -330,7 +142,6 @@ export function BusinessProfileForm() {
           />
         </div>
 
-        {/* Description textarea */}
         <div className="space-y-1.5">
           <label className="block text-sm font-medium text-foreground">
             Deskripsi Bisnis
@@ -348,13 +159,11 @@ export function BusinessProfileForm() {
         </div>
       </Card>
 
-      {/* Subscription Badge - Minimal version with link to billing */}
       <SubscriptionBadge
         plan={profile?.plan}
         status={profile?.subscriptionStatus}
       />
 
-      {/* Save Button */}
       <div className="flex items-center justify-between pt-4 border-t border-gray-100">
         <p className="text-sm text-gray-500">
           {hasChanges ? (
