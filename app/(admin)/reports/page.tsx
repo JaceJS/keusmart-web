@@ -18,7 +18,6 @@ export default function ReportsPage() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Read tab and period from URL, with defaults
   const tabParam = searchParams.get("tab") as ReportTab | null;
   const periodParam = searchParams.get("period") as Period | null;
 
@@ -29,7 +28,6 @@ export default function ReportsPage() {
     ? periodParam!
     : "month";
 
-  // Update URL when tab or period changes
   const updateURL = useCallback(
     (newTab: ReportTab, newPeriod: Period) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -54,10 +52,10 @@ export default function ReportsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-gray-900">
-            Laporan Keuangan
+            Laporan
           </h1>
           <p className="text-sm text-text-secondary mt-1">
-            Analisa performa bisnis Anda dalam periode tertentu.
+            Analisa laporan keuangan Anda
           </p>
         </div>
 

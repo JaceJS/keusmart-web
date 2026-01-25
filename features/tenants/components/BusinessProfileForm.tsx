@@ -6,6 +6,7 @@ import { Button } from "@/app/components/ui/Button";
 import { Card } from "@/app/components/ui/Card";
 import { useTenantProfile } from "../hooks/useTenantProfile";
 import { UpdateTenantRequest } from "../types/tenant.types";
+import { uploadService } from "@/core/upload";
 import { BusinessProfileFormSkeleton } from "./BusinessProfileFormSkeleton";
 import { SubscriptionBadge } from "./SubscriptionBadge";
 import { LogoUploader } from "./LogoUploader";
@@ -31,8 +32,10 @@ export function BusinessProfileForm() {
     logoUrl: "",
   });
 
+  const [pendingLogoFile, setPendingLogoFile] = useState<File | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (profile) {
@@ -56,26 +59,49 @@ export function BusinessProfileForm() {
     setSuccessMessage(null);
   };
 
-  const handleLogoUpload = (imageUrl: string) => {
-    setFormData((prev) => ({ ...prev, logoUrl: imageUrl }));
+  const handleLogoFileSelect = (file: File | null) => {
+    setPendingLogoFile(file);
     setHasChanges(true);
     setSuccessMessage(null);
-  };
 
-  const handleLogoRemove = () => {
-    setFormData((prev) => ({ ...prev, logoUrl: "" }));
-    setHasChanges(true);
+    // If file is null, user wants to remove logo
+    if (file === null) {
+      setFormData((prev) => ({ ...prev, logoUrl: "" }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = await updateProfile(formData);
-    if (success) {
-      setHasChanges(false);
-      setSuccessMessage("Profil berhasil disimpan!");
-      setTimeout(() => setSuccessMessage(null), 3000);
+    setIsSaving(true);
+
+    try {
+      let logoUrl = formData.logoUrl;
+
+      // Upload logo if there's a pending file
+      if (pendingLogoFile) {
+        const uploadResponse = await uploadService.uploadImage(
+          pendingLogoFile,
+          "tenants",
+        );
+        logoUrl = uploadResponse.imageUrl;
+      }
+
+      const success = await updateProfile({ ...formData, logoUrl });
+
+      if (success) {
+        setHasChanges(false);
+        setPendingLogoFile(null);
+        setSuccessMessage("Profil berhasil disimpan!");
+        setTimeout(() => setSuccessMessage(null), 3000);
+      }
+    } catch (err) {
+      console.error("Failed to save profile:", err);
+    } finally {
+      setIsSaving(false);
     }
   };
+
+  const isSubmitting = isSaving || isUpdating;
 
   if (isLoading) {
     return <BusinessProfileFormSkeleton />;
@@ -99,8 +125,8 @@ export function BusinessProfileForm() {
 
       <LogoUploader
         currentLogoUrl={profile?.logoUrl}
-        onUploadSuccess={handleLogoUpload}
-        onRemove={handleLogoRemove}
+        onFileSelect={handleLogoFileSelect}
+        isUploading={isSubmitting}
       />
 
       <Card className="p-6 space-y-6">
@@ -175,8 +201,8 @@ export function BusinessProfileForm() {
             "Semua perubahan tersimpan"
           )}
         </p>
-        <Button type="submit" disabled={isUpdating || !hasChanges} size="md">
-          {isUpdating ? (
+        <Button type="submit" disabled={isSubmitting || !hasChanges} size="md">
+          {isSubmitting ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
               Menyimpan...

@@ -19,20 +19,16 @@ export default function BillingPage() {
     upgradePlan,
   } = useCurrentSubscription();
 
-  // Mock invoices for now - will be fetched from API later
   const [invoices] = useState<Invoice[]>([]);
   const [isLoadingInvoices] = useState(false);
 
-  // Handle plan selection
   const handleSelectPlan = async (planId: string) => {
     const success = await upgradePlan(planId);
     if (success) {
-      // Could show a success toast here
       console.log("Plan upgraded successfully");
     }
   };
 
-  // Scroll to plan selector
   const scrollToPlanSelector = () => {
     document.getElementById("plan-selector")?.scrollIntoView({
       behavior: "smooth",

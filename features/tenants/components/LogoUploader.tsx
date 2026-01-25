@@ -1,25 +1,30 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { Building2, ImagePlus, Loader2, X } from "lucide-react";
-import { uploadService } from "@/core/upload";
+import { useRef, useState, useEffect } from "react";
+import { Building2, ImagePlus, X } from "lucide-react";
 
 interface LogoUploaderProps {
   currentLogoUrl?: string | null;
-  onUploadSuccess: (imageUrl: string) => void;
-  onRemove: () => void;
+  onFileSelect: (file: File | null) => void;
+  isUploading?: boolean;
 }
 
 export function LogoUploader({
   currentLogoUrl,
-  onUploadSuccess,
-  onRemove,
+  onFileSelect,
+  isUploading = false,
 }: LogoUploaderProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [preview, setPreview] = useState<string | null>(currentLogoUrl || null);
-  const [isUploading, setIsUploading] = useState(false);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [hasNewFile, setHasNewFile] = useState(false);
 
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (!hasNewFile) {
+      setPreview(currentLogoUrl || null);
+    }
+  }, [currentLogoUrl, hasNewFile]);
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -36,25 +41,17 @@ export function LogoUploader({
     const reader = new FileReader();
     reader.onloadend = () => {
       setPreview(reader.result as string);
+      setHasNewFile(true);
     };
     reader.readAsDataURL(file);
 
-    setIsUploading(true);
-    try {
-      const response = await uploadService.uploadImage(file, "tenants");
-      onUploadSuccess(response.imageUrl);
-    } catch (err) {
-      console.error("Failed to upload logo:", err);
-      alert("Gagal mengupload logo. Silakan coba lagi.");
-      setPreview(currentLogoUrl || null);
-    } finally {
-      setIsUploading(false);
-    }
+    onFileSelect(file);
   };
 
   const handleRemove = () => {
     setPreview(null);
-    onRemove();
+    setHasNewFile(false);
+    onFileSelect(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -64,10 +61,7 @@ export function LogoUploader({
     <div className="flex items-start gap-6">
       <div className="relative group">
         <div className="w-24 h-24 rounded-2xl bg-linear-to-br from-primary/10 to-primary/5 border-2 border-dashed border-primary/30 flex items-center justify-center overflow-hidden transition-all group-hover:border-primary/50">
-          {isUploading ? (
-            <Loader2 className="w-8 h-8 text-primary/40 animate-spin" />
-          ) : preview ? (
-            // eslint-disable-next-line @next/next/no-img-element
+          {preview ? (
             <img
               src={preview}
               alt="Logo Bisnis"
@@ -116,6 +110,11 @@ export function LogoUploader({
         <p className="text-xs text-gray-400 mt-2">
           Format: JPG, PNG, WEBP, atau GIF
         </p>
+        {hasNewFile && (
+          <p className="text-xs text-amber-600 mt-2">
+            Klik simpan untuk mengunggah logo baru
+          </p>
+        )}
       </div>
     </div>
   );
