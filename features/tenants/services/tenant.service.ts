@@ -4,6 +4,8 @@ import {
   SwitchTenantResponse,
   TenantProfile,
   UpdateTenantRequest,
+  CreateTenantRequest,
+  CreateTenantResponse,
 } from "../types/tenant.types";
 import { TENANT_ENDPOINTS } from "../tenant.endpoints";
 
@@ -33,6 +35,16 @@ export const tenantService = {
   updateTenant: async (data: UpdateTenantRequest): Promise<TenantProfile> => {
     const response = await apiClient.put<ApiResponse<TenantProfile>>(
       TENANT_ENDPOINTS.ME,
+      data,
+    );
+    return response.data;
+  },
+
+  createTenant: async (
+    data: CreateTenantRequest,
+  ): Promise<CreateTenantResponse> => {
+    const response = await apiClient.post<ApiResponse<CreateTenantResponse>>(
+      TENANT_ENDPOINTS.CREATE,
       data,
     );
     return response.data;

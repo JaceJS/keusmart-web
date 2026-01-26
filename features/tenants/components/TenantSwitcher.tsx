@@ -176,7 +176,7 @@ export function TenantSwitcher() {
 
           <div className="p-2 border-t border-border bg-gray-50">
             <Link
-              href="/settings/tenants"
+              href="/businesses"
               className="flex items-center justify-center gap-2 w-full p-2.5 rounded-lg text-xs font-medium text-text-secondary hover:text-foreground hover:bg-white hover:shadow-sm border border-transparent hover:border-border transition-all"
               onClick={() => setIsOpen(false)}
             >
