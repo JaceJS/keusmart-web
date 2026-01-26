@@ -1,6 +1,6 @@
-import { BusinessProfileForm } from "@/features/tenants/components/BusinessProfileForm";
+import { TenantProfileForm } from "@/features/tenants/components/TenantProfileForm";
 
-export default function BusinessProfilePage() {
+export default function TenantProfilePage() {
   return (
     <div className="space-y-6">
       <div>
@@ -12,7 +12,7 @@ export default function BusinessProfilePage() {
         </p>
       </div>
 
-      <BusinessProfileForm />
+      <TenantProfileForm />
     </div>
   );
 }

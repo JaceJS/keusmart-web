@@ -1,4 +1,4 @@
-export function BusinessProfileFormSkeleton() {
+export function TenantProfileFormSkeleton() {
   return (
     <div className="space-y-6 animate-pulse">
       <div className="flex items-center gap-4">

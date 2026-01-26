@@ -7,7 +7,7 @@ import { Card } from "@/app/components/ui/Card";
 import { useTenantProfile } from "../hooks/useTenantProfile";
 import { UpdateTenantRequest } from "../types/tenant.types";
 import { uploadService } from "@/core/upload";
-import { BusinessProfileFormSkeleton } from "./BusinessProfileFormSkeleton";
+import { TenantProfileFormSkeleton } from "./TenantProfileFormSkeleton";
 import { SubscriptionBadge } from "./SubscriptionBadge";
 import { LogoUploader } from "./LogoUploader";
 import {
@@ -19,7 +19,7 @@ import {
   Save,
 } from "lucide-react";
 
-export function BusinessProfileForm() {
+export function TenantProfileForm() {
   const { profile, isLoading, isUpdating, error, updateProfile } =
     useTenantProfile();
 
@@ -104,7 +104,7 @@ export function BusinessProfileForm() {
   const isSubmitting = isSaving || isUpdating;
 
   if (isLoading) {
-    return <BusinessProfileFormSkeleton />;
+    return <TenantProfileFormSkeleton />;
   }
 
   return (
