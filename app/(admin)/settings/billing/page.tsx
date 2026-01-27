@@ -7,8 +7,9 @@ import {
   BillingHistory,
   usePlans,
   useCurrentSubscription,
+  type Invoice,
 } from "@/features/subscriptions";
-import { Invoice } from "@/features/subscriptions";
+import Loading from "./loading";
 
 export default function BillingPage() {
   const { plans, isLoading: isLoadingPlans } = usePlans();
@@ -34,6 +35,10 @@ export default function BillingPage() {
       behavior: "smooth",
     });
   };
+
+  if (isLoadingPlans || isLoadingSubscription) {
+    return <Loading />;
+  }
 
   return (
     <div className="space-y-8">

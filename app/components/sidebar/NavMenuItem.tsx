@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/app/lib/utils";
-import type { MenuItem } from "./menu-config";
+import type { MenuItem } from "./MenuConfig";
 import type { UserRole } from "@/features/auth/types/auth.types";
 
 interface NavMenuItemProps {

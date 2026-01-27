@@ -1,6 +1,5 @@
 // Components
 export { TenantSwitcher } from "./components/TenantSwitcher";
-export { TenantProfileForm } from "./components/TenantProfileForm";
 
 // Hooks
 export { useTenants } from "./hooks/useTenants";

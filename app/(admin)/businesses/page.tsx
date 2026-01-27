@@ -20,6 +20,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { cn } from "@/app/lib/utils";
+import Loading from "./loading";
 
 // Helper for plan badge color
 const getPlanBadgeColor = (plan: string) => {
@@ -51,11 +52,7 @@ export default function BusinessesPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
@@ -159,7 +156,7 @@ export default function BusinessesPage() {
                     ) : (
                       <>
                         Buka Dashboard
-                        <ArrowRight className="w-4 h-4 ml-2 opacity-50 group-hover/button:translate-x-2 transition-transform duration-300" />
+                        <ArrowRight className="w-4 h-4 opacity-50 group-hover/button:translate-x-1 transition-transform duration-300" />
                       </>
                     )}
                   </Button>

@@ -10,7 +10,7 @@ import { ConfirmationModal } from "../ui/ConfirmationModal";
 import { SidebarSkeleton } from "./SidebarSkeleton";
 import { NavMenuItem } from "./NavMenuItem";
 import { UserProfile } from "./UserProfile";
-import { menuItems } from "./menu-config";
+import { menuItems } from "./MenuConfig";
 import { cn } from "@/app/lib/utils";
 
 interface SidebarProps {
