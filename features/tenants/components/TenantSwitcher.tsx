@@ -1,12 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { Store, ChevronDown, Check, Settings, Building2 } from "lucide-react";
+import { useRef } from "react";
+import { Building2 } from "lucide-react";
 import { useAuthData } from "@/features/auth";
-import { useTenants } from "../hooks/useTenants";
-import { useSwitchTenant } from "../hooks/useSwitchTenant";
 import { cn } from "@/app/lib/utils";
-import Link from "next/link";
 import Image from "next/image";
 
 // Helper to determine badge color based on plan
@@ -24,43 +21,44 @@ const getPlanBadgeColor = (plan: string) => {
 };
 
 export function TenantSwitcher() {
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { tenant: currentTenant, user } = useAuthData();
-  const { tenants, isLoading: isLoadingTenants } = useTenants();
-  const { switchTenant, isLoading: isSwitching } = useSwitchTenant();
+  // const { tenants, isLoading: isLoadingTenants } = useTenants();
+  // const { switchTenant, isLoading: isSwitching } = useSwitchTenant();
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  // useEffect(() => {
+  //   function handleClickOutside(event: MouseEvent) {
+  //     if (
+  //       dropdownRef.current &&
+  //       !dropdownRef.current.contains(event.target as Node)
+  //     ) {
+  //       setIsOpen(false);
+  //     }
+  //   }
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => document.removeEventListener("mousedown", handleClickOutside);
+  // }, []);
 
-  const handleSwitch = async (tenantId: string) => {
-    if (tenantId === currentTenant?.id) {
-      setIsOpen(false);
-      return;
-    }
-    await switchTenant(tenantId);
-    setIsOpen(false);
-  };
+  // const handleSwitch = async (tenantId: string) => {
+  //   if (tenantId === currentTenant?.id) {
+  //     setIsOpen(false);
+  //     return;
+  //   }
+  //   await switchTenant(tenantId);
+  //   setIsOpen(false);
+  // };
 
   const activeTenantLogo = currentTenant?.logoUrl;
   const activePlanColor = getPlanBadgeColor(currentTenant?.plan || "free");
 
   return (
     <div className="relative" ref={dropdownRef}>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        disabled={isSwitching}
-        className="flex items-center gap-3 w-full hover:bg-secondary p-2 -ml-2 rounded-xl transition-all duration-200 group border border-transparent hover:border-border/50"
+      <div
+        // onClick={() => setIsOpen(!isOpen)}
+        // disabled={isSwitching}
+        // className="flex items-center gap-3 w-full hover:bg-secondary p-2 -ml-2 rounded-xl transition-all duration-200 group border border-transparent hover:border-border/50"
+        className="flex items-center gap-3 w-full p-2 -ml-2 rounded-xl border border-transparent"
       >
         <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-primary/10 flex items-center justify-center shrink-0 border border-primary/10 shadow-sm group-hover:shadow transition-all">
           {activeTenantLogo ? (
@@ -94,15 +92,15 @@ export function TenantSwitcher() {
           </span>
         </div>
 
-        <ChevronDown
+        {/* <ChevronDown
           className={cn(
             "w-4 h-4 text-text-tertiary group-hover:text-text-secondary transition-transform duration-200 shrink-0",
             isOpen && "-rotate-180",
           )}
-        />
-      </button>
+        /> */}
+      </div>
 
-      {isOpen && (
+      {/* {isOpen && (
         <div className="absolute top-full left-0 mt-2 w-[260px] z-50 bg-white border border-border rounded-xl shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 origin-top-left">
           <div className="p-3 bg-gray-50/50 border-b border-border">
             <p className="text-xs font-semibold text-text-secondary uppercase tracking-wider">
@@ -185,7 +183,7 @@ export function TenantSwitcher() {
             </Link>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
