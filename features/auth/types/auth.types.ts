@@ -1,3 +1,5 @@
+import { PlanConfig } from "@/features/plans/types/plan.types";
+
 export type UserRole = "owner" | "admin" | "staff";
 
 export interface User {
@@ -80,6 +82,7 @@ export interface JwtPayload {
   tenantName: string;
   tenantPlan: string;
   tenantLogoUrl?: string;
+  planConfig: PlanConfig;
   exp: number;
   iat: number;
 }
