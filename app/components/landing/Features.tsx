@@ -1,8 +1,19 @@
 import { Card } from "@/app/components/ui/Card";
 import { Container } from "@/app/components/ui/Container";
-import { MessageCircle, Sparkles, Store, TrendingUp } from "lucide-react";
+import {
+  ClipboardList,
+  MessageCircle,
+  Sparkles,
+  TrendingUp,
+} from "lucide-react";
 
 const features = [
+  {
+    icon: ClipboardList,
+    title: "Manajemen Operasional",
+    description:
+      "Pantau transaksi, stok masuk-keluar, dan performa penjualan harian untuk memastikan operasional bisnis tetap sehat.",
+  },
   {
     icon: MessageCircle,
     title: "WhatsApp Otomatis",
@@ -14,12 +25,6 @@ const features = [
     title: "AI Insight Keuangan",
     description:
       "Analisa pola penjualan, prediksi stok, dan rekomendasi bisnis pintar menggunakan AI untuk keputusan lebih baik.",
-  },
-  {
-    icon: Store,
-    title: "Multi Tenant",
-    description:
-      "Kelola banyak toko atau tenant dalam satu dashboard terpusat. Cocok untuk bisnis yang sedang berkembang.",
   },
   {
     icon: TrendingUp,

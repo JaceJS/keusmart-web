@@ -6,7 +6,7 @@ import { APP_NAME } from "@/app/lib/constants";
 export function FinalCTA() {
   return (
     <section className="relative overflow-hidden py-20 lg:py-24">
-      <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-primary-light/30 to-secondary"></div>
+      <div className="absolute inset-0 bg-linear-to-br from-primary/50 via-primary-light/30 to-secondary"></div>
 
       <Container className="relative">
         <div className="mx-auto max-w-3xl text-center">

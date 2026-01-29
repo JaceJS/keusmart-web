@@ -3,93 +3,11 @@ import { Card } from "@/app/components/ui/Card";
 import { Container } from "@/app/components/ui/Container";
 import { Check, X } from "lucide-react";
 import { cn } from "@/app/lib/utils";
-
-interface PlanFeature {
-  name: string;
-  starter: boolean | string;
-  growth: boolean | string;
-  smart: boolean | string;
-}
-
-const features: PlanFeature[] = [
-  { name: "Pencatatan Penjualan", starter: true, growth: true, smart: true },
-  { name: "Pencatatan Pengeluaran", starter: true, growth: true, smart: true },
-  {
-    name: "Laporan Harian/Bulanan",
-    starter: "Ringkas",
-    growth: "Lengkap",
-    smart: "Advanced",
-  },
-  {
-    name: "Dashboard Ringkasan",
-    starter: "Basic",
-    growth: "Lengkap",
-    smart: "Multi-cabang",
-  },
-  { name: "Export CSV / PDF", starter: false, growth: true, smart: true },
-  { name: "WhatsApp Summary", starter: false, growth: true, smart: true },
-  { name: "AI Insight", starter: false, growth: "Basic", smart: "Advanced" },
-  { name: "Prediksi Stok (AI)", starter: false, growth: false, smart: true },
-  {
-    name: "Insight Lintas Cabang",
-    starter: false,
-    growth: false,
-    smart: true,
-  },
-  {
-    name: "Perbandingan Cabang",
-    starter: false,
-    growth: false,
-    smart: true,
-  },
-  { name: "Priority Support", starter: false, growth: false, smart: true },
-  {
-    name: "Custom Role Permission",
-    starter: false,
-    growth: false,
-    smart: true,
-  },
-  { name: "Backup Prioritas", starter: false, growth: false, smart: true },
-];
-
-const plans = [
-  {
-    id: "starter",
-    name: "Starter",
-    price: "39.000",
-    period: "/bulan",
-    description: "Untuk UMKM yang baru memulai",
-    tenants: 1,
-    users: 2,
-    color: "bg-emerald-500",
-    cta: "Mulai Starter",
-    popular: false,
-  },
-  {
-    id: "growth",
-    name: "Growth",
-    price: "79.000",
-    period: "/bulan",
-    description: "Untuk bisnis yang sedang berkembang",
-    tenants: 2,
-    users: 5,
-    color: "bg-amber-500",
-    cta: "Pilih Growth",
-    popular: true,
-  },
-  {
-    id: "smart",
-    name: "Smart",
-    price: "159.000",
-    period: "/bulan",
-    description: "Untuk bisnis multi-cabang",
-    tenants: 5,
-    users: 10,
-    color: "bg-blue-500",
-    cta: "Pilih Smart",
-    popular: false,
-  },
-];
+import {
+  PLANS,
+  FEATURE_COMPARISON,
+  formatPlanPrice,
+} from "@/features/plans/constants/plans";
 
 function FeatureValue({ value }: { value: boolean | string }) {
   if (value === true) {
@@ -125,15 +43,15 @@ export function Pricing() {
 
         {/* Plan Cards */}
         <div className="grid gap-6 lg:grid-cols-3 mb-12">
-          {plans.map((plan) => (
+          {PLANS.map((plan) => (
             <Card
               key={plan.id}
               className={cn(
                 "relative flex flex-col p-6",
-                plan.popular && "border-2 border-primary shadow-xl",
+                plan.isPopular && "border-2 border-primary shadow-xl",
               )}
             >
-              {plan.popular && (
+              {plan.isPopular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                   <span className="rounded-full bg-primary px-4 py-1 text-sm font-medium text-white shadow-lg">
                     Paling Populer
@@ -144,7 +62,7 @@ export function Pricing() {
               <div className="flex items-center gap-3 mb-4">
                 <div className={cn("w-3 h-3 rounded-full", plan.color)} />
                 <h3 className="text-2xl font-bold text-foreground">
-                  {plan.name}
+                  {plan.displayName}
                 </h3>
               </div>
 
@@ -157,28 +75,13 @@ export function Pricing() {
                   Rp
                 </span>
                 <span className="text-4xl font-bold text-foreground">
-                  {plan.price}
+                  {formatPlanPrice(plan.price)}
                 </span>
-                <span className="text-text-secondary">{plan.period}</span>
-              </div>
-
-              <div className="space-y-2 mb-6 text-sm">
-                <p className="flex items-center gap-2">
-                  <span className="font-semibold text-foreground">
-                    {plan.tenants}
-                  </span>
-                  <span className="text-text-secondary">Tenant (Cabang)</span>
-                </p>
-                <p className="flex items-center gap-2">
-                  <span className="font-semibold text-foreground">
-                    {plan.users}
-                  </span>
-                  <span className="text-text-secondary">User</span>
-                </p>
+                <span className="text-text-secondary">/bulan</span>
               </div>
 
               <Button
-                variant={plan.popular ? "primary" : "secondary"}
+                variant={plan.isPopular ? "primary" : "secondary"}
                 size="lg"
                 className="w-full mt-auto"
               >
@@ -197,7 +100,7 @@ export function Pricing() {
                   <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
                     Fitur
                   </th>
-                  {plans.map((plan) => (
+                  {PLANS.map((plan) => (
                     <th
                       key={plan.id}
                       className="px-6 py-4 text-center text-sm font-semibold text-foreground"
@@ -206,14 +109,14 @@ export function Pricing() {
                         <div
                           className={cn("w-2.5 h-2.5 rounded-full", plan.color)}
                         />
-                        {plan.name}
+                        {plan.displayName}
                       </div>
                     </th>
                   ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {features.map((feature, index) => (
+                {FEATURE_COMPARISON.map((feature, index) => (
                   <tr
                     key={index}
                     className="hover:bg-gray-50 transition-colors"
@@ -221,21 +124,13 @@ export function Pricing() {
                     <td className="px-6 py-3 text-sm text-text-secondary">
                       {feature.name}
                     </td>
-                    <td className="px-6 py-3 text-center">
-                      <div className="flex justify-center">
-                        <FeatureValue value={feature.starter} />
-                      </div>
-                    </td>
-                    <td className="px-6 py-3 text-center">
-                      <div className="flex justify-center">
-                        <FeatureValue value={feature.growth} />
-                      </div>
-                    </td>
-                    <td className="px-6 py-3 text-center">
-                      <div className="flex justify-center">
-                        <FeatureValue value={feature.smart} />
-                      </div>
-                    </td>
+                    {PLANS.map((plan) => (
+                      <td key={plan.id} className="px-6 py-3 text-center">
+                        <div className="flex justify-center">
+                          <FeatureValue value={feature.getValue(plan)} />
+                        </div>
+                      </td>
+                    ))}
                   </tr>
                 ))}
               </tbody>

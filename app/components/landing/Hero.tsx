@@ -24,12 +24,19 @@ export function Hero() {
               dapatkan insight AI untuk mengembangkan bisnis Anda.
             </p>
 
-            <div className="flex flex-col gap-4 sm:flex-row">
-              <Button size="lg" className="group">
+            <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
+              <Button
+                size="lg"
+                className="group w-full justify-center sm:w-auto"
+              >
                 Coba Gratis 14 Hari
                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
-              <Button size="lg" variant="secondary">
+              <Button
+                size="lg"
+                variant="secondary"
+                className="w-full justify-center sm:w-auto"
+              >
                 Lihat Harga
               </Button>
             </div>
