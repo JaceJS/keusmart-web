@@ -1,12 +1,7 @@
 "use client";
 
 import { usePlan } from "../context/PlanContext";
-import {
-  FeatureName,
-  TieredFeature,
-  TIER_LEVELS,
-  PlanFeatures,
-} from "../types/plan.types";
+import { FeatureName, TieredFeature, TIER_LEVELS } from "../types/plan.types";
 
 type TierValue<T extends TieredFeature> = (typeof TIER_LEVELS)[T][number];
 
@@ -36,6 +31,10 @@ export function useCanAccess<T extends FeatureName>(
     return featureValue;
   }
 
+  if (featureValue === false) {
+    return false;
+  }
+
   if (minLevel !== undefined && feature in TIER_LEVELS) {
     const levels = TIER_LEVELS[feature as TieredFeature] as readonly unknown[];
     const currentLevel = featureValue;
@@ -43,10 +42,6 @@ export function useCanAccess<T extends FeatureName>(
     const requiredIndex = levels.indexOf(minLevel);
 
     return currentIndex >= requiredIndex && currentIndex !== -1;
-  }
-
-  if (featureValue === false) {
-    return false;
   }
 
   return true;

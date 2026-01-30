@@ -2,6 +2,9 @@
 export { KpiCard } from "./components/KpiCard";
 export { SalesTrendChart } from "./components/SalesTrendChart";
 export { TopProductsList } from "./components/TopProductsList";
+export { AIInsightWidget } from "./components/AIInsightWidget";
+export { WhatsAppSummaryButton } from "./components/WhatsAppSummaryButton";
+export { WhatsAppSummaryCard } from "./components/WhatsAppSummaryCard";
 
 // Hooks
 export { useDashboardData } from "./hooks/useDashboardData";

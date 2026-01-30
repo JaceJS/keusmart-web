@@ -33,6 +33,8 @@ export interface TopProductItem {
   name: string;
   quantitySold: number;
   revenue: number;
+  category?: string;
+  stockRemaining?: number;
 }
 
 export type TopProductsResponse = TopProductItem[];

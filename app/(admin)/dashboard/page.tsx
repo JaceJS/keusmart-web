@@ -1,14 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { DollarSign, ShoppingCart, Package, TrendingUp } from "lucide-react";
 import {
   useDashboardData,
   KpiCard,
   SalesTrendChart,
   TopProductsList,
+  AIInsightWidget,
+  WhatsAppSummaryCard,
 } from "@/features/analytics";
-import { PeriodSelector, Period } from "@/app/components/ui/PeriodSelector";
+import {
+  TimeRangeSelector,
+  PresetPeriod,
+  DateRange,
+} from "@/app/components/ui/TimeRangeSelector";
+import { usePlan } from "@/features/plans";
 
 // Format currency helper
 const formatCurrency = (value: number): string => {
@@ -24,10 +31,33 @@ const formatCurrency = (value: number): string => {
   return `Rp ${value.toLocaleString("id-ID")}`;
 };
 
+// Map preset to period for API
+const presetToPeriod = (
+  preset: PresetPeriod,
+): "today" | "week" | "month" | "year" => {
+  return preset;
+};
+
 export default function DashboardPage() {
-  const [period, setPeriod] = useState<Period>("today");
+  const { features } = usePlan();
+  const isSmartPlan = features.dashboard === "multi-branch";
+
+  const [timeRange, setTimeRange] = useState<PresetPeriod | DateRange>("today");
+
+  // Determine period for API call
+  const period =
+    typeof timeRange === "string" ? presetToPeriod(timeRange) : "month";
+
   const { summary, salesTrend, topProducts, isLoading, error } =
     useDashboardData(period);
+
+  const handleTimeRangeChange = useCallback(
+    (value: PresetPeriod | DateRange) => {
+      setTimeRange(value);
+      // TODO: If custom DateRange, integrate with backend using startDate/endDate
+    },
+    [],
+  );
 
   return (
     <div className="space-y-6">
@@ -39,7 +69,11 @@ export default function DashboardPage() {
           </h1>
           <p className="text-sm text-gray-500">Overview performa bisnis Anda</p>
         </div>
-        <PeriodSelector value={period} onChange={setPeriod} />
+        <TimeRangeSelector
+          value={timeRange}
+          onChange={handleTimeRangeChange}
+          showCustomRange={isSmartPlan}
+        />
       </div>
 
       {/* Error State */}
@@ -89,18 +123,27 @@ export default function DashboardPage() {
         />
       </div>
 
-      {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 h-full">
-          <SalesTrendChart
-            data={salesTrend}
-            loading={isLoading}
-            period={period}
-          />
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col lg:flex-row gap-4 lg:h-[320px]">
+          <div className="flex-3 min-w-0 h-[280px] lg:h-full">
+            <SalesTrendChart
+              data={salesTrend}
+              loading={isLoading}
+              period={period}
+            />
+          </div>
+          <div className="flex-1 min-w-0 lg:max-w-[280px] h-auto lg:h-full">
+            <AIInsightWidget loading={isLoading} />
+          </div>
         </div>
 
-        <div className="h-full">
-          <TopProductsList data={topProducts} loading={isLoading} />
+        <div className="flex flex-col lg:flex-row gap-4 lg:h-[280px]">
+          <div className="flex-3 min-w-0 h-auto lg:h-full">
+            <TopProductsList data={topProducts} loading={isLoading} />
+          </div>
+          <div className="flex-1 min-w-0 lg:max-w-[280px] h-auto lg:h-full">
+            <WhatsAppSummaryCard period={period} />
+          </div>
         </div>
       </div>
     </div>

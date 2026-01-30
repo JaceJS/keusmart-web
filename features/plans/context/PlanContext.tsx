@@ -53,7 +53,6 @@ export function PlanProvider({ children }: { children: React.ReactNode }) {
       if (decoded.planConfig) {
         setPlanConfig(decoded.planConfig);
       } else {
-        // Fallback if planConfig not in token
         setPlanConfig(DEFAULT_PLAN_CONFIG);
       }
     } catch (error) {

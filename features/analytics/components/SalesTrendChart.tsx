@@ -242,21 +242,21 @@ export function SalesTrendChart({
 }: SalesTrendChartProps) {
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl border border-border p-6 shadow-sm animate-pulse h-full">
-        <div className="h-5 bg-gray-200 rounded w-32 mb-4" />
-        <div className="flex-1 bg-gray-100 rounded-xl min-h-64" />
+      <div className="bg-white rounded-2xl border border-border p-4 shadow-sm animate-pulse h-full flex flex-col">
+        <div className="h-4 bg-gray-200 rounded w-32 mb-4 shrink-0" />
+        <div className="flex-1 bg-gray-100 rounded-xl min-h-0" />
       </div>
     );
   }
 
   if (!data || data.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border border-border p-6 shadow-sm h-full flex flex-col">
-        <h3 className="text-lg font-semibold text-foreground mb-4">
+      <div className="bg-white rounded-2xl border border-border p-4 shadow-sm h-full flex flex-col">
+        <h3 className="text-base font-semibold text-foreground mb-4 shrink-0">
           Trend Penjualan
         </h3>
-        <div className="flex-1 flex items-center justify-center bg-secondary rounded-xl min-h-64">
-          <p className="text-text-secondary">Belum ada data penjualan</p>
+        <div className="flex-1 flex items-center justify-center bg-gray-50 rounded-xl min-h-0">
+          <p className="text-sm text-gray-500">Belum ada data penjualan</p>
         </div>
       </div>
     );
@@ -273,11 +273,11 @@ export function SalesTrendChart({
 
   return (
     <div className="bg-white rounded-2xl border border-border p-6 shadow-sm h-full flex flex-col">
-      <h3 className="text-lg font-semibold text-foreground mb-6">
+      <h3 className="text-base font-semibold text-foreground mb-4 shrink-0">
         Trend Penjualan
       </h3>
 
-      <div className="flex-1 min-h-[280px]">
+      <div className="flex-1 min-h-0">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={chartData}

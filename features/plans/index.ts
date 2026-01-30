@@ -29,3 +29,4 @@ export { useCanAccess, useCheckLimit } from "./hooks/useCanAccess";
 // Components
 export { FeatureGate } from "./components/FeatureGate";
 export { UpgradeBanner } from "./components/UpgradeBanner";
+export { LockedFeatureCard } from "./components/LockedFeatureCard";
