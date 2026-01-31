@@ -44,12 +44,12 @@ export const menuItems: MenuItem[] = [
       {
         title: "Profil Bisnis",
         href: "/settings/profile",
-        roles: ["owner", "staff"],
+        roles: ["owner"],
       },
       {
         title: "Langganan",
         href: "/settings/billing",
-        roles: ["owner", "staff"],
+        roles: ["owner"],
       },
     ],
   },
