@@ -1,58 +1,36 @@
 "use client";
 
 import { usePlan } from "../context/PlanContext";
-import { FeatureName, TieredFeature, TIER_LEVELS } from "../types/plan.types";
-
-type TierValue<T extends TieredFeature> = (typeof TIER_LEVELS)[T][number];
+import { FeatureName } from "../types/plan.types";
 
 /**
- * Hook for programmatic feature access checks
+ * Hook for checking feature access
  *
  * @example
- * // Boolean feature check
+ * const canViewChart = useCanAccess("reportsChart");
  * const canExport = useCanAccess("exportCsv");
  *
- * // Tiered feature check - checks if current level >= minLevel
- * const hasAdvancedReports = useCanAccess("reports", "advanced");
+ * if (canViewChart) {
+ *   return <Chart />;
+ * } else {
+ *   return <LockedCard />;
+ * }
  */
-export function useCanAccess<T extends FeatureName>(
-  feature: T,
-  minLevel?: T extends TieredFeature ? TierValue<T> : never,
-): boolean {
+export function useCanAccess(feature: FeatureName): boolean {
   const { features, isLoading } = usePlan();
 
   if (isLoading) {
     return false;
   }
 
-  const featureValue = features[feature];
-
-  if (typeof featureValue === "boolean") {
-    return featureValue;
-  }
-
-  if (featureValue === false) {
-    return false;
-  }
-
-  if (minLevel !== undefined && feature in TIER_LEVELS) {
-    const levels = TIER_LEVELS[feature as TieredFeature] as readonly unknown[];
-    const currentLevel = featureValue;
-    const currentIndex = levels.indexOf(currentLevel);
-    const requiredIndex = levels.indexOf(minLevel);
-
-    return currentIndex >= requiredIndex && currentIndex !== -1;
-  }
-
-  return true;
+  return features[feature] === true;
 }
 
 /**
  * Check if a specific limit has been reached
  *
  * @example
- * const { limits } = usePlan();
- * const canAddUser = currentUserCount < limits.users;
+ * const { canAdd, remaining } = useCheckLimit("users", currentUserCount);
  */
 export function useCheckLimit(
   limitName: keyof ReturnType<typeof usePlan>["limits"],

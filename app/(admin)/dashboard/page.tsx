@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { DollarSign, ShoppingCart, Package, TrendingUp } from "lucide-react";
+import { useState, useCallback, useMemo } from "react";
+import { DollarSign, ShoppingCart, Package, Receipt } from "lucide-react";
 import {
   useDashboardData,
   KpiCard,
@@ -16,22 +16,9 @@ import {
   DateRange,
 } from "@/app/components/ui/TimeRangeSelector";
 import { usePlan } from "@/features/plans";
+import { formatCurrencyCompact } from "@/utils/number";
+import { format } from "date-fns";
 
-// Format currency helper
-const formatCurrency = (value: number): string => {
-  if (value >= 1000000000) {
-    return `Rp ${(value / 1000000000).toFixed(1)}M`;
-  }
-  if (value >= 1000000) {
-    return `Rp ${(value / 1000000).toFixed(1)}Jt`;
-  }
-  if (value >= 1000) {
-    return `Rp ${(value / 1000).toFixed(0)}Rb`;
-  }
-  return `Rp ${value.toLocaleString("id-ID")}`;
-};
-
-// Map preset to period for API
 const presetToPeriod = (
   preset: PresetPeriod,
 ): "today" | "week" | "month" | "year" => {
@@ -40,24 +27,38 @@ const presetToPeriod = (
 
 export default function DashboardPage() {
   const { features } = usePlan();
-  const isSmartPlan = features.dashboard === "multi-branch";
+  const canCustomDateRange = features.customDateRange;
 
   const [timeRange, setTimeRange] = useState<PresetPeriod | DateRange>("today");
 
-  // Determine period for API call
-  const period =
-    typeof timeRange === "string" ? presetToPeriod(timeRange) : "month";
+  const dashboardOptions = useMemo(() => {
+    if (typeof timeRange === "string") {
+      return { period: presetToPeriod(timeRange) };
+    }
+    return {
+      period: "month" as const,
+      startDate: format(timeRange.startDate, "yyyy-MM-dd"),
+      endDate: format(timeRange.endDate, "yyyy-MM-dd"),
+    };
+  }, [timeRange]);
 
   const { summary, salesTrend, topProducts, isLoading, error } =
-    useDashboardData(period);
+    useDashboardData(dashboardOptions);
 
   const handleTimeRangeChange = useCallback(
     (value: PresetPeriod | DateRange) => {
       setTimeRange(value);
-      // TODO: If custom DateRange, integrate with backend using startDate/endDate
     },
     [],
   );
+
+  const period =
+    typeof timeRange === "string" ? presetToPeriod(timeRange) : "month";
+
+  const avgPerTransaction =
+    summary?.summary.totalTransactions && summary.summary.totalTransactions > 0
+      ? summary.summary.totalRevenue / summary.summary.totalTransactions
+      : 0;
 
   return (
     <div className="space-y-6">
@@ -72,7 +73,7 @@ export default function DashboardPage() {
         <TimeRangeSelector
           value={timeRange}
           onChange={handleTimeRangeChange}
-          showCustomRange={isSmartPlan}
+          showCustomRange={canCustomDateRange}
         />
       </div>
 
@@ -87,7 +88,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard
           title="Total Omzet"
-          value={formatCurrency(summary?.summary.totalRevenue ?? 0)}
+          value={formatCurrencyCompact(summary?.summary.totalRevenue ?? 0)}
           change={summary?.comparison?.revenueChange}
           icon={DollarSign}
           iconColor="text-success-dark"
@@ -104,19 +105,19 @@ export default function DashboardPage() {
           loading={isLoading}
         />
         <KpiCard
+          title="Rata-rata/Transaksi"
+          value={formatCurrencyCompact(avgPerTransaction)}
+          icon={Receipt}
+          iconColor="text-accent-purple-dark"
+          iconBgColor="bg-accent-purple-light"
+          loading={isLoading}
+          trendLabel="per order"
+        />
+        <KpiCard
           title="Produk Terjual"
           value={summary?.summary.totalItemsSold ?? 0}
           change={summary?.comparison?.itemsSoldChange}
           icon={Package}
-          iconColor="text-accent-purple-dark"
-          iconBgColor="bg-accent-purple-light"
-          loading={isLoading}
-        />
-        <KpiCard
-          title="Laba Kotor"
-          value={formatCurrency(summary?.summary.grossProfit ?? 0)}
-          change={summary?.comparison?.profitChange}
-          icon={TrendingUp}
           iconColor="text-accent-orange-dark"
           iconBgColor="bg-accent-orange-light"
           loading={isLoading}

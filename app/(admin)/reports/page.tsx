@@ -2,21 +2,30 @@
 
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useCallback } from "react";
-import { PeriodSelector, Period } from "@/app/components/ui/PeriodSelector";
+import {
+  TimeRangeSelector,
+  PresetPeriod,
+  DateRange,
+} from "@/app/components/ui/TimeRangeSelector";
 import { ReportTabs } from "./components/ReportTabs";
 import { SummaryView } from "./components/SummaryView";
 import { SalesView } from "./components/SalesView";
 import { ExpensesView } from "./components/ExpensesView";
 import type { ReportTab } from "./constants";
 import { REPORT_TABS } from "./constants";
-import { Download } from "lucide-react";
+import { Download, Lock } from "lucide-react";
+import { usePlan, useCanAccess } from "@/features/plans";
 
+type Period = "today" | "week" | "month" | "year";
 const VALID_PERIODS: Period[] = ["today", "week", "month", "year"];
 
 export default function ReportsPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+
+  const canExport = useCanAccess("exportCsv");
+  const canCustomDateRange = useCanAccess("customDateRange");
 
   const tabParam = searchParams.get("tab") as ReportTab | null;
   const periodParam = searchParams.get("period") as Period | null;
@@ -42,8 +51,11 @@ export default function ReportsPage() {
     updateURL(tab, period);
   };
 
-  const handlePeriodChange = (newPeriod: Period) => {
-    updateURL(activeTab, newPeriod);
+  const handleTimeRangeChange = (value: PresetPeriod | DateRange) => {
+    if (typeof value === "string") {
+      updateURL(activeTab, value);
+    }
+    // TODO: Handle custom date range when backend supports it
   };
 
   return (
@@ -59,8 +71,26 @@ export default function ReportsPage() {
           </p>
         </div>
 
-        <button className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-border rounded-lg text-sm font-medium text-text-secondary hover:text-foreground hover:bg-gray-50 transition-colors shadow-sm">
-          <Download className="w-4 h-4" />
+        <button
+          disabled={!canExport}
+          onClick={() => {
+            // TODO: Implement export functionality
+            console.log("Export clicked");
+          }}
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm ${
+            canExport
+              ? "bg-white border border-border text-text-secondary hover:text-foreground hover:bg-gray-50"
+              : "bg-gray-100 border border-gray-200 text-gray-400 cursor-not-allowed"
+          }`}
+          title={
+            canExport ? "Export laporan" : "Upgrade ke Growth untuk Export"
+          }
+        >
+          {canExport ? (
+            <Download className="w-4 h-4" />
+          ) : (
+            <Lock className="w-4 h-4" />
+          )}
           Export
         </button>
       </div>
@@ -68,7 +98,11 @@ export default function ReportsPage() {
       {/* Controls */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-border shadow-sm">
         <ReportTabs activeTab={activeTab} onChange={handleTabChange} />
-        <PeriodSelector value={period} onChange={handlePeriodChange} />
+        <TimeRangeSelector
+          value={period}
+          onChange={handleTimeRangeChange}
+          showCustomRange={canCustomDateRange}
+        />
       </div>
 
       {/* Content */}

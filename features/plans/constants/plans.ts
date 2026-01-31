@@ -39,11 +39,12 @@ export const PLANS: PlanDefinition[] = [
     features: {
       pos: true,
       expenseTracker: true,
-      reports: "basic",
-      dashboard: "basic",
+      reportsChart: false,
       exportCsv: false,
-      whatsappSummary: false,
+      customDateRange: false,
+      multiBranch: false,
       aiInsight: false,
+      whatsappSummary: false,
       stockPrediction: false,
     },
   },
@@ -64,11 +65,12 @@ export const PLANS: PlanDefinition[] = [
     features: {
       pos: true,
       expenseTracker: true,
-      reports: "advanced",
-      dashboard: "standard",
+      reportsChart: true,
       exportCsv: true,
+      customDateRange: false,
+      multiBranch: false,
+      aiInsight: true,
       whatsappSummary: true,
-      aiInsight: "basic",
       stockPrediction: false,
     },
   },
@@ -89,11 +91,12 @@ export const PLANS: PlanDefinition[] = [
     features: {
       pos: true,
       expenseTracker: true,
-      reports: "advanced",
-      dashboard: "multi-branch",
+      reportsChart: true,
       exportCsv: true,
+      customDateRange: true,
+      multiBranch: true,
+      aiInsight: true,
       whatsappSummary: true,
-      aiInsight: "advanced",
       stockPrediction: true,
     },
   },
@@ -117,24 +120,9 @@ export const FEATURE_COMPARISON: FeatureDisplay[] = [
     getValue: (plan) => plan.features.expenseTracker,
   },
   {
-    name: "Laporan Harian/Bulanan",
-    key: "reports",
-    getValue: (plan) =>
-      plan.features.reports === "basic" ? "Ringkas" : "Lengkap",
-  },
-  {
-    name: "Dashboard Ringkasan",
-    key: "dashboard",
-    getValue: (plan) => {
-      switch (plan.features.dashboard) {
-        case "basic":
-          return "Basic";
-        case "standard":
-          return "Lengkap";
-        case "multi-branch":
-          return "Multi-cabang";
-      }
-    },
+    name: "Laporan Grafik Keuangan",
+    key: "reportsChart",
+    getValue: (plan) => plan.features.reportsChart,
   },
   {
     name: "Export CSV / PDF",
@@ -142,17 +130,24 @@ export const FEATURE_COMPARISON: FeatureDisplay[] = [
     getValue: (plan) => plan.features.exportCsv,
   },
   {
-    name: "WhatsApp Summary",
-    key: "whatsappSummary",
-    getValue: (plan) => plan.features.whatsappSummary,
+    name: "Custom Date Range",
+    key: "customDateRange",
+    getValue: (plan) => plan.features.customDateRange,
+  },
+  {
+    name: "Multi-Cabang Dashboard",
+    key: "multiBranch",
+    getValue: (plan) => plan.features.multiBranch,
   },
   {
     name: "AI Insight",
     key: "aiInsight",
-    getValue: (plan) => {
-      if (plan.features.aiInsight === false) return false;
-      return plan.features.aiInsight === "basic" ? "Basic" : "Advanced";
-    },
+    getValue: (plan) => plan.features.aiInsight,
+  },
+  {
+    name: "WhatsApp Summary",
+    key: "whatsappSummary",
+    getValue: (plan) => plan.features.whatsappSummary,
   },
   {
     name: "Prediksi Stok (AI)",

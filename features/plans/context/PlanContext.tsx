@@ -3,11 +3,17 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
-import { PlanConfig, PlanFeatures, PlanLimits } from "../types/plan.types";
+import {
+  PlanConfig,
+  PlanFeatures,
+  PlanLimits,
+  PlanTier,
+} from "../types/plan.types";
 import { JwtPayload } from "@/features/auth/types/auth.types";
 
-// Default plan config for unauthenticated or free users
+// Default plan config for Starter (free) users
 const DEFAULT_PLAN_CONFIG: PlanConfig = {
+  tier: "starter",
   limits: {
     tenants: 1,
     outlets: 1,
@@ -16,16 +22,18 @@ const DEFAULT_PLAN_CONFIG: PlanConfig = {
   features: {
     pos: true,
     expenseTracker: true,
-    reports: "basic",
-    dashboard: "basic",
+    reportsChart: false,
     exportCsv: false,
-    whatsappSummary: false,
+    customDateRange: false,
+    multiBranch: false,
     aiInsight: false,
+    whatsappSummary: false,
     stockPrediction: false,
   },
 };
 
 interface PlanContextValue {
+  tier: PlanTier;
   limits: PlanLimits;
   features: PlanFeatures;
   planConfig: PlanConfig;
@@ -64,6 +72,7 @@ export function PlanProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const value: PlanContextValue = {
+    tier: planConfig.tier,
     limits: planConfig.limits,
     features: planConfig.features,
     planConfig,

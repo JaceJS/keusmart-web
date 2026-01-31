@@ -3,11 +3,10 @@ export type {
   PlanConfig,
   PlanLimits,
   PlanFeatures,
+  PlanTier,
   FeatureName,
   LimitName,
-  TieredFeature,
 } from "./types/plan.types";
-export { TIER_LEVELS } from "./types/plan.types";
 
 // Constants
 export {

@@ -1,7 +1,17 @@
 import { KpiCard, useReportSummary } from "@/features/analytics";
 import { FinancialSummaryChart } from "@/features/analytics/components/FinancialSummaryChart";
-import { DollarSign, TrendingUp, TrendingDown, Wallet } from "lucide-react";
-import type { Period } from "@/app/components/ui/PeriodSelector";
+import {
+  DollarSign,
+  TrendingUp,
+  TrendingDown,
+  Wallet,
+  BarChart3,
+} from "lucide-react";
+import { useCanAccess } from "@/features/plans";
+import { LockedFeatureCard } from "@/features/plans/components/LockedFeatureCard";
+import { formatCurrency } from "@/utils/number";
+
+type Period = "today" | "week" | "month" | "year";
 
 interface SummaryViewProps {
   period: Period;
@@ -9,25 +19,26 @@ interface SummaryViewProps {
 
 export function SummaryView({ period }: SummaryViewProps) {
   const { data, isLoading, error } = useReportSummary(period);
+  const canViewChart = useCanAccess("reportsChart");
 
   if (error) {
     return <div className="text-red-500 p-4 bg-red-50 rounded-lg">{error}</div>;
   }
 
-  // Helper to format currency
-  const fmt = (n?: number) =>
-    new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      maximumFractionDigits: 0,
-    }).format(n || 0);
+  // Calculate margins
+  const grossMargin = data?.summary?.totalRevenue
+    ? ((data.summary.grossProfit || 0) / data.summary.totalRevenue) * 100
+    : 0;
+  const netMargin = data?.summary?.totalRevenue
+    ? ((data.summary.netProfit || 0) / data.summary.totalRevenue) * 100
+    : 0;
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard
           title="Total Penjualan"
-          value={fmt(data?.summary?.totalRevenue)}
+          value={formatCurrency(data?.summary?.totalRevenue ?? 0)}
           loading={isLoading}
           icon={DollarSign}
           iconColor="text-primary-dark"
@@ -37,7 +48,7 @@ export function SummaryView({ period }: SummaryViewProps) {
         />
         <KpiCard
           title="Total Pengeluaran"
-          value={fmt(data?.summary?.totalExpenses)}
+          value={formatCurrency(data?.summary?.totalExpenses ?? 0)}
           loading={isLoading}
           icon={Wallet}
           iconColor="text-red-500"
@@ -47,31 +58,41 @@ export function SummaryView({ period }: SummaryViewProps) {
         />
         <KpiCard
           title="Laba Kotor"
-          value={fmt(data?.summary?.grossProfit)}
+          value={formatCurrency(data?.summary?.grossProfit ?? 0)}
           loading={isLoading}
           icon={TrendingUp}
-          iconColor="text-primary-dark"
-          iconBgColor="bg-primary-light"
+          iconColor="text-success-dark"
+          iconBgColor="bg-success-light"
+          trendLabel={`Margin: ${grossMargin.toFixed(1)}%`}
         />
         <KpiCard
           title="Laba Bersih"
-          value={fmt(data?.summary?.netProfit)}
+          value={formatCurrency(data?.summary?.netProfit ?? 0)}
           loading={isLoading}
           icon={TrendingDown}
-          iconColor="text-primary-dark"
-          iconBgColor="bg-primary-light"
-          trendLabel="margin bersih"
+          iconColor="text-accent-purple-dark"
+          iconBgColor="bg-accent-purple-light"
+          trendLabel={`Margin: ${netMargin.toFixed(1)}%`}
         />
       </div>
 
+      {/* Chart - locked for Starter */}
       <div className="h-[400px]">
-        <FinancialSummaryChart
-          revenue={data?.summary?.totalRevenue || 0}
-          expenses={data?.summary?.totalExpenses || 0}
-          revenueChange={data?.comparison?.revenueChange}
-          expenseChange={data?.comparison?.expenseChange}
-          loading={isLoading}
-        />
+        {canViewChart ? (
+          <FinancialSummaryChart
+            revenue={data?.summary?.totalRevenue || 0}
+            expenses={data?.summary?.totalExpenses || 0}
+            revenueChange={data?.comparison?.revenueChange}
+            expenseChange={data?.comparison?.expenseChange}
+            loading={isLoading}
+          />
+        ) : (
+          <LockedFeatureCard
+            title="Visualisasi Keuangan"
+            icon={<BarChart3 className="w-5 h-5 text-primary" />}
+            description="Upgrade ke Growth untuk melihat grafik perbandingan pendapatan dan pengeluaran secara visual."
+          />
+        )}
       </div>
     </div>
   );

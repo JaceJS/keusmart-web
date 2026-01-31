@@ -1,5 +1,10 @@
 export type AnalyticsPeriod = "today" | "week" | "month" | "year";
 
+export interface DateRangeParams {
+  startDate?: string;
+  endDate?: string;
+}
+
 export interface AnalyticsSummary {
   totalRevenue: number;
   totalTransactions: number;

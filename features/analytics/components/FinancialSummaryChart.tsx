@@ -11,6 +11,7 @@ import {
   Cell,
   ReferenceLine,
 } from "recharts";
+import { formatCurrencyCompact } from "@/utils/number";
 
 interface FinancialSummaryChartProps {
   revenue: number;
@@ -19,20 +20,6 @@ interface FinancialSummaryChartProps {
   expenseChange?: number;
   loading?: boolean;
 }
-
-// Format currency
-const formatCurrency = (value: number): string => {
-  if (value >= 1000000000) {
-    return `Rp ${(value / 1000000000).toFixed(1)}M`;
-  }
-  if (value >= 1000000) {
-    return `Rp ${(value / 1000000).toFixed(1)}Jt`;
-  }
-  if (value >= 1000) {
-    return `Rp ${(value / 1000).toFixed(0)}Rb`;
-  }
-  return value.toLocaleString("id-ID");
-};
 
 // Custom tooltip
 const CustomTooltip = ({
@@ -72,7 +59,7 @@ const CustomTooltip = ({
           )}
         </div>
         <p className="text-lg font-bold text-foreground">
-          {formatCurrency(data.value)}
+          {formatCurrencyCompact(data.value)}
         </p>
       </div>
     );
@@ -170,7 +157,7 @@ export function FinancialSummaryChart({
             <YAxis
               axisLine={false}
               tickLine={false}
-              tickFormatter={formatCurrency}
+              tickFormatter={formatCurrencyCompact}
               tick={{ fontSize: 12, fill: "var(--text-tertiary)" }}
               domain={[0, maxVal]}
             />

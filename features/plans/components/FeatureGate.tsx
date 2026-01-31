@@ -2,14 +2,11 @@
 
 import React from "react";
 import { useCanAccess } from "../hooks/useCanAccess";
-import { FeatureName, TieredFeature, TIER_LEVELS } from "../types/plan.types";
+import { FeatureName } from "../types/plan.types";
 import { UpgradeBanner } from "./UpgradeBanner";
 
-type TierValue<T extends TieredFeature> = (typeof TIER_LEVELS)[T][number];
-
-interface FeatureGateProps<T extends FeatureName> {
-  feature: T;
-  minLevel?: T extends TieredFeature ? TierValue<T> : never;
+interface FeatureGateProps {
+  feature: FeatureName;
   children: React.ReactNode;
   fallback?: React.ReactNode;
   hideWhenUnavailable?: boolean;
@@ -24,11 +21,6 @@ interface FeatureGateProps<T extends FeatureName> {
  *   <ExportButton />
  * </FeatureGate>
  *
- * // Tiered feature with minimum level
- * <FeatureGate feature="reports" minLevel="advanced">
- *   <AdvancedReportsSection />
- * </FeatureGate>
- *
  * // With custom fallback
  * <FeatureGate feature="aiInsight" fallback={<CustomUpgradeMessage />}>
  *   <AIInsightsPanel />
@@ -39,14 +31,13 @@ interface FeatureGateProps<T extends FeatureName> {
  *   <StockPredictionWidget />
  * </FeatureGate>
  */
-export function FeatureGate<T extends FeatureName>({
+export function FeatureGate({
   feature,
-  minLevel,
   children,
   fallback,
   hideWhenUnavailable = false,
-}: FeatureGateProps<T>) {
-  const hasAccess = useCanAccess(feature, minLevel as never);
+}: FeatureGateProps) {
+  const hasAccess = useCanAccess(feature);
 
   if (hasAccess) {
     return <>{children}</>;

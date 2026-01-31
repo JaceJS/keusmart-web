@@ -35,7 +35,7 @@ export function WhatsAppSummaryCard({ period }: WhatsAppSummaryCardProps) {
     setTimeout(() => setIsSent(false), 3000);
   };
 
-  const isAdvanced = features.dashboard === "multi-branch";
+  const isAdvanced = features.multiBranch;
 
   return (
     <Card className="p-4 h-full flex flex-col">

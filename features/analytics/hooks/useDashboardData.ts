@@ -4,10 +4,17 @@ import { useState, useEffect, useCallback } from "react";
 import {
   AnalyticsPeriod,
   DashboardSummaryResponse,
+  DateRangeParams,
   SalesTrendResponse,
   TopProductsResponse,
 } from "../types/analytics.types";
 import { analyticsService } from "../services/analytics.service";
+
+interface UseDashboardDataOptions {
+  period?: AnalyticsPeriod;
+  startDate?: string;
+  endDate?: string;
+}
 
 interface UseDashboardDataResult {
   summary: DashboardSummaryResponse | null;
@@ -19,8 +26,15 @@ interface UseDashboardDataResult {
 }
 
 export const useDashboardData = (
-  period: AnalyticsPeriod = "today",
+  periodOrOptions: AnalyticsPeriod | UseDashboardDataOptions = "today",
 ): UseDashboardDataResult => {
+  const options: UseDashboardDataOptions =
+    typeof periodOrOptions === "string"
+      ? { period: periodOrOptions }
+      : periodOrOptions;
+
+  const { period = "today", startDate, endDate } = options;
+
   const [summary, setSummary] = useState<DashboardSummaryResponse | null>(null);
   const [salesTrend, setSalesTrend] = useState<SalesTrendResponse | null>(null);
   const [topProducts, setTopProducts] = useState<TopProductsResponse | null>(
@@ -33,7 +47,6 @@ export const useDashboardData = (
     setIsLoading(true);
     setError(null);
 
-    // Map period to correct groupBy value
     const getGroupByForPeriod = (
       p: AnalyticsPeriod,
     ): "hour" | "day" | "week" | "month" => {
@@ -51,11 +64,18 @@ export const useDashboardData = (
       }
     };
 
+    const dateRange: DateRangeParams | undefined =
+      startDate && endDate ? { startDate, endDate } : undefined;
+
     try {
       const [summaryData, trendData, productsData] = await Promise.all([
-        analyticsService.getSummary(period),
-        analyticsService.getSalesTrend(period, getGroupByForPeriod(period)),
-        analyticsService.getTopProducts(period),
+        analyticsService.getSummary(period, dateRange),
+        analyticsService.getSalesTrend(
+          period,
+          getGroupByForPeriod(period),
+          dateRange,
+        ),
+        analyticsService.getTopProducts(period, 5, dateRange),
       ]);
 
       setSummary(summaryData);
@@ -67,7 +87,7 @@ export const useDashboardData = (
     } finally {
       setIsLoading(false);
     }
-  }, [period]);
+  }, [period, startDate, endDate]);
 
   useEffect(() => {
     fetchData();

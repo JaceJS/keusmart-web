@@ -58,7 +58,6 @@ interface AIInsightWidgetProps {
 
 export function AIInsightWidget({ loading = false }: AIInsightWidgetProps) {
   const hasAccess = useCanAccess("aiInsight");
-  const { features } = usePlan();
 
   if (!hasAccess) {
     return (
@@ -70,8 +69,8 @@ export function AIInsightWidget({ loading = false }: AIInsightWidgetProps) {
     );
   }
 
-  const aiLevel = features.aiInsight;
-  const insights = aiLevel === "advanced" ? ADVANCED_INSIGHTS : BASIC_INSIGHTS;
+  // All users with aiInsight access get insights
+  const insights = BASIC_INSIGHTS;
 
   if (loading) {
     return (
@@ -101,11 +100,6 @@ export function AIInsightWidget({ loading = false }: AIInsightWidgetProps) {
             Rekomendasi AI
           </h3>
         </div>
-        {aiLevel === "advanced" && (
-          <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
-            Advanced
-          </span>
-        )}
       </div>
 
       <div className="space-y-2 overflow-y-auto flex-1 pr-1">
