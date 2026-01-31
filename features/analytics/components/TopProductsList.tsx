@@ -88,9 +88,6 @@ export function TopProductsList({
         <h3 className="font-semibold text-gray-900 text-sm">
           Daftar Produk Terlaris
         </h3>
-        <Link href="/products" className="text-xs text-primary hover:underline">
-          Lihat Semua
-        </Link>
       </div>
 
       <div className="overflow-auto flex-1 min-h-0">
@@ -101,7 +98,7 @@ export function TopProductsList({
               <th className="pb-3 font-medium">KATEGORI</th>
               <th className="pb-3 font-medium text-right">TERJUAL</th>
               <th className="pb-3 font-medium text-center">STATUS STOK</th>
-              <th className="pb-3 font-medium text-right">REVENUE</th>
+              <th className="pb-3 font-medium text-right">PENDAPATAN</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">

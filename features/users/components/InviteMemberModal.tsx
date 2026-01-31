@@ -9,6 +9,7 @@ interface InviteMemberModalProps {
   onClose: () => void;
   onInvite: (data: InviteMemberRequest) => Promise<void>;
   isLoading?: boolean;
+  remainingSlots?: number;
 }
 
 export function InviteMemberModal({
@@ -16,6 +17,7 @@ export function InviteMemberModal({
   onClose,
   onInvite,
   isLoading = false,
+  remainingSlots,
 }: InviteMemberModalProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -70,7 +72,9 @@ export function InviteMemberModal({
                 Undang Anggota
               </h2>
               <p className="text-sm text-text-secondary">
-                Tambahkan anggota baru ke tim Anda
+                {remainingSlots !== undefined
+                  ? `Tersisa ${remainingSlots} slot undangan`
+                  : "Tambahkan anggota baru ke tim Anda"}
               </p>
             </div>
           </div>
