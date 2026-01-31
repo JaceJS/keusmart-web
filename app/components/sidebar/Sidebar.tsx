@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import { useAuthData } from "@/features/auth";
+import { useAuth } from "@/features/auth";
 import { authService } from "@/features/auth/services/auth.service";
 import { TenantSwitcher } from "@/features/tenants";
 import { ConfirmationModal } from "../ui/ConfirmationModal";
@@ -21,7 +21,7 @@ interface SidebarProps {
 export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, isLoading } = useAuthData();
+  const { user, isLoading } = useAuth();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [expandedMenus, setExpandedMenus] = useState<string[]>([]);

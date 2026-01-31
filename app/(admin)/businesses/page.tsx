@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useAuthData } from "@/features/auth";
 import { useTenants } from "@/features/tenants/hooks/useTenants";
 import { useSwitchTenant } from "@/features/tenants/hooks/useSwitchTenant";
 import { Button } from "@/app/components/ui/Button";
@@ -16,29 +15,16 @@ import {
   CheckCircle2,
   Store,
   Calendar,
-  Settings,
   ArrowRight,
 } from "lucide-react";
 import { cn } from "@/app/lib/utils";
 import Loading from "./loading";
-
-// Helper for plan badge color
-const getPlanBadgeColor = (plan: string) => {
-  switch (plan?.toLowerCase()) {
-    case "pro":
-      return "bg-amber-100 text-amber-700 border-amber-200";
-    case "smart":
-      return "bg-blue-100 text-blue-700 border-blue-200";
-    case "starter":
-      return "bg-green-100 text-green-700 border-green-200";
-    default:
-      return "bg-gray-100 text-gray-700 border-gray-200";
-  }
-};
+import { useAuth } from "@/features/auth";
+import { getPlanBadgeColor } from "@/utils";
 
 export default function BusinessesPage() {
   const router = useRouter();
-  const { tenant: currentTenant, user } = useAuthData();
+  const { tenant: currentTenant, user } = useAuth();
   const { tenants, isLoading, refresh } = useTenants();
   const { switchTenant, isLoading: isSwitching } = useSwitchTenant();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);

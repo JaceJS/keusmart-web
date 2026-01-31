@@ -2,15 +2,16 @@
 
 import { useRef } from "react";
 import { Building2 } from "lucide-react";
-import { useAuthData } from "@/features/auth";
+
 import { cn } from "@/app/lib/utils";
 import Image from "next/image";
 import { getPlanBadgeColor } from "@/utils/plan";
+import { useAuth } from "@/features/auth";
 
 export function TenantSwitcher() {
   // const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { tenant: currentTenant, user } = useAuthData();
+  const { tenant: currentTenant, user } = useAuth();
   // const { tenants, isLoading: isLoadingTenants } = useTenants();
   // const { switchTenant, isLoading: isSwitching } = useSwitchTenant();
 
