@@ -1,8 +1,8 @@
 export interface Plan {
   id: string;
-  name: string; // "starter" | "growth" | "smart"
+  name: string;
   displayName: string;
-  price: number; // Monthly price in IDR
+  price: number;
   description: string;
   features: string[];
   limits: {
@@ -20,6 +20,9 @@ export interface Subscription {
   status: "active" | "expired" | "cancelled" | "trial";
   startDate: string;
   endDate: string;
+  usage: {
+    users: number;
+  };
   createdAt: string;
   updatedAt: string;
 }

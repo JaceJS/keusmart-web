@@ -1,27 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import {
   CurrentPlanCard,
   PlanSelector,
-  BillingHistory,
-  usePlans,
   useCurrentSubscription,
-  type Invoice,
 } from "@/features/subscriptions";
-import Loading from "./loading";
 
 export default function BillingPage() {
-  const { plans, isLoading: isLoadingPlans } = usePlans();
-  const {
-    subscription,
-    isLoading: isLoadingSubscription,
-    isUpgrading,
-    upgradePlan,
-  } = useCurrentSubscription();
-
-  const [invoices] = useState<Invoice[]>([]);
-  const [isLoadingInvoices] = useState(false);
+  const { subscription, isUpgrading, upgradePlan } = useCurrentSubscription();
 
   const handleSelectPlan = async (planId: string) => {
     const success = await upgradePlan(planId);
@@ -35,10 +21,6 @@ export default function BillingPage() {
       behavior: "smooth",
     });
   };
-
-  if (isLoadingPlans || isLoadingSubscription) {
-    return <Loading />;
-  }
 
   return (
     <div className="space-y-8">
@@ -54,24 +36,18 @@ export default function BillingPage() {
 
       {/* Current Plan */}
       <CurrentPlanCard
-        subscription={subscription}
-        isLoading={isLoadingSubscription}
         onUpgradeClick={scrollToPlanSelector}
+        currentUsers={subscription?.usage?.users || 1}
+        // currentOutlets={1} // TODO: Get from API
       />
 
       {/* Plan Selector */}
       <div id="plan-selector">
         <PlanSelector
-          plans={plans}
-          currentPlanId={subscription?.planId}
-          isLoading={isLoadingPlans}
           isUpgrading={isUpgrading}
           onSelectPlan={handleSelectPlan}
         />
       </div>
-
-      {/* Billing History */}
-      <BillingHistory invoices={invoices} isLoading={isLoadingInvoices} />
     </div>
   );
 }

@@ -2,53 +2,25 @@
 
 import { Card } from "@/app/components/ui/Card";
 import { Button } from "@/app/components/ui/Button";
-import { Plan } from "../types/subscription.types";
+import {
+  PLANS,
+  formatPlanPrice,
+  type PlanDefinition,
+} from "@/features/plans/constants/plans";
+import { usePlan } from "@/features/auth";
 import { Check, Zap, Star, Loader2 } from "lucide-react";
 import { cn } from "@/app/lib/utils";
 
 interface PlanSelectorProps {
-  plans: Plan[];
-  currentPlanId?: string;
-  isLoading: boolean;
-  isUpgrading: boolean;
+  isUpgrading?: boolean;
   onSelectPlan: (planId: string) => void;
 }
 
-// Skeleton for loading
-function PlansSkeleton() {
-  return (
-    <div className="grid gap-6 md:grid-cols-3">
-      {[1, 2, 3].map((i) => (
-        <div
-          key={i}
-          className="h-[400px] bg-gray-100 rounded-2xl animate-pulse"
-        />
-      ))}
-    </div>
-  );
-}
-
-// Format price to IDR
-function formatPrice(price: number): string {
-  if (price === 0) return "Gratis";
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(price);
-}
-
 export function PlanSelector({
-  plans,
-  currentPlanId,
-  isLoading,
-  isUpgrading,
+  isUpgrading = false,
   onSelectPlan,
 }: PlanSelectorProps) {
-  if (isLoading) {
-    return <PlansSkeleton />;
-  }
+  const { tier: currentTier } = usePlan();
 
   return (
     <div className="space-y-6">
@@ -60,8 +32,8 @@ export function PlanSelector({
       </div>
 
       <div className="grid gap-6 md:grid-cols-3">
-        {plans.map((plan) => {
-          const isCurrentPlan = currentPlanId === plan.id;
+        {PLANS.map((plan) => {
+          const isCurrentPlan = currentTier === plan.id;
           const isPopular = plan.isPopular;
 
           return (
@@ -92,62 +64,78 @@ export function PlanSelector({
                 </div>
               )}
 
-              {/* Plan header */}
+              {/* Plan header with color indicator */}
               <div className="mb-6">
-                <h3 className="text-xl font-bold text-gray-900">
-                  {plan.displayName}
-                </h3>
-                <p className="text-sm text-gray-500 mt-1">{plan.description}</p>
+                <div className="flex items-center gap-2 mb-1">
+                  <div className={cn("w-3 h-3 rounded-full", plan.color)} />
+                  <h3 className="text-xl font-bold text-gray-900">
+                    {plan.displayName}
+                  </h3>
+                </div>
+                <p className="text-sm text-gray-500">{plan.description}</p>
               </div>
 
               {/* Price */}
               <div className="mb-6">
                 <div className="flex items-baseline gap-1">
+                  <span className="text-sm text-gray-500">Rp</span>
                   <span className="text-3xl font-bold text-gray-900">
-                    {formatPrice(plan.price)}
+                    {formatPlanPrice(plan.price)}
                   </span>
-                  {plan.price > 0 && (
-                    <span className="text-gray-500 text-sm">/bulan</span>
-                  )}
+                  <span className="text-gray-500 text-sm">/bulan</span>
                 </div>
-              </div>
-
-              {/* Features */}
-              <div className="flex-1 space-y-3 mb-6">
-                {plan.features.map((feature, index) => (
-                  <div key={index} className="flex items-start gap-2">
-                    <Check
-                      className={cn(
-                        "w-4 h-4 mt-0.5 shrink-0",
-                        isPopular ? "text-primary" : "text-green-500",
-                      )}
-                    />
-                    <span className="text-sm text-gray-700">{feature}</span>
-                  </div>
-                ))}
               </div>
 
               {/* Limits info */}
-              {plan.limits && (
-                <div className="mb-6 p-3 bg-gray-50 rounded-lg space-y-1">
-                  {plan.limits.tenants && (
-                    <p className="text-xs text-gray-500">
-                      Tenant:{" "}
-                      <span className="font-medium text-gray-700">
-                        {plan.limits.tenants}
-                      </span>
-                    </p>
-                  )}
-                  {plan.limits.users && (
-                    <p className="text-xs text-gray-500">
-                      Pengguna:{" "}
-                      <span className="font-medium text-gray-700">
-                        {plan.limits.users}
-                      </span>
-                    </p>
-                  )}
-                </div>
-              )}
+              <div className="mb-4 p-3 bg-gray-50 rounded-lg space-y-1">
+                {/* <p className="text-xs text-gray-500">
+                  Bisnis:{" "}
+                  <span className="font-medium text-gray-700">
+                    {plan.limits.tenants}
+                  </span>
+                </p>
+                <p className="text-xs text-gray-500">
+                  Outlet:{" "}
+                  <span className="font-medium text-gray-700">
+                    {plan.limits.outlets}
+                  </span>
+                </p> */}
+                <p className="text-xs text-gray-500">
+                  Pengguna:{" "}
+                  <span className="font-medium text-gray-700">
+                    {plan.limits.users}
+                  </span>
+                </p>
+              </div>
+
+              {/* Key Features */}
+              <div className="flex-1 space-y-2 mb-6">
+                <FeatureItem
+                  label="Pencatatan Penjualan"
+                  enabled={plan.features.pos}
+                  highlight={isPopular}
+                />
+                <FeatureItem
+                  label="Pencatatan Pengeluaran"
+                  enabled={plan.features.expenseTracker}
+                  highlight={isPopular}
+                />
+                <FeatureItem
+                  label="Laporan Grafik"
+                  enabled={plan.features.reportsChart}
+                  highlight={isPopular}
+                />
+                <FeatureItem
+                  label="Export CSV"
+                  enabled={plan.features.exportCsv}
+                  highlight={isPopular}
+                />
+                <FeatureItem
+                  label="AI Insight"
+                  enabled={plan.features.aiInsight}
+                  highlight={isPopular}
+                />
+              </div>
 
               {/* Action button */}
               <Button
@@ -172,7 +160,7 @@ export function PlanSelector({
                 ) : (
                   <>
                     <Zap className="w-4 h-4" />
-                    {plan.price === 0 ? "Pilih Paket" : "Upgrade"}
+                    {plan.cta}
                   </>
                 )}
               </Button>
@@ -180,6 +168,36 @@ export function PlanSelector({
           );
         })}
       </div>
+    </div>
+  );
+}
+
+function FeatureItem({
+  label,
+  enabled,
+  highlight,
+}: {
+  label: string;
+  enabled: boolean;
+  highlight: boolean;
+}) {
+  return (
+    <div className="flex items-start gap-2">
+      <Check
+        className={cn(
+          "w-4 h-4 mt-0.5 shrink-0",
+          enabled
+            ? highlight
+              ? "text-primary"
+              : "text-green-500"
+            : "text-gray-300",
+        )}
+      />
+      <span
+        className={cn("text-sm", enabled ? "text-gray-700" : "text-gray-400")}
+      >
+        {label}
+      </span>
     </div>
   );
 }
