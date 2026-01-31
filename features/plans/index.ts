@@ -19,8 +19,11 @@ export {
   type FeatureDisplay,
 } from "./constants/plans";
 
-// Context
-export { PlanProvider, usePlan } from "./context/PlanContext";
+// Context - re-export from auth for backward compatibility
+export { usePlan } from "@/features/auth";
+
+// Legacy PlanProvider - kept for reference but should migrate to AuthProvider
+export { PlanProvider } from "./context/PlanContext";
 
 // Hooks
 export { useCanAccess, useCheckLimit } from "./hooks/useCanAccess";

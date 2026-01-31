@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import { useAuthData } from "@/features/auth/hooks/useAuthData";
+import { useAuthData } from "@/features/auth";
 import { authService } from "@/features/auth/services/auth.service";
 import { TenantSwitcher } from "@/features/tenants";
 import { ConfirmationModal } from "../ui/ConfirmationModal";

@@ -1,10 +1,10 @@
 import { DashboardLayout } from "@/app/components/DashboardLayout";
-import { PlanProvider } from "@/features/plans";
+import { AuthProvider } from "@/features/auth";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <PlanProvider>
+    <AuthProvider>
       <DashboardLayout>{children}</DashboardLayout>
-    </PlanProvider>
+    </AuthProvider>
   );
 }

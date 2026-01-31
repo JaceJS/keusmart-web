@@ -35,4 +35,13 @@ export type {
 export { useLogin } from "./hooks/useLogin";
 export { useRegister } from "./hooks/useRegister";
 export { useOtp } from "./hooks/useOtp";
-export { useAuthData } from "./hooks/useAuthData"; // Added export
+
+// Context & Hooks (consolidated auth + plan)
+export {
+  AuthProvider,
+  useAuth,
+  useUser,
+  useTenant,
+  usePlan,
+  useAuthData, // deprecated, use useAuth instead
+} from "./context/AuthContext";

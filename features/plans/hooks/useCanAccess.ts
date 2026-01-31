@@ -1,6 +1,6 @@
 "use client";
 
-import { usePlan } from "../context/PlanContext";
+import { usePlan } from "@/features/auth";
 import { FeatureName } from "../types/plan.types";
 
 /**
