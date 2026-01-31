@@ -100,7 +100,7 @@ export default function AuthPage() {
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* Left Side - Animation */}
-      <div className="hidden lg:flex items-center justify-center bg-gradient-to-br from-primary/10 via-primary/5 to-secondary p-12">
+      <div className="hidden lg:flex items-center justify-center bg-linear-to-br from-primary/10 via-primary/5 to-secondary p-12">
         <div className="max-w-lg w-full">
           <Lottie
             animationData={financeAnimation}

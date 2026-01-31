@@ -1,14 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { Input } from "@/app/components/ui/Input";
 import { PasswordInput } from "@/app/components/ui/PasswordInput";
 import { Button } from "@/app/components/ui/Button";
-import { Modal } from "@/app/components/ui/Modal";
-import { TermsContent } from "@/features/auth/components/TermsContent";
-import { PrivacyContent } from "@/features/auth/components/PrivacyContent";
 import type { RegisterStep } from "@/features/auth";
+import Link from "next/link";
 
 interface RegisterFormProps {
   step: RegisterStep;
@@ -51,9 +48,6 @@ export function RegisterForm({
   onResendOtp,
   isLoading = false,
 }: RegisterFormProps) {
-  const [showTerms, setShowTerms] = useState(false);
-  const [showPrivacy, setShowPrivacy] = useState(false);
-
   return (
     <>
       <form onSubmit={onSubmit} className="space-y-4">
@@ -161,21 +155,21 @@ export function RegisterForm({
               />
               <span className="text-sm text-text-secondary">
                 Saya setuju dengan{" "}
-                <button
-                  type="button"
-                  onClick={() => setShowTerms(true)}
-                  className="text-primary hover:text-primary-dark hover:underline"
+                <Link
+                  href="/terms"
+                  target="_blank"
+                  className="text-primary hover:underline"
                 >
                   Syarat & Ketentuan
-                </button>{" "}
+                </Link>{" "}
                 dan{" "}
-                <button
-                  type="button"
-                  onClick={() => setShowPrivacy(true)}
-                  className="text-primary hover:text-primary-dark hover:underline"
+                <Link
+                  href="/privacy"
+                  target="_blank"
+                  className="text-primary hover:underline"
                 >
                   Kebijakan Privasi
-                </button>
+                </Link>
               </span>
             </label>
 
@@ -190,22 +184,6 @@ export function RegisterForm({
           </>
         )}
       </form>
-
-      <Modal
-        isOpen={showTerms}
-        onClose={() => setShowTerms(false)}
-        title="Syarat & Ketentuan"
-      >
-        <TermsContent />
-      </Modal>
-
-      <Modal
-        isOpen={showPrivacy}
-        onClose={() => setShowPrivacy(false)}
-        title="Kebijakan Privasi"
-      >
-        <PrivacyContent />
-      </Modal>
     </>
   );
 }

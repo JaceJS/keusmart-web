@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Cookies from "js-cookie";
 import { authService } from "../services/auth.service";
 import type { RegisterRequest, RegisterResponse } from "../types/auth.types";
 
@@ -11,6 +13,8 @@ interface UseRegisterResult {
 }
 
 export function useRegister(): UseRegisterResult {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,13 +23,20 @@ export function useRegister(): UseRegisterResult {
     setError(null);
 
     try {
-      // Data matches the new interface directly
       const response = await authService.register(data);
-      // Registration successful, usually followed by OTP step or auto-login
+
+      Cookies.set("accessToken", response.tokens.accessToken, { expires: 1 });
+
+      if (response.tenant?.id) {
+        Cookies.set("tenantId", response.tenant.id, { expires: 7 });
+      }
+
+      const from = searchParams.get("from") || "/dashboard";
+      router.push(from);
+
       return response;
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Registration failed";
+      const message = err instanceof Error ? err.message : "Registrasi gagal";
       setError(message);
       throw err;
     } finally {

@@ -6,6 +6,7 @@ import {
   CONTACT_WHATSAPP,
   CONTACT_WHATSAPP_NUMBER,
 } from "@/app/lib/constants";
+import Link from "next/link";
 
 const footerLinks = [
   { name: "Fitur", href: "#features" },
@@ -74,19 +75,19 @@ export function Footer() {
             © {new Date().getFullYear()} {APP_NAME}. All rights reserved.
           </p>
           <div className="flex items-center gap-1 text-sm">
-            <a
+            <Link
               href="/privacy"
               className="px-2 py-1 text-text-secondary transition-colors hover:text-primary"
             >
               Kebijakan Privasi
-            </a>
+            </Link>
             <span className="text-border">·</span>
-            <a
+            <Link
               href="/terms"
               className="px-2 py-1 text-text-secondary transition-colors hover:text-primary"
             >
               Syarat & Ketentuan
-            </a>
+            </Link>
           </div>
         </div>
       </Container>
