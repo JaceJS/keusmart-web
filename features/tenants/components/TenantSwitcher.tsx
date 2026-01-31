@@ -5,20 +5,7 @@ import { Building2 } from "lucide-react";
 import { useAuthData } from "@/features/auth";
 import { cn } from "@/app/lib/utils";
 import Image from "next/image";
-
-// Helper to determine badge color based on plan
-const getPlanBadgeColor = (plan: string) => {
-  switch (plan?.toLowerCase()) {
-    case "pro":
-      return "bg-amber-100 text-amber-700 border-amber-200";
-    case "smart":
-      return "bg-blue-100 text-blue-700 border-blue-200";
-    case "starter":
-      return "bg-green-100 text-green-700 border-green-200";
-    default:
-      return "bg-gray-100 text-gray-700 border-gray-200";
-  }
-};
+import { getPlanBadgeColor } from "@/utils/plan";
 
 export function TenantSwitcher() {
   // const [isOpen, setIsOpen] = useState(false);

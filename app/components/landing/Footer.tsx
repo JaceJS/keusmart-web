@@ -75,17 +75,17 @@ export function Footer() {
           </p>
           <div className="flex items-center gap-1 text-sm">
             <a
-              href="#"
+              href="/privacy"
               className="px-2 py-1 text-text-secondary transition-colors hover:text-primary"
             >
-              Privacy Policy
+              Kebijakan Privasi
             </a>
             <span className="text-border">·</span>
             <a
-              href="#"
+              href="/terms"
               className="px-2 py-1 text-text-secondary transition-colors hover:text-primary"
             >
-              Terms of Service
+              Syarat & Ketentuan
             </a>
           </div>
         </div>
