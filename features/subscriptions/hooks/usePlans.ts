@@ -100,7 +100,6 @@ export const usePlans = (): UsePlansReturn => {
       setPlans(data);
     } catch (err) {
       console.error("Failed to fetch plans, using defaults:", err);
-      // Use default plans if API fails
       setPlans(DEFAULT_PLANS);
     } finally {
       setIsLoading(false);

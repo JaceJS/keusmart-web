@@ -43,5 +43,4 @@ export {
   useUser,
   useTenant,
   usePlan,
-  useAuthData, // deprecated, use useAuth instead
 } from "./context/AuthContext";
