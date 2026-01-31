@@ -23,7 +23,6 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const router = useRouter();
   const { user, isLoading } = useAuth();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
 
   useEffect(() => {
@@ -43,7 +42,6 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   };
 
   const handleLogout = async () => {
-    setIsLoggingOut(true);
     try {
       await authService.logout();
     } catch (error) {
@@ -51,7 +49,6 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
     } finally {
       Cookies.remove("accessToken");
       Cookies.remove("tenantId");
-      setIsLoggingOut(false);
       setShowLogoutDialog(false);
       router.push("/login");
     }
