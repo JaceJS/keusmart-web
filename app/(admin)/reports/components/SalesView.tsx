@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSales, SalesReportTable } from "@/features/sales";
-import type { Period } from "@/app/components/ui/PeriodSelector";
+import type { Period } from "@/app/components/ui/TimeRangeSelector";
 
 interface SalesViewProps {
   period: Period;

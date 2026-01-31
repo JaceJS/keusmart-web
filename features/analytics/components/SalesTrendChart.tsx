@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { SalesTrendItem } from "../types/analytics.types";
-import type { Period } from "@/app/components/ui/PeriodSelector";
+import type { Period } from "@/app/components/ui/TimeRangeSelector";
 
 interface SalesTrendChartProps {
   data: SalesTrendItem[] | null;

@@ -32,6 +32,9 @@ export interface DateRange {
 
 export type PresetPeriod = "today" | "week" | "month" | "year";
 
+// Alias for backward compatibility
+export type Period = PresetPeriod;
+
 interface TimeRangeSelectorProps {
   value: PresetPeriod | DateRange;
   onChange: (value: PresetPeriod | DateRange) => void;
@@ -80,26 +83,6 @@ const presets: PresetOption[] = [
   },
 ];
 
-const additionalPresets = [
-  {
-    id: "thisMonth",
-    label: "Bulan Ini",
-    getRange: () => {
-      const today = new Date();
-      return { from: startOfMonth(today), to: today };
-    },
-  },
-  {
-    id: "lastMonth",
-    label: "Bulan Lalu",
-    getRange: () => {
-      const today = new Date();
-      const lastMonth = subMonths(today, 1);
-      return { from: startOfMonth(lastMonth), to: endOfMonth(lastMonth) };
-    },
-  },
-];
-
 const formatDisplayDate = (date: Date): string => {
   return format(date, "d MMM yyyy", { locale: id });
 };
@@ -141,15 +124,6 @@ export function TimeRangeSelector({
 
   const handlePresetClick = (presetId: PresetPeriod) => {
     onChange(presetId);
-    setIsOpen(false);
-    setShowCalendar(false);
-  };
-
-  const handleAdditionalPresetClick = (
-    preset: (typeof additionalPresets)[number],
-  ) => {
-    const range = preset.getRange();
-    onChange({ startDate: range.from, endDate: range.to });
     setIsOpen(false);
     setShowCalendar(false);
   };
@@ -216,20 +190,6 @@ export function TimeRangeSelector({
                 >
                   <span>{preset.label}</span>
                   {isPresetSelected(preset.id) && <Check className="h-4 w-4" />}
-                </button>
-              ))}
-
-              {/* Divider */}
-              <div className="my-2 border-t border-gray-200" />
-
-              {/* Additional Presets */}
-              {additionalPresets.map((preset) => (
-                <button
-                  key={preset.id}
-                  onClick={() => handleAdditionalPresetClick(preset)}
-                  className="w-full text-left px-3 py-2 text-sm rounded-lg text-gray-700 hover:bg-white hover:shadow-sm transition-all"
-                >
-                  {preset.label}
                 </button>
               ))}
 

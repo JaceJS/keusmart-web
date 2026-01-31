@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useExpenses, ExpenseReportTable } from "@/features/expenses";
-import type { Period } from "@/app/components/ui/PeriodSelector";
+import type { Period } from "@/app/components/ui/TimeRangeSelector";
 
 interface ExpensesViewProps {
   period: Period;
