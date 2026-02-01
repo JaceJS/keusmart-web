@@ -32,6 +32,7 @@ export default function AuthPage() {
 
   const [mode, setMode] = useState<AuthMode>(initialMode);
   const [registerStep, setRegisterStep] = useState<RegisterStep>(1);
+  const [otpExpiry, setOtpExpiry] = useState<number | null>(null);
   const [rememberMe, setRememberMe] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
 
@@ -98,7 +99,13 @@ export default function AuthPage() {
     setErrorMessage(null);
     try {
       if (registerStep === 1) {
-        await sendOtp({ login_id: email, name, businessName });
+        // Jika OTP masih valid, langsung ke step 2 tanpa kirim ulang
+        if (otpExpiry && otpExpiry > Date.now()) {
+          setRegisterStep(2);
+          return;
+        }
+        const response = await sendOtp({ login_id: email, name, businessName });
+        setOtpExpiry(Date.now() + response.expiresIn * 1000);
         setRegisterStep(2);
       } else if (registerStep === 2) {
         if (otp.length !== 6) {
@@ -126,6 +133,19 @@ export default function AuthPage() {
 
   const handleStepBack = () => {
     setRegisterStep((prev) => (prev - 1) as RegisterStep);
+  };
+
+  const handleResendOtp = async () => {
+    try {
+      const response = await sendOtp({
+        login_id: email,
+        name,
+        businessName,
+      });
+      setOtpExpiry(Date.now() + response.expiresIn * 1000);
+    } catch (error: any) {
+      console.error("Failed to resend OTP", error);
+    }
   };
 
   return (
@@ -205,6 +225,7 @@ export default function AuthPage() {
                 name={name}
                 businessName={businessName}
                 otp={otp}
+                otpExpiry={otpExpiry}
                 password={password}
                 confirmPassword={confirmPassword}
                 agreeTerms={agreeTerms}
@@ -216,9 +237,7 @@ export default function AuthPage() {
                 onConfirmPasswordChange={setConfirmPassword}
                 onAgreeTermsChange={setAgreeTerms}
                 onSubmit={handleRegisterSubmit}
-                onResendOtp={() =>
-                  sendOtp({ login_id: email, name, businessName })
-                }
+                onResendOtp={handleResendOtp}
                 isLoading={isOtpLoading || isRegisterLoading}
               />
             )}

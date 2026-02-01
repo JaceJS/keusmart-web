@@ -6,6 +6,7 @@ import type {
   RegisterRequest,
   RegisterResponse,
   SendOtpRequest,
+  SendOtpResponse,
   VerifyOtpRequest,
   VerifyOtpResponse,
 } from "../types/auth.types";
@@ -28,8 +29,8 @@ export const authService = {
     return response.data;
   },
 
-  sendOtp: async (data: SendOtpRequest): Promise<{ message: string }> => {
-    const response = await apiClient.post<ApiResponse<{ message: string }>>(
+  sendOtp: async (data: SendOtpRequest): Promise<SendOtpResponse> => {
+    const response = await apiClient.post<ApiResponse<SendOtpResponse>>(
       AUTH_ENDPOINTS.SEND_OTP,
       data,
     );

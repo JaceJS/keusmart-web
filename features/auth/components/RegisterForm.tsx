@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { Input } from "@/app/components/ui/Input";
 import { PasswordInput } from "@/app/components/ui/PasswordInput";
 import { Button } from "@/app/components/ui/Button";
 import type { RegisterStep } from "@/features/auth";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { formatCountdown } from "@/utils/date";
 
 interface RegisterFormProps {
   step: RegisterStep;
@@ -13,6 +14,7 @@ interface RegisterFormProps {
   name: string;
   businessName: string;
   otp: string;
+  otpExpiry: number | null;
   password: string;
   confirmPassword: string;
   agreeTerms: boolean;
@@ -34,6 +36,7 @@ export function RegisterForm({
   name,
   businessName,
   otp,
+  otpExpiry,
   password,
   confirmPassword,
   agreeTerms,
@@ -48,6 +51,35 @@ export function RegisterForm({
   onResendOtp,
   isLoading = false,
 }: RegisterFormProps) {
+  const [remainingSeconds, setRemainingSeconds] = useState<number | null>(null);
+
+  // Calculate initial remaining seconds based on expiry timestamp
+  useEffect(() => {
+    if (step === 2 && otpExpiry) {
+      const secondsLeft = Math.max(
+        0,
+        Math.ceil((otpExpiry - Date.now()) / 1000),
+      );
+      setRemainingSeconds(secondsLeft);
+    }
+  }, [step, otpExpiry]);
+
+  useEffect(() => {
+    if (step !== 2 || !otpExpiry) return;
+
+    const interval = setInterval(() => {
+      setRemainingSeconds(() => {
+        const secondsLeft = Math.max(
+          0,
+          Math.ceil((otpExpiry - Date.now()) / 1000),
+        );
+        return secondsLeft;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [step, otpExpiry]);
+
   return (
     <>
       <form onSubmit={onSubmit} className="space-y-4">
@@ -112,16 +144,33 @@ export function RegisterForm({
               required
             />
 
+            {remainingSeconds === 0 && (
+              <p className="text-sm text-red-500">
+                Kode OTP telah kedaluwarsa.
+              </p>
+            )}
+
             <p className="text-sm text-text-secondary">
-              Tidak menerima kode?{" "}
-              <button
-                type="button"
-                onClick={onResendOtp}
-                disabled={isLoading || !onResendOtp}
-                className="text-primary hover:underline"
-              >
-                Kirim ulang
-              </button>
+              {remainingSeconds !== null && remainingSeconds > 0 ? (
+                <span>
+                  Kirim ulang dalam{" "}
+                  <span className="font-medium text-primary">
+                    {formatCountdown(remainingSeconds)}
+                  </span>
+                </span>
+              ) : (
+                <>
+                  Tidak menerima kode?{" "}
+                  <button
+                    type="button"
+                    onClick={onResendOtp}
+                    disabled={isLoading || !onResendOtp}
+                    className="text-primary hover:underline"
+                  >
+                    Kirim ulang
+                  </button>
+                </>
+              )}
             </p>
 
             <Button

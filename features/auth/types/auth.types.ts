@@ -60,6 +60,10 @@ export interface SendOtpRequest {
   businessName: string;
 }
 
+export interface SendOtpResponse {
+  expiresIn: number;
+}
+
 export interface VerifyOtpRequest {
   login_id: string;
   otp: string;

@@ -4,12 +4,13 @@ import { useState } from "react";
 import { authService } from "../services/auth.service";
 import type {
   SendOtpRequest,
+  SendOtpResponse,
   VerifyOtpRequest,
   VerifyOtpResponse,
 } from "../types/auth.types";
 
 interface UseOtpResult {
-  sendOtp: (data: SendOtpRequest) => Promise<void>;
+  sendOtp: (data: SendOtpRequest) => Promise<SendOtpResponse>;
   verifyOtp: (data: VerifyOtpRequest) => Promise<VerifyOtpResponse>;
   isLoading: boolean;
   error: string | null;
@@ -23,7 +24,9 @@ export function useOtp(): UseOtpResult {
     setIsLoading(true);
     setError(null);
     try {
-      await authService.sendOtp(data);
+      const response = await authService.sendOtp(data);
+
+      return response;
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to send OTP";
       setError(message);
@@ -34,7 +37,7 @@ export function useOtp(): UseOtpResult {
   };
 
   const verifyOtp = async (
-    data: VerifyOtpRequest
+    data: VerifyOtpRequest,
   ): Promise<VerifyOtpResponse> => {
     setIsLoading(true);
     setError(null);
