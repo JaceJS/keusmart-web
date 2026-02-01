@@ -24,10 +24,11 @@ export default function AuthPage() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Read mode from URL params, default to "login"
   const modeParam = searchParams.get("mode") as AuthMode | null;
   const validModes: AuthMode[] = ["login", "register"];
-  const initialMode: AuthMode = validModes.includes(modeParam!) ? modeParam! : "login";
+  const initialMode: AuthMode = validModes.includes(modeParam!)
+    ? modeParam!
+    : "login";
 
   const [mode, setMode] = useState<AuthMode>(initialMode);
   const [registerStep, setRegisterStep] = useState<RegisterStep>(1);
@@ -50,17 +51,15 @@ export default function AuthPage() {
   const { register, isLoading: isRegisterLoading } = useRegister();
   const { sendOtp, verifyOtp, isLoading: isOtpLoading } = useOtp();
 
-  // Update URL when mode changes
   const updateURL = useCallback(
     (newMode: AuthMode) => {
       const params = new URLSearchParams(searchParams.toString());
       params.set("mode", newMode);
       router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     },
-    [router, pathname, searchParams]
+    [router, pathname, searchParams],
   );
 
-  // Sync state with URL params on mount and param changes
   useEffect(() => {
     if (modeParam && validModes.includes(modeParam) && modeParam !== mode) {
       setMode(modeParam);

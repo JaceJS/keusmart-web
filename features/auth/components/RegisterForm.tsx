@@ -54,6 +54,13 @@ export function RegisterForm({
         {/* STEP 1: Email */}
         {step === 1 && (
           <>
+            <div className="mb-6 rounded-lg bg-primary/5 border border-primary/20 p-4">
+              <p className="text-lg text-center">
+                Mulai uji coba gratis 14 hari paket{" "}
+                <span className="font-bold">Growth</span>
+              </p>
+            </div>
+
             <Input
               label="Nama Lengkap"
               type="text"
@@ -111,6 +118,7 @@ export function RegisterForm({
                 type="button"
                 onClick={onResendOtp}
                 disabled={isLoading || !onResendOtp}
+                className="text-primary hover:underline"
               >
                 Kirim ulang
               </button>
