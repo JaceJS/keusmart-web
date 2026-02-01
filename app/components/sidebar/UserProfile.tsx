@@ -14,7 +14,7 @@ export function UserProfile({ name, email, onLogout }: UserProfileProps) {
   return (
     <div className="p-4 border-t border-border">
       <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-primary-light to-secondary flex items-center justify-center text-primary-text font-semibold text-sm shadow-sm uppercase">
+        <div className="w-9 h-9 rounded-full bg-linear-to-tr from-primary-light to-secondary flex items-center justify-center text-primary-text font-semibold text-sm shadow-sm uppercase">
           {initials}
         </div>
         <div className="flex-1 min-w-0">

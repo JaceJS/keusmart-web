@@ -52,7 +52,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
       Cookies.remove("tenantId");
       planConfigUtils.remove();
       setShowLogoutDialog(false);
-      router.push("/login");
+      router.push("/");
     }
   };
 

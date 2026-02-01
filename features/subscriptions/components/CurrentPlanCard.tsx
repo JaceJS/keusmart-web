@@ -5,9 +5,10 @@ import { Button } from "@/app/components/ui/Button";
 import { usePlan } from "@/features/auth";
 import { getPlanById, formatPlanPrice } from "@/features/plans/constants/plans";
 import { useCurrentSubscription } from "../hooks/useCurrentSubscription";
-import { Crown, CheckCircle, Zap, Users, Building2, Clock } from "lucide-react";
+import { Crown, CheckCircle, Zap, Users } from "lucide-react";
 import { cn } from "@/app/lib/utils";
 import { formatDateTimeWithHour } from "@/utils/date";
+import { getPlanBadgeColor } from "@/utils";
 
 interface CurrentPlanCardProps {
   onUpgradeClick?: () => void;
@@ -73,8 +74,7 @@ export function CurrentPlanCard({
   currentOutlets = 1,
 }: CurrentPlanCardProps) {
   const { tier, limits, isLoading } = usePlan();
-  const { subscription, isTrial, trialDaysRemaining } =
-    useCurrentSubscription();
+  const { subscription, isTrial } = useCurrentSubscription();
   const planDefinition = getPlanById(tier);
 
   if (isLoading) {
@@ -170,21 +170,32 @@ export function CurrentPlanCard({
       {subscription && (
         <>
           {isTrial && subscription.trialEndDate && (
-            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-sm text-blue-900">
+            <div
+              className={`mt-4 p-3 rounded-lg border ${getPlanBadgeColor(
+                subscription.planId,
+              )}`}
+            >
+              <p className="text-sm">
                 Trial berakhir pada:{" "}
                 {formatDateTimeWithHour(subscription.trialEndDate)}
               </p>
             </div>
           )}
-          {!isTrial && subscription.endDate && subscription.status === "active" && (
-            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-              <p className="text-sm text-green-900">
-                Langganan berakhir pada:{" "}
-                {formatDateTimeWithHour(subscription.endDate)}
-              </p>
-            </div>
-          )}
+
+          {!isTrial &&
+            subscription.endDate &&
+            subscription.status === "active" && (
+              <div
+                className={`mt-4 p-3 rounded-lg border ${getPlanBadgeColor(
+                  subscription.planId,
+                )}`}
+              >
+                <p className="text-sm">
+                  Langganan berakhir pada:{" "}
+                  {formatDateTimeWithHour(subscription.endDate)}
+                </p>
+              </div>
+            )}
         </>
       )}
 
