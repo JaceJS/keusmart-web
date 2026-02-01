@@ -4,8 +4,11 @@ import { Card } from "@/app/components/ui/Card";
 import { Button } from "@/app/components/ui/Button";
 import { usePlan } from "@/features/auth";
 import { getPlanById, formatPlanPrice } from "@/features/plans/constants/plans";
-import { Crown, CheckCircle, Zap, Users, Building2 } from "lucide-react";
+import { useCurrentSubscription } from "../hooks/useCurrentSubscription";
+import { Crown, CheckCircle, Zap, Users, Building2, Clock } from "lucide-react";
 import { cn } from "@/app/lib/utils";
+import { formatDate } from "@/utils/date";
+import { getTrialDaysRemaining } from "@/utils/subscription";
 
 interface CurrentPlanCardProps {
   onUpgradeClick?: () => void;
@@ -71,6 +74,7 @@ export function CurrentPlanCard({
   currentOutlets = 1,
 }: CurrentPlanCardProps) {
   const { tier, limits, isLoading } = usePlan();
+  const { subscription, isTrial, trialDaysRemaining } = useCurrentSubscription();
   const planDefinition = getPlanById(tier);
 
   if (isLoading) {
@@ -130,21 +134,33 @@ export function CurrentPlanCard({
                 planDefinition.color.replace("bg-", ""),
             )}
           >
-            <Crown className="w-7 h-7 text-white" />
+            <Crown className="w-7 h-7 text-primary" />
           </div>
           <div>
             <h3 className="text-xl font-bold text-gray-900">
               Paket {planDefinition.displayName}
+              {isTrial && (
+                <span className="ml-2 text-sm font-normal text-blue-600">
+                  (Trial)
+                </span>
+              )}
             </h3>
             <p className="text-gray-500 text-sm mt-0.5">
               {planDefinition.description}
             </p>
           </div>
         </div>
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-          <CheckCircle className="w-3.5 h-3.5" />
-          Aktif
-        </span>
+        {isTrial ? (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+            <Clock className="w-3.5 h-3.5" />
+            {trialDaysRemaining} hari lagi
+          </span>
+        ) : (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+            <CheckCircle className="w-3.5 h-3.5" />
+            Aktif
+          </span>
+        )}
       </div>
 
       {/* Pricing */}
@@ -155,6 +171,15 @@ export function CurrentPlanCard({
         </span>
         <span className="text-gray-500">/bulan</span>
       </div>
+
+      {/* Trial End Date */}
+      {isTrial && subscription?.endDate && (
+        <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-sm text-blue-900">
+            Trial berakhir: {formatDate(subscription.endDate)}
+          </p>
+        </div>
+      )}
 
       {/* Usage Meters */}
       <div className="mt-6 p-4 bg-white rounded-xl border border-gray-100 space-y-4">

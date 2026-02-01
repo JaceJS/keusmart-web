@@ -4,6 +4,7 @@ import { useState } from "react";
 import Cookies from "js-cookie";
 import { tenantService } from "../services/tenant.service";
 import { config } from "@/core/config";
+import { planConfigUtils } from "@/features/auth/utils/planConfig.utils";
 
 export const useSwitchTenant = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,6 +19,12 @@ export const useSwitchTenant = () => {
       }
 
       Cookies.set(config.auth.tenantIdKey, response.tenant.id, { expires: 3 });
+
+      if (response.tenant.planConfig) {
+        planConfigUtils.save(response.tenant.planConfig);
+      } else {
+        planConfigUtils.save(planConfigUtils.getDefault());
+      }
 
       window.location.href = "/dashboard";
     } catch (error) {

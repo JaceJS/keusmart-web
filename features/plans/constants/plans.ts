@@ -144,11 +144,12 @@ export const FEATURE_COMPARISON: FeatureDisplay[] = [
     key: "customDateRange",
     getValue: (plan) => plan.features.customDateRange,
   },
-  {
-    name: "Multi-Cabang Dashboard",
-    key: "multiBranch",
-    getValue: (plan) => plan.features.multiBranch,
-  },
+  // TODO: uncomment if already implement multi branch
+  // {
+  //   name: "Multi-Cabang Dashboard",
+  //   key: "multiBranch",
+  //   getValue: (plan) => plan.features.multiBranch,
+  // },
   {
     name: "Prediksi Stok (AI)",
     key: "stockPrediction",

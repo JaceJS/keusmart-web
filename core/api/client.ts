@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 import { config } from "@/core/config";
 import { AUTH_ENDPOINTS } from "@/features/auth/auth.endpoints";
+import { planConfigUtils } from "@/features/auth/utils/planConfig.utils";
 
 const API_BASE_URL = config.api.baseUrl;
 
@@ -182,6 +183,11 @@ class ApiClient {
       throw new Error("Invalid refresh response structure");
     }
 
+    const refreshData = json.data || json;
+    if (refreshData.tenant?.planConfig) {
+      planConfigUtils.save(refreshData.tenant.planConfig);
+    }
+
     return newAccessToken;
   }
 
@@ -205,6 +211,7 @@ class ApiClient {
   private handleLogout() {
     Cookies.remove(config.auth.tokenKey);
     Cookies.remove(config.auth.tenantIdKey);
+    planConfigUtils.remove();
     // Note: Do not remove refreshToken cookie client-side (HttpOnly)
     if (typeof window !== "undefined") {
       window.location.href = "/login";

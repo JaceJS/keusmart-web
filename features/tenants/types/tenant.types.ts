@@ -1,4 +1,5 @@
 import { UserRole } from "@/features/auth/types/auth.types";
+import type { PlanConfig } from "@/features/plans/types/plan.types";
 
 export interface Tenant {
   id: string;
@@ -20,6 +21,7 @@ export type SwitchTenantResponse = {
     id: string;
     name: string;
     plan: string;
+    planConfig?: PlanConfig;
   };
 };
 

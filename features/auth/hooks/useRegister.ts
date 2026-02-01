@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
 import { authService } from "../services/auth.service";
 import type { RegisterRequest, RegisterResponse } from "../types/auth.types";
+import { planConfigUtils } from "../utils/planConfig.utils";
 
 interface UseRegisterResult {
   register: (data: RegisterRequest) => Promise<RegisterResponse | undefined>;
@@ -29,6 +30,12 @@ export function useRegister(): UseRegisterResult {
 
       if (response.tenant?.id) {
         Cookies.set("tenantId", response.tenant.id, { expires: 7 });
+      }
+
+      if (response.tenant?.planConfig) {
+        planConfigUtils.save(response.tenant.planConfig);
+      } else {
+        planConfigUtils.save(planConfigUtils.getDefault());
       }
 
       const from = searchParams.get("from") || "/dashboard";

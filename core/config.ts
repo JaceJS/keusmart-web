@@ -13,5 +13,6 @@ export const config = {
     tokenKey: "accessToken",
     refreshTokenKey: "refreshToken",
     tenantIdKey: "tenantId",
+    planConfigKey: "planConfig",
   },
 } as const;

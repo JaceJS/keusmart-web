@@ -17,6 +17,7 @@ export interface Tenant {
   name: string;
   plan: string;
   logoUrl?: string;
+  planConfig?: PlanConfig;
 }
 
 export interface TenantWithRole extends Tenant {
@@ -82,7 +83,6 @@ export interface JwtPayload {
   tenantName: string;
   tenantPlan: string;
   tenantLogoUrl?: string;
-  planConfig: PlanConfig;
   exp: number;
   iat: number;
 }

@@ -135,6 +135,27 @@ export function PlanSelector({
                   enabled={plan.features.aiInsight}
                   highlight={isPopular}
                 />
+                <FeatureItem
+                  label="WhatsApp Summary"
+                  enabled={plan.features.whatsappSummary}
+                  highlight={isPopular}
+                />
+                <FeatureItem
+                  label="Custom Date Range"
+                  enabled={plan.features.customDateRange}
+                  highlight={isPopular}
+                />
+                {/* TODO: Uncomment if already implement multi selector */}
+                {/* <FeatureItem
+                  label="Multi Cabang"
+                  enabled={plan.features.multiBranch}
+                  highlight={isPopular}
+                /> */}
+                <FeatureItem
+                  label="Prediksi Stok (AI)"
+                  enabled={plan.features.stockPrediction}
+                  highlight={isPopular}
+                />
               </div>
 
               {/* Action button */}

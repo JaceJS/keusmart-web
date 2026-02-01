@@ -1,14 +1,17 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Subscription, UpgradePlanRequest } from "../types/subscription.types";
 import { subscriptionService } from "../services/subscription.service";
+import { getTrialDaysRemaining } from "@/utils/subscription";
 
 interface UseCurrentSubscriptionReturn {
   subscription: Subscription | null;
   isLoading: boolean;
   isUpgrading: boolean;
   error: string | null;
+  isTrial: boolean;
+  trialDaysRemaining: number;
   upgradePlan: (planId: string) => Promise<boolean>;
   refetch: () => Promise<void>;
 }
@@ -54,11 +57,23 @@ export const useCurrentSubscription = (): UseCurrentSubscriptionReturn => {
     }
   };
 
+  const isTrial = useMemo(
+    () => subscription?.status === "trial",
+    [subscription?.status],
+  );
+
+  const trialDaysRemaining = useMemo(
+    () => (isTrial ? getTrialDaysRemaining(subscription?.trialEndDate) : 0),
+    [isTrial, subscription?.trialEndDate],
+  );
+
   return {
     subscription,
     isLoading,
     isUpgrading,
     error,
+    isTrial,
+    trialDaysRemaining,
     upgradePlan,
     refetch: fetchSubscription,
   };

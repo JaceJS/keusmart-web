@@ -16,6 +16,9 @@ import {
   DateRange,
 } from "@/app/components/ui/TimeRangeSelector";
 import { usePlan } from "@/features/plans";
+import { useCurrentSubscription } from "@/features/subscriptions";
+import { TrialBanner } from "@/features/subscriptions/components/TrialBanner";
+import { isTrialExpiringSoon } from "@/utils/subscription";
 import { formatCurrencyCompact } from "@/utils/number";
 import { format } from "date-fns";
 
@@ -27,7 +30,9 @@ const presetToPeriod = (
 
 export default function DashboardPage() {
   const { features } = usePlan();
+  const { isTrial, trialDaysRemaining } = useCurrentSubscription();
   const canCustomDateRange = features.customDateRange;
+  const showTrialBanner = isTrial && isTrialExpiringSoon(trialDaysRemaining);
 
   const [timeRange, setTimeRange] = useState<PresetPeriod | DateRange>("today");
 
@@ -62,6 +67,9 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
+      {/* Trial Banner */}
+      {showTrialBanner && <TrialBanner daysRemaining={trialDaysRemaining} />}
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -134,7 +142,7 @@ export default function DashboardPage() {
             />
           </div>
           <div className="flex-1 min-w-0 lg:max-w-[280px] h-auto lg:h-full">
-            <AIInsightWidget loading={isLoading} />
+            <WhatsAppSummaryCard period={period} />
           </div>
         </div>
 
@@ -143,7 +151,7 @@ export default function DashboardPage() {
             <TopProductsList data={topProducts} loading={isLoading} />
           </div>
           <div className="flex-1 min-w-0 lg:max-w-[280px] h-auto lg:h-full">
-            <WhatsAppSummaryCard period={period} />
+            <AIInsightWidget loading={isLoading} />
           </div>
         </div>
       </div>

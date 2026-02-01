@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { useAuth } from "@/features/auth";
 import { authService } from "@/features/auth/services/auth.service";
+import { planConfigUtils } from "@/features/auth/utils/planConfig.utils";
 import { TenantSwitcher } from "@/features/tenants";
 import { ConfirmationModal } from "../ui/ConfirmationModal";
 import { SidebarSkeleton } from "./SidebarSkeleton";
@@ -49,6 +50,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
     } finally {
       Cookies.remove("accessToken");
       Cookies.remove("tenantId");
+      planConfigUtils.remove();
       setShowLogoutDialog(false);
       router.push("/login");
     }

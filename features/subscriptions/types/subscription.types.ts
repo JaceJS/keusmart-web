@@ -20,6 +20,7 @@ export interface Subscription {
   status: "active" | "expired" | "cancelled" | "trial";
   startDate: string;
   endDate: string;
+  trialEndDate: string;
   usage: {
     users: number;
   };

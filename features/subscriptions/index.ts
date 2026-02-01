@@ -2,6 +2,7 @@
 export { CurrentPlanCard } from "./components/CurrentPlanCard";
 export { PlanSelector } from "./components/PlanSelector";
 export { BillingHistory } from "./components/BillingHistory";
+export { TrialBanner } from "./components/TrialBanner";
 
 // Hooks
 export { usePlans } from "./hooks/usePlans";

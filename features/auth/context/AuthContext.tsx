@@ -3,40 +3,17 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
-import {
-  AuthState,
-  JwtPayload,
-  User,
-  Tenant,
-  TenantWithRole,
-} from "../types/auth.types";
+import { AuthState, JwtPayload, User, Tenant } from "../types/auth.types";
 import {
   PlanConfig,
   PlanFeatures,
   PlanLimits,
   PlanTier,
 } from "@/features/plans/types/plan.types";
-
-// Default plan config for Starter (free) users
-const DEFAULT_PLAN_CONFIG: PlanConfig = {
-  tier: "starter",
-  limits: {
-    tenants: 1,
-    outlets: 1,
-    users: 2,
-  },
-  features: {
-    pos: true,
-    expenseTracker: true,
-    reportsChart: false,
-    exportCsv: false,
-    customDateRange: false,
-    multiBranch: false,
-    aiInsight: false,
-    whatsappSummary: false,
-    stockPrediction: false,
-  },
-};
+import {
+  planConfigUtils,
+  DEFAULT_PLAN_CONFIG,
+} from "../utils/planConfig.utils";
 
 interface AuthContextValue extends AuthState {
   // Plan data
@@ -57,7 +34,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     isLoading: true,
   });
 
-  const [planConfig, setPlanConfig] = useState<PlanConfig>(DEFAULT_PLAN_CONFIG);
+  const [planConfig, setPlanConfig] = useState<PlanConfig>(
+    planConfigUtils.load(),
+  );
 
   useEffect(() => {
     try {
@@ -92,12 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         logoUrl: decoded.tenantLogoUrl || "",
       };
 
-      // Extract plan config
-      if (decoded.planConfig) {
-        setPlanConfig(decoded.planConfig);
-      } else {
-        setPlanConfig(DEFAULT_PLAN_CONFIG);
-      }
+      setPlanConfig(planConfigUtils.load());
 
       setAuthState({
         user,
