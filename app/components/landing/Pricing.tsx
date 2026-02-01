@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/app/components/ui/Button";
 import { Card } from "@/app/components/ui/Card";
 import { Container } from "@/app/components/ui/Container";
@@ -32,13 +33,14 @@ export function Pricing() {
     <section id="pricing" className="py-20 lg:py-24 bg-gray-50">
       <Container>
         <div className="mb-16 text-center">
+          <div className="mb-6 flex justify-center">
+            <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+              🎁 Coba Gratis 14 Hari
+            </span>
+          </div>
           <h2 className="mb-4 text-3xl font-bold text-foreground sm:text-4xl">
-            Harga Transparan, Tanpa Biaya Tersembunyi
+            Pilih Paket yang Tepat untuk Bisnis Anda
           </h2>
-          <p className="mx-auto max-w-2xl text-lg text-text-secondary">
-            Pilih paket yang sesuai dengan kebutuhan bisnis Anda. Upgrade atau
-            downgrade kapan saja.
-          </p>
         </div>
 
         {/* Plan Cards */}
@@ -66,27 +68,33 @@ export function Pricing() {
                 </h3>
               </div>
 
-              <p className="text-sm text-text-secondary mb-4">
+              <p className="text-sm text-text-secondary mb-6">
                 {plan.description}
               </p>
 
-              <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-lg font-medium text-text-secondary">
-                  Rp
-                </span>
-                <span className="text-4xl font-bold text-foreground">
-                  {formatPlanPrice(plan.price)}
-                </span>
-                <span className="text-text-secondary">/bulan</span>
+              <div className="mb-6">
+                <div className="mb-1">
+                  <span className="text-2xl font-bold text-foreground">
+                    Gratis 14 hari
+                  </span>
+                </div>
+                <div className="text-sm text-text-secondary">
+                  Lalu Rp {formatPlanPrice(plan.price)}/bulan
+                </div>
               </div>
 
-              <Button
-                variant={plan.isPopular ? "primary" : "secondary"}
-                size="lg"
-                className="w-full mt-auto"
-              >
-                {plan.cta}
-              </Button>
+              <Link href="/login?mode=register" className="mt-auto">
+                <Button
+                  variant={plan.isPopular ? "primary" : "secondary"}
+                  size="lg"
+                  className="w-full"
+                >
+                  Coba Gratis 14 Hari
+                </Button>
+              </Link>
+              <p className="mt-3 text-center text-xs text-text-secondary">
+                Tanpa kartu kredit • Bisa cancel kapan saja
+              </p>
             </Card>
           ))}
         </div>

@@ -77,6 +77,7 @@ export function Footer() {
           <div className="flex items-center gap-1 text-sm">
             <Link
               href="/privacy"
+              target="_blank"
               className="px-2 py-1 text-text-secondary transition-colors hover:text-primary"
             >
               Kebijakan Privasi
@@ -84,6 +85,7 @@ export function Footer() {
             <span className="text-border">·</span>
             <Link
               href="/terms"
+              target="_blank"
               className="px-2 py-1 text-text-secondary transition-colors hover:text-primary"
             >
               Syarat & Ketentuan

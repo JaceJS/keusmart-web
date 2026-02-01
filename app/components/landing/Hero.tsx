@@ -1,6 +1,7 @@
 import { Button } from "@/app/components/ui/Button";
 import { Container } from "@/app/components/ui/Container";
 import { ArrowRight, BarChart3, MessageCircle, Sparkles } from "lucide-react";
+import Link from "next/link";
 
 export function Hero() {
   return (
@@ -25,20 +26,24 @@ export function Hero() {
             </p>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
-              <Button
-                size="lg"
-                className="group w-full justify-center sm:w-auto"
-              >
-                Coba Gratis 14 Hari
-                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </Button>
-              <Button
-                size="lg"
-                variant="secondary"
-                className="w-full justify-center sm:w-auto"
-              >
-                Lihat Harga
-              </Button>
+              <Link href="/login?mode=register">
+                <Button
+                  size="lg"
+                  className="group w-full justify-center sm:w-auto"
+                >
+                  Coba Gratis 14 Hari
+                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
+              <Link href="/#pricing">
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="w-full justify-center sm:w-auto"
+                >
+                  Lihat Harga
+                </Button>
+              </Link>
             </div>
 
             <div className="flex flex-wrap items-center gap-6 pt-4">

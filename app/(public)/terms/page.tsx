@@ -11,7 +11,11 @@ export default function TermsPage() {
   return (
     <div className="min-h-screen bg-background p-6 md:p-12">
       <div className="max-w-3xl mx-auto space-y-8">
-        <Button onClick={() => router.back()} variant="secondary">
+        <Button
+          onClick={() => router.back()}
+          variant="ghost"
+          className="hover:bg-transparent hover:underline"
+        >
           <MoveLeft className="w-4 h-4 mr-2" />
           Kembali
         </Button>

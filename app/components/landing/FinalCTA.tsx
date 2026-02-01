@@ -2,6 +2,7 @@ import { Button } from "@/app/components/ui/Button";
 import { Container } from "@/app/components/ui/Container";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { APP_NAME } from "@/app/lib/constants";
+import Link from "next/link";
 
 export function FinalCTA() {
   return (
@@ -21,13 +22,11 @@ export function FinalCTA() {
           </p>
 
           <div className="mb-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <Button size="lg" className="group w-full sm:w-auto">
-              Coba Gratis 14 Hari
-              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </Button>
-            <Button size="lg" variant="secondary" className="w-full sm:w-auto">
-              Lihat Semua Paket
-            </Button>
+            <Link href="#pricing">
+              <Button size="lg" variant="primary" className="w-full sm:w-auto">
+                Lihat Semua Paket
+              </Button>
+            </Link>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-text-secondary">
