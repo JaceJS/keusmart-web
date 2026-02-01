@@ -75,11 +75,9 @@ export function Pricing() {
               <div className="mb-6">
                 <div className="mb-1">
                   <span className="text-2xl font-bold text-foreground">
-                    Gratis 14 hari
+                    Rp {formatPlanPrice(plan.price)}
                   </span>
-                </div>
-                <div className="text-sm text-text-secondary">
-                  Lalu Rp {formatPlanPrice(plan.price)}/bulan
+                  <span className="text-sm">/bulan</span>
                 </div>
               </div>
 

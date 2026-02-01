@@ -7,8 +7,7 @@ import { getPlanById, formatPlanPrice } from "@/features/plans/constants/plans";
 import { useCurrentSubscription } from "../hooks/useCurrentSubscription";
 import { Crown, CheckCircle, Zap, Users, Building2, Clock } from "lucide-react";
 import { cn } from "@/app/lib/utils";
-import { formatDate } from "@/utils/date";
-import { getTrialDaysRemaining } from "@/utils/subscription";
+import { formatDateTimeWithHour } from "@/utils/date";
 
 interface CurrentPlanCardProps {
   onUpgradeClick?: () => void;
@@ -74,7 +73,8 @@ export function CurrentPlanCard({
   currentOutlets = 1,
 }: CurrentPlanCardProps) {
   const { tier, limits, isLoading } = usePlan();
-  const { subscription, isTrial, trialDaysRemaining } = useCurrentSubscription();
+  const { subscription, isTrial, trialDaysRemaining } =
+    useCurrentSubscription();
   const planDefinition = getPlanById(tier);
 
   if (isLoading) {
@@ -150,17 +150,11 @@ export function CurrentPlanCard({
             </p>
           </div>
         </div>
-        {isTrial ? (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
-            <Clock className="w-3.5 h-3.5" />
-            {trialDaysRemaining} hari lagi
-          </span>
-        ) : (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-            <CheckCircle className="w-3.5 h-3.5" />
-            Aktif
-          </span>
-        )}
+
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+          <CheckCircle className="w-3.5 h-3.5" />
+          Aktif
+        </span>
       </div>
 
       {/* Pricing */}
@@ -172,13 +166,26 @@ export function CurrentPlanCard({
         <span className="text-gray-500">/bulan</span>
       </div>
 
-      {/* Trial End Date */}
-      {isTrial && subscription?.endDate && (
-        <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-          <p className="text-sm text-blue-900">
-            Trial berakhir: {formatDate(subscription.endDate)}
-          </p>
-        </div>
+      {/* Subscription End Date */}
+      {subscription && (
+        <>
+          {isTrial && subscription.trialEndDate && (
+            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-900">
+                Trial berakhir pada:{" "}
+                {formatDateTimeWithHour(subscription.trialEndDate)}
+              </p>
+            </div>
+          )}
+          {!isTrial && subscription.endDate && subscription.status === "active" && (
+            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-sm text-green-900">
+                Langganan berakhir pada:{" "}
+                {formatDateTimeWithHour(subscription.endDate)}
+              </p>
+            </div>
+          )}
+        </>
       )}
 
       {/* Usage Meters */}

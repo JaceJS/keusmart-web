@@ -6,13 +6,15 @@ import { Button } from "@/app/components/ui/Button";
 import { useRouter } from "next/navigation";
 import { cn } from "@/app/lib/utils";
 import { getTrialUrgencyLevel } from "@/utils/subscription";
+import { formatDateTimeWithHour } from "@/utils/date";
 
 interface TrialBannerProps {
   daysRemaining: number;
+  endDate?: string;
   onDismiss?: () => void;
 }
 
-export function TrialBanner({ daysRemaining, onDismiss }: TrialBannerProps) {
+export function TrialBanner({ daysRemaining, endDate, onDismiss }: TrialBannerProps) {
   const router = useRouter();
   const [isDismissed, setIsDismissed] = useState(false);
   const urgency = getTrialUrgencyLevel(daysRemaining);
@@ -54,7 +56,9 @@ export function TrialBanner({ daysRemaining, onDismiss }: TrialBannerProps) {
       <AlertCircle className={cn("w-5 h-5 shrink-0", style.icon)} />
       <div className="flex-1">
         <p className={cn("font-medium", style.text)}>
-          Trial berakhir dalam {daysRemaining} hari
+          {endDate
+            ? `Trial berakhir pada ${formatDateTimeWithHour(endDate)}`
+            : `Trial berakhir dalam ${daysRemaining} hari`}
         </p>
         <p className={cn("text-sm mt-1", style.text, "opacity-80")}>
           Upgrade sekarang untuk terus mengakses semua fitur premium

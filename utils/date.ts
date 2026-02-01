@@ -34,3 +34,52 @@ export const formatDateLong = (dateString: string): string => {
     year: "numeric",
   });
 };
+
+/**
+ * Format date with hour and minute (e.g., "24 Januari 2026, 14:30")
+ */
+export const formatDateTimeWithHour = (dateString: string): string => {
+  try {
+    const date = new Date(dateString);
+
+    const datePart = date.toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+
+    const timePart = date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+
+    return `${datePart}, ${timePart}`;
+  } catch (error) {
+    console.error("Failed to format date with hour:", error);
+    return dateString;
+  }
+};
+
+/**
+ * Format date with hour and minute (short format) (e.g., "24 Jan 2026, 14:30")
+ */
+export const formatDateTimeShort = (dateString: string): string => {
+  try {
+    const date = new Date(dateString);
+    const datePart = date.toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+    const timePart = date.toLocaleTimeString("id-ID", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+    return `${datePart}, ${timePart}`;
+  } catch (error) {
+    console.error("Failed to format date with hour (short):", error);
+    return dateString;
+  }
+};
