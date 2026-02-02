@@ -5,4 +5,5 @@ export const AUTH_ENDPOINTS = {
   VERIFY_OTP: "/auth/register/otp/verify",
   LOGOUT: "/auth/logout",
   REFRESH: "/auth/refresh",
+  GOOGLE_LOGIN: "/auth/google",
 } as const;

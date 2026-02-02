@@ -61,4 +61,8 @@ export const authService = {
       { credentials: "include" },
     );
   },
+
+  getGoogleAuthUrl: (): string => {
+    return `${process.env.NEXT_PUBLIC_API_URL}${AUTH_ENDPOINTS.GOOGLE_LOGIN}`;
+  },
 };
