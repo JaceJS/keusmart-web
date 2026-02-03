@@ -6,5 +6,6 @@ export const AUTH_ENDPOINTS = {
   LOGOUT: "/auth/logout",
   REFRESH: "/auth/refresh",
   GOOGLE_LOGIN: "/auth/google",
-  GOOGLE_ONBOARDING_DATA: "/auth/google/onboarding",
+  GOOGLE_ONBOARDING: "/auth/google/onboarding",
+  GOOGLE_REGISTER: "/auth/google/register",
 } as const;

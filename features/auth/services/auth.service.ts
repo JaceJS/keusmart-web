@@ -10,6 +10,8 @@ import type {
   VerifyOtpRequest,
   VerifyOtpResponse,
   GetOnboardingDataResponse,
+  GoogleRegisterRequest,
+  GoogleRegisterResponse,
 } from "../types/auth.types";
 import { config } from "@/core/config";
 
@@ -73,9 +75,19 @@ export const authService = {
   ): Promise<GetOnboardingDataResponse> => {
     const response = await apiClient.get<
       ApiResponse<GetOnboardingDataResponse>
-    >(AUTH_ENDPOINTS.GOOGLE_ONBOARDING_DATA, {
+    >(AUTH_ENDPOINTS.GOOGLE_ONBOARDING, {
       params: { token },
     });
+    return response.data;
+  },
+
+  googleRegister: async (
+    data: GoogleRegisterRequest,
+  ): Promise<GoogleRegisterResponse> => {
+    const response = await apiClient.post<ApiResponse<GoogleRegisterResponse>>(
+      AUTH_ENDPOINTS.GOOGLE_REGISTER,
+      data,
+    );
     return response.data;
   },
 };

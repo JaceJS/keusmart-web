@@ -25,11 +25,23 @@ export interface PaginatedResponse<T> {
   meta: PaginatedMeta;
 }
 
-interface ApiError {
-  message: string;
+export class ApiError extends Error {
   code?: string;
   details?: any;
   statusCode: number;
+
+  constructor(
+    message: string,
+    statusCode: number,
+    code?: string,
+    details?: any,
+  ) {
+    super(message);
+    this.name = "ApiError";
+    this.statusCode = statusCode;
+    this.code = code;
+    this.details = details;
+  }
 }
 
 interface RequestOptions extends RequestInit {
@@ -225,13 +237,12 @@ class ApiClient {
   private async unwrapResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
       const errorBody = await response.json().catch(() => ({}));
-      const error: ApiError = {
-        message: errorBody.message || "An error occurred",
-        code: errorBody.code,
-        details: errorBody.details,
-        statusCode: response.status,
-      };
-      throw error;
+      throw new ApiError(
+        errorBody.message || "An error occurred",
+        response.status,
+        errorBody.code,
+        errorBody.details,
+      );
     }
 
     const text = await response.text();

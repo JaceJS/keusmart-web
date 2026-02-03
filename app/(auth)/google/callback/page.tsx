@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
 import { planConfigUtils } from "@/features/auth/utils/planConfig.utils";
-import { authService } from "@/features/auth/services/auth.service";
+import { useGoogle } from "@/features/auth/hooks/useGoogle";
 import { Button } from "@/app/components/ui/Button";
 
 export default function GoogleCallbackPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { getOnboardingData } = useGoogle();
   const [status, setStatus] = useState("Proses autentikasi...");
   const [error, setError] = useState<string | null>(null);
 
@@ -23,7 +24,7 @@ export default function GoogleCallbackPage() {
           const tenantId = searchParams.get("tenantId");
 
           if (!accessToken) {
-            throw new Error("Terjadi kesalahan. Silakan login ulang.");
+            throw new Error("Access token missing for active user");
           }
 
           Cookies.set("accessToken", accessToken, { expires: 1 });
@@ -40,19 +41,16 @@ export default function GoogleCallbackPage() {
           const token = searchParams.get("token");
 
           if (!token) {
-            throw new Error("Terjadi kesalahan. Silakan login ulang.");
+            throw new Error("Onboarding token missing");
           }
 
           setStatus("Mengambil data user...");
-          const userData = await authService.getGoogleOnboarding(token);
+          const userData = await getOnboardingData(token);
 
           setStatus("Mengalihkan ke halaman onboarding...");
-          const params = new URLSearchParams();
-          if (userData.email) params.append("email", userData.email);
-          if (userData.name) params.append("name", userData.name);
-          params.append("token", token);
+          sessionStorage.setItem("onboarding_user", JSON.stringify(userData));
 
-          router.replace(`/onboarding?${params.toString()}`);
+          router.replace(`/onboarding?token=${token}`);
         } else {
           const msg =
             searchParams.get("error") || "Status login tidak dikenali.";
@@ -69,7 +67,7 @@ export default function GoogleCallbackPage() {
     };
 
     processCallback();
-  }, [searchParams, router]);
+  }, [searchParams, router, getOnboardingData]);
 
   if (error) {
     return (

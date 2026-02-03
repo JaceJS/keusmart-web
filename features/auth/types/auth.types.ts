@@ -97,3 +97,11 @@ export interface GetOnboardingDataResponse {
   googleId: string;
   picture: string;
 }
+
+export interface GoogleRegisterRequest {
+  token: string;
+  businessName: string;
+  phone?: string;
+}
+
+export type GoogleRegisterResponse = LoginResponse;

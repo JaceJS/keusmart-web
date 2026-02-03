@@ -12,7 +12,6 @@ export default function BillingPage() {
   const handleSelectPlan = async (planId: string) => {
     const success = await upgradePlan(planId);
     if (success) {
-      console.log("Plan upgraded successfully");
     }
   };
 
