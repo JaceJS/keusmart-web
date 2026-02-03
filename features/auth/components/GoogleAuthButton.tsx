@@ -14,7 +14,7 @@ export function GoogleAuthButton({ mode }: GoogleAuthButtonProps) {
 
   const handleGoogleLogin = () => {
     setIsLoading(true);
-    // Redirect to backend Google Auth endpoint
+
     window.location.href = authService.getGoogleAuthUrl();
   };
 

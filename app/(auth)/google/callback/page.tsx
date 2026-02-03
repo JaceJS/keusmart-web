@@ -4,50 +4,88 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
 import { planConfigUtils } from "@/features/auth/utils/planConfig.utils";
+import { authService } from "@/features/auth/services/auth.service";
+import { Button } from "@/app/components/ui/Button";
 
 export default function GoogleCallbackPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState("Proses autentikasi...");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const accessToken = searchParams.get("accessToken");
-    const refreshToken = searchParams.get("refreshToken");
-    const tenantId = searchParams.get("tenantId");
-    const authStatus = searchParams.get("status"); // 'active' or 'incomplete'
-    const name = searchParams.get("name");
-    const email = searchParams.get("email");
+    const processCallback = async () => {
+      const authStatus = searchParams.get("status");
 
-    if (accessToken) {
-      // Store tokens
-      Cookies.set("accessToken", accessToken, { expires: 1 });
-      if (refreshToken) {
-        // Optionally store refresh token if handled by client
-      }
+      try {
+        if (authStatus === "active") {
+          const accessToken = searchParams.get("accessToken");
+          const tenantId = searchParams.get("tenantId");
 
-      if (tenantId) {
-        Cookies.set("tenantId", tenantId, { expires: 7 });
-      } else {
-        // If no tenant (new user), use default plan config temporarily
-        planConfigUtils.save(planConfigUtils.getDefault());
-      }
+          if (!accessToken) {
+            throw new Error("Terjadi kesalahan. Silakan login ulang.");
+          }
 
-      // Handle redirect based on status
-      if (authStatus === "incomplete") {
-        setStatus("Mengalihkan ke halaman onboarding...");
-        const params = new URLSearchParams();
-        if (email) params.append("email", email);
-        if (name) params.append("name", name);
-        router.replace(`/onboarding?${params.toString()}`);
-      } else {
-        setStatus("Login berhasil! Mengalihkan...");
-        router.replace("/dashboard");
+          Cookies.set("accessToken", accessToken, { expires: 1 });
+
+          if (tenantId) {
+            Cookies.set("tenantId", tenantId, { expires: 7 });
+          } else {
+            planConfigUtils.save(planConfigUtils.getDefault());
+          }
+
+          setStatus("Login berhasil! Mengalihkan...");
+          router.replace("/dashboard");
+        } else if (authStatus === "incomplete") {
+          const token = searchParams.get("token");
+
+          if (!token) {
+            throw new Error("Terjadi kesalahan. Silakan login ulang.");
+          }
+
+          setStatus("Mengambil data user...");
+          const userData = await authService.getGoogleOnboarding(token);
+
+          setStatus("Mengalihkan ke halaman onboarding...");
+          const params = new URLSearchParams();
+          if (userData.email) params.append("email", userData.email);
+          if (userData.name) params.append("name", userData.name);
+          params.append("token", token);
+
+          router.replace(`/onboarding?${params.toString()}`);
+        } else {
+          const msg =
+            searchParams.get("error") || "Status login tidak dikenali.";
+          throw new Error(msg);
+        }
+      } catch (err) {
+        setStatus("Terjadi kesalahan.");
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Gagal memproses data login. Sesi mungkin kadaluarsa.",
+        );
       }
-    } else {
-      setStatus("Gagal login. Token tidak ditemukan.");
-      // setTimeout(() => router.replace("/login"), 3000);
-    }
+    };
+
+    processCallback();
   }, [searchParams, router]);
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
+        <div className="text-center space-y-4 max-w-md">
+          <div className="text-red-500 text-xl font-bold">
+            Autentikasi Gagal
+          </div>
+          <p className="text-text-secondary">{error}</p>
+          <Button onClick={() => router.replace("/login")}>
+            Kembali ke Login
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">

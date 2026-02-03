@@ -9,7 +9,9 @@ import type {
   SendOtpResponse,
   VerifyOtpRequest,
   VerifyOtpResponse,
+  GetOnboardingDataResponse,
 } from "../types/auth.types";
+import { config } from "@/core/config";
 
 export const authService = {
   login: async (data: LoginRequest): Promise<LoginResponse> => {
@@ -63,6 +65,17 @@ export const authService = {
   },
 
   getGoogleAuthUrl: (): string => {
-    return `${process.env.NEXT_PUBLIC_API_URL}${AUTH_ENDPOINTS.GOOGLE_LOGIN}`;
+    return `${config.api.baseUrl}${AUTH_ENDPOINTS.GOOGLE_LOGIN}`;
+  },
+
+  getGoogleOnboarding: async (
+    token: string,
+  ): Promise<GetOnboardingDataResponse> => {
+    const response = await apiClient.get<
+      ApiResponse<GetOnboardingDataResponse>
+    >(AUTH_ENDPOINTS.GOOGLE_ONBOARDING_DATA, {
+      params: { token },
+    });
+    return response.data;
   },
 };

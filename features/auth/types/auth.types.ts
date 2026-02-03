@@ -90,3 +90,10 @@ export interface JwtPayload {
   exp: number;
   iat: number;
 }
+
+export interface GetOnboardingDataResponse {
+  email: string;
+  name: string;
+  googleId: string;
+  picture: string;
+}
