@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { AuthState, JwtPayload, User, Tenant } from "../types/auth.types";
+import { authService } from "../services/auth.service";
 import {
   PlanConfig,
   PlanFeatures,
@@ -21,6 +22,8 @@ interface AuthContextValue extends AuthState {
   limits: PlanLimits;
   features: PlanFeatures;
   planConfig: PlanConfig;
+  // Session refresh
+  refreshSession: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -91,12 +94,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  const refreshSession = async () => {
+    try {
+      const data = await authService.getMe();
+
+      setAuthState((prev) => ({
+        ...prev,
+        user: data.user,
+        tenant: data.tenant,
+        tenants: data.tenants,
+      }));
+
+      if (data.tenant?.planConfig) {
+        planConfigUtils.save(data.tenant.planConfig);
+        setPlanConfig(data.tenant.planConfig);
+      }
+    } catch (error) {
+      console.error("Failed to refresh session:", error);
+    }
+  };
+
   const value: AuthContextValue = {
     ...authState,
     tier: planConfig.tier,
     limits: planConfig.limits,
     features: planConfig.features,
     planConfig,
+    refreshSession,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -14,17 +14,21 @@ interface TrialBannerProps {
   onDismiss?: () => void;
 }
 
-export function TrialBanner({ daysRemaining, endDate, onDismiss }: TrialBannerProps) {
+export function TrialBanner({
+  daysRemaining,
+  endDate,
+  onDismiss,
+}: TrialBannerProps) {
   const router = useRouter();
   const [isDismissed, setIsDismissed] = useState(false);
   const urgency = getTrialUrgencyLevel(daysRemaining);
 
   if (isDismissed || daysRemaining <= 0) return null;
 
-  const handleDismiss = () => {
-    setIsDismissed(true);
-    onDismiss?.();
-  };
+  // const handleDismiss = () => {
+  //   setIsDismissed(true);
+  //   onDismiss?.();
+  // };
 
   const styles = {
     info: {
@@ -48,10 +52,7 @@ export function TrialBanner({ daysRemaining, endDate, onDismiss }: TrialBannerPr
 
   return (
     <div
-      className={cn(
-        "flex items-center gap-4 p-4 rounded-xl border",
-        style.bg
-      )}
+      className={cn("flex items-center gap-4 p-4 rounded-xl border", style.bg)}
     >
       <AlertCircle className={cn("w-5 h-5 shrink-0", style.icon)} />
       <div className="flex-1">
@@ -72,13 +73,13 @@ export function TrialBanner({ daysRemaining, endDate, onDismiss }: TrialBannerPr
         <Zap className="w-4 h-4" />
         Lihat Paket
       </Button>
-      <button
+      {/* <button
         onClick={handleDismiss}
         className={cn("p-1 rounded hover:bg-black/5", style.text)}
         aria-label="Dismiss trial banner"
       >
         <X className="w-4 h-4" />
-      </button>
+      </button> */}
     </div>
   );
 }

@@ -9,6 +9,7 @@ import { UpdateTenantRequest } from "@/features/tenants/types/tenant.types";
 import { uploadService } from "@/core/upload";
 import { SubscriptionBadge } from "@/features/tenants/components/SubscriptionBadge";
 import { LogoUploader } from "@/features/tenants/components/LogoUploader";
+import { useAuth } from "@/features/auth";
 import {
   Building2,
   FileText,
@@ -22,6 +23,7 @@ import Loading from "./loading";
 export default function TenantProfilePage() {
   const { profile, isLoading, isUpdating, error, updateProfile } =
     useTenantProfile();
+  const { refreshSession } = useAuth();
 
   const [formData, setFormData] = useState<UpdateTenantRequest>({
     name: "",
@@ -92,6 +94,9 @@ export default function TenantProfilePage() {
         setPendingLogoFile(null);
         setSuccessMessage("Profil berhasil disimpan!");
         setTimeout(() => setSuccessMessage(null), 3000);
+
+        // Refresh auth context to update tenant data (including logoUrl)
+        await refreshSession();
       }
     } catch (err) {
       console.error("Failed to save profile:", err);
