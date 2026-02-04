@@ -12,6 +12,7 @@ import type {
   GetOnboardingDataResponse,
   GoogleRegisterRequest,
   GoogleRegisterResponse,
+  GetMeResponse,
 } from "../types/auth.types";
 import { config } from "@/core/config";
 
@@ -87,6 +88,13 @@ export const authService = {
     const response = await apiClient.post<ApiResponse<GoogleRegisterResponse>>(
       AUTH_ENDPOINTS.GOOGLE_REGISTER,
       data,
+    );
+    return response.data;
+  },
+
+  getMe: async (): Promise<GetMeResponse> => {
+    const response = await apiClient.get<ApiResponse<GetMeResponse>>(
+      AUTH_ENDPOINTS.ME,
     );
     return response.data;
   },

@@ -105,3 +105,9 @@ export interface GoogleRegisterRequest {
 }
 
 export type GoogleRegisterResponse = LoginResponse;
+
+export interface GetMeResponse {
+  user: User;
+  tenant: Tenant;
+  tenants: TenantWithRole[];
+}

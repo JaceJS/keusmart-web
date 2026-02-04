@@ -9,11 +9,13 @@ import {
   GetOnboardingDataResponse,
   GoogleRegisterRequest,
   GoogleRegisterResponse,
+  GetMeResponse,
 } from "../types/auth.types";
 
 interface UseGoogleResult {
   getOnboardingData: (token: string) => Promise<GetOnboardingDataResponse>;
   register: (data: GoogleRegisterRequest) => Promise<GoogleRegisterResponse>;
+  getMe: () => Promise<GetMeResponse>;
   isLoading: boolean;
   error: string | null;
 }
@@ -53,8 +55,10 @@ export function useGoogle(): UseGoogleResult {
 
           if (response.tenant?.id) {
             Cookies.set("tenantId", response.tenant.id, { expires: 7 });
-          } else {
-            planConfigUtils.save(planConfigUtils.getDefault());
+          }
+
+          if (response.tenant?.planConfig) {
+            planConfigUtils.save(response.tenant.planConfig);
           }
 
           sessionStorage.removeItem("onboarding_user");
@@ -74,5 +78,26 @@ export function useGoogle(): UseGoogleResult {
     [router],
   );
 
-  return { getOnboardingData, register, isLoading, error };
+  const getMe = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const data = await authService.getMe();
+
+      if (data.tenant?.planConfig) {
+        planConfigUtils.save(data.tenant.planConfig);
+      }
+
+      return data;
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Gagal mengambil data session";
+      setError(message);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  return { getOnboardingData, register, getMe, isLoading, error };
 }

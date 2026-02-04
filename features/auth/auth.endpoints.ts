@@ -8,4 +8,5 @@ export const AUTH_ENDPOINTS = {
   GOOGLE_LOGIN: "/auth/google",
   GOOGLE_ONBOARDING: "/auth/google/onboarding",
   GOOGLE_REGISTER: "/auth/google/register",
+  ME: "/auth/me",
 } as const;

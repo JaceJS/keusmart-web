@@ -10,7 +10,7 @@ import { Button } from "@/app/components/ui/Button";
 export default function GoogleCallbackPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { getOnboardingData } = useGoogle();
+  const { getOnboardingData, getMe } = useGoogle();
   const [status, setStatus] = useState("Proses autentikasi...");
   const [error, setError] = useState<string | null>(null);
 
@@ -31,9 +31,10 @@ export default function GoogleCallbackPage() {
 
           if (tenantId) {
             Cookies.set("tenantId", tenantId, { expires: 7 });
-          } else {
-            planConfigUtils.save(planConfigUtils.getDefault());
           }
+
+          setStatus("Memuat...");
+          await getMe();
 
           setStatus("Login berhasil! Mengalihkan...");
           router.replace("/dashboard");
@@ -44,7 +45,7 @@ export default function GoogleCallbackPage() {
             throw new Error("Onboarding token missing");
           }
 
-          setStatus("Mengambil data user...");
+          setStatus("Memuat...");
           const userData = await getOnboardingData(token);
 
           setStatus("Mengalihkan ke halaman onboarding...");
@@ -67,7 +68,7 @@ export default function GoogleCallbackPage() {
     };
 
     processCallback();
-  }, [searchParams, router, getOnboardingData]);
+  }, [searchParams, router, getOnboardingData, getMe]);
 
   if (error) {
     return (

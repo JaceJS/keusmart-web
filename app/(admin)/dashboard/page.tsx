@@ -30,7 +30,8 @@ const presetToPeriod = (
 
 export default function DashboardPage() {
   const { features } = usePlan();
-  const { isTrial, trialDaysRemaining, subscription } = useCurrentSubscription();
+  const { isTrial, trialDaysRemaining, subscription } =
+    useCurrentSubscription();
   const canCustomDateRange = features.customDateRange;
   const showTrialBanner = isTrial && isTrialExpiringSoon(trialDaysRemaining);
 

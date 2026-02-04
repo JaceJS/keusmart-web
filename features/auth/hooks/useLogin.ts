@@ -27,8 +27,6 @@ export const useLogin = () => {
 
       if (response.tenant?.planConfig) {
         planConfigUtils.save(response.tenant.planConfig);
-      } else {
-        planConfigUtils.save(planConfigUtils.getDefault());
       }
 
       const from = searchParams.get("from") || "/dashboard";

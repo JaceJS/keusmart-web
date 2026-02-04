@@ -11,6 +11,7 @@ interface UseCurrentSubscriptionReturn {
   isUpgrading: boolean;
   error: string | null;
   isTrial: boolean;
+  trialDaysRemaining: number;
   upgradePlan: (planId: string) => Promise<boolean>;
   refetch: () => Promise<void>;
 }
@@ -61,12 +62,18 @@ export const useCurrentSubscription = (): UseCurrentSubscriptionReturn => {
     [subscription?.status],
   );
 
+  const trialDaysRemaining = useMemo(
+    () => getTrialDaysRemaining(subscription?.trialEndDate),
+    [subscription?.trialEndDate],
+  );
+
   return {
     subscription,
     isLoading,
     isUpgrading,
     error,
     isTrial,
+    trialDaysRemaining,
     upgradePlan,
     refetch: fetchSubscription,
   };
