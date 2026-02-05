@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import { X, UserPlus, Mail, Shield } from "lucide-react";
-import type { InviteMemberRequest } from "../types/user.types";
 
 interface InviteMemberModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onInvite: (data: InviteMemberRequest) => Promise<void>;
+  onInvite: (data: { name: string; email: string }) => Promise<void>;
   isLoading?: boolean;
   remainingSlots?: number;
 }
@@ -21,7 +20,6 @@ export function InviteMemberModal({
 }: InviteMemberModalProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState<"admin" | "staff">("staff");
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -38,14 +36,12 @@ export function InviteMemberModal({
     }
 
     try {
-      await onInvite({ name, email, role });
-      // Reset form
+      await onInvite({ name, email });
       setName("");
       setEmail("");
-      setRole("staff");
       onClose();
     } catch (err) {
-      setError("Gagal mengundang anggota. Silakan coba lagi.");
+      setError("Gagal mengundang anggota. Silahkan coba lagi.");
     }
   };
 
@@ -128,26 +124,19 @@ export function InviteMemberModal({
             </div>
           </div>
 
-          {/* Role Select */}
+          {/* Role - Fixed to Staff */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">
               Role
             </label>
             <div className="relative">
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value as "admin" | "staff")}
-                className="w-full px-4 py-2.5 pl-10 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all appearance-none bg-white"
-              >
-                <option value="staff">Staff - Akses terbatas</option>
-                <option value="admin">Admin - Akses penuh</option>
-              </select>
+              <div className="w-full px-4 py-2.5 pl-10 border border-border rounded-lg bg-gray-50 text-gray-700">
+                Staff - Akses terbatas
+              </div>
               <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
             </div>
             <p className="text-xs text-text-tertiary mt-1.5">
-              {role === "admin"
-                ? "Admin dapat mengelola produk, laporan, dan pengaturan."
-                : "Staff hanya dapat melihat data tanpa mengubah."}
+              Staff hanya dapat melihat data tanpa mengubah.
             </p>
           </div>
 

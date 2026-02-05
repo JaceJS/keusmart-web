@@ -3,7 +3,7 @@ export { TeamMemberList } from "./components/TeamMemberList";
 export { InviteMemberModal } from "./components/InviteMemberModal";
 
 // Hooks
-export { useUsers } from "./hooks/useUsers";
+export { useUsers, useInviteMember } from "./hooks/useUsers";
 
 // Services
 export { userService } from "./services/user.service";
@@ -12,6 +12,9 @@ export { userService } from "./services/user.service";
 export type {
   TeamMember,
   InviteMemberRequest,
+  InviteMemberResponse,
+  InviteTokenData,
+  AcceptInviteResponse,
   UpdateMemberRoleRequest,
   UserParams,
   GetUsersResponse,

@@ -33,7 +33,7 @@ export function OnboardingForm({
     setValidationError(null);
 
     if (!token) {
-      setValidationError("Token sesi tidak ditemukan. Silakan login ulang.");
+      setValidationError("Token sesi tidak ditemukan. Silahkan login ulang.");
       return;
     }
 

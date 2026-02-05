@@ -29,7 +29,7 @@ export function LogoUploader({
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      alert("Silakan pilih file gambar (JPG, PNG, dll)");
+      alert("Silahkan pilih file gambar (JPG, PNG, dll)");
       return;
     }
 

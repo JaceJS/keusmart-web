@@ -2,6 +2,9 @@ import { apiClient, ApiResponse, PaginatedResponse } from "@/core/api/client";
 import type {
   UserParams,
   InviteMemberRequest,
+  InviteMemberResponse,
+  InviteTokenData,
+  AcceptInviteResponse,
   UpdateMemberRoleRequest,
   TeamMember,
 } from "../types/user.types";
@@ -21,10 +24,26 @@ export const userService = {
     };
   },
 
-  inviteMember: async (data: InviteMemberRequest): Promise<TeamMember> => {
-    const response = await apiClient.post<ApiResponse<TeamMember>>(
+  inviteMember: async (
+    data: InviteMemberRequest,
+  ): Promise<InviteMemberResponse> => {
+    const response = await apiClient.post<ApiResponse<InviteMemberResponse>>(
       USER_ENDPOINTS.INVITE,
       data,
+    );
+    return response.data;
+  },
+
+  getInviteByToken: async (token: string): Promise<InviteTokenData> => {
+    const response = await apiClient.get<ApiResponse<InviteTokenData>>(
+      `${USER_ENDPOINTS.INVITE_TOKEN}/${token}`,
+    );
+    return response.data;
+  },
+
+  acceptInvite: async (token: string): Promise<AcceptInviteResponse> => {
+    const response = await apiClient.post<ApiResponse<AcceptInviteResponse>>(
+      `${USER_ENDPOINTS.INVITE_ACCEPT}/${token}/accept`,
     );
     return response.data;
   },

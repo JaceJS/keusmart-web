@@ -206,6 +206,7 @@ export function TeamMemberList({
                               onClick={() => setOpenMenuId(null)}
                             />
                             <div className="absolute right-0 bottom-full mb-1 w-44 bg-white rounded-lg shadow-lg border border-border py-1 z-20">
+                              {/* Role change temporarily disabled
                               <button
                                 onClick={() => {
                                   onEditRole?.(member);
@@ -216,6 +217,7 @@ export function TeamMemberList({
                                 <Shield className="w-4 h-4" />
                                 Ubah Role
                               </button>
+                              */}
                               <button
                                 onClick={() => {
                                   onRemove?.(member);
