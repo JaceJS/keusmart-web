@@ -16,9 +16,15 @@ export type {
   Plan,
   Subscription,
   Invoice,
+  Payment,
+  BillingCycle,
+  CheckoutRequest,
+  CheckoutResponse,
+  AutoRenewRequest,
   GetPlansResponse,
   GetSubscriptionResponse,
   GetInvoicesResponse,
+  GetPaymentsResponse,
   UpgradePlanRequest,
 } from "./types/subscription.types";
 

@@ -244,15 +244,14 @@ export function CurrentPlanCard({
       </div>
 
       {/* Actions */}
-      <div className="mt-6 pt-6 border-t border-gray-100 flex items-center gap-3">
-        {!isTopTier && (
+      {!isTopTier && (
+        <div className="mt-6 pt-6 border-t border-gray-100">
           <Button variant="primary" onClick={onUpgradeClick}>
             <Zap className="w-4 h-4" />
             Upgrade Paket
           </Button>
-        )}
-        <Button variant="primary">Perpanjang</Button>
-      </div>
+        </div>
+      )}
     </Card>
   );
 }
