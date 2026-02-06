@@ -2,22 +2,23 @@
 
 import { Card } from "@/app/components/ui/Card";
 import { Button } from "@/app/components/ui/Button";
-import {
-  PLANS,
-  formatPlanPrice,
-  type PlanDefinition,
-} from "@/features/plans/constants/plans";
+import { PLANS, formatPlanPrice } from "@/features/plans/constants/plans";
 import { usePlan } from "@/features/auth";
 import { Check, Zap, Star, Loader2 } from "lucide-react";
 import { cn } from "@/app/lib/utils";
+import { BillingCycle } from "../types/subscription.types";
 
 interface PlanSelectorProps {
   isUpgrading?: boolean;
+  billingCycle?: BillingCycle;
   onSelectPlan: (planId: string) => void;
 }
 
+const YEARLY_DISCOUNT = 0.2; // 20% off
+
 export function PlanSelector({
   isUpgrading = false,
+  billingCycle = "monthly",
   onSelectPlan,
 }: PlanSelectorProps) {
   const { tier: currentTier } = usePlan();
@@ -77,13 +78,31 @@ export function PlanSelector({
 
               {/* Price */}
               <div className="mb-6">
-                <div className="flex items-baseline gap-1">
-                  <span className="text-sm text-gray-500">Rp</span>
-                  <span className="text-3xl font-bold text-gray-900">
-                    {formatPlanPrice(plan.price)}
-                  </span>
-                  <span className="text-gray-500 text-sm">/bulan</span>
-                </div>
+                {(() => {
+                  const monthlyPrice = plan.price;
+                  const yearlyMonthlyPrice = Math.round(
+                    monthlyPrice * (1 - YEARLY_DISCOUNT),
+                  );
+                  const displayPrice =
+                    billingCycle === "yearly"
+                      ? yearlyMonthlyPrice
+                      : monthlyPrice;
+
+                  return (
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-sm text-gray-500">Rp</span>
+                      <span className="text-3xl font-bold text-gray-900">
+                        {formatPlanPrice(displayPrice)}
+                      </span>
+                      <span className="text-gray-500 text-sm">/bulan</span>
+                      {billingCycle === "yearly" && (
+                        <span className="ml-2 text-xs text-gray-400 line-through">
+                          Rp {formatPlanPrice(monthlyPrice)}
+                        </span>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
 
               {/* Limits info */}

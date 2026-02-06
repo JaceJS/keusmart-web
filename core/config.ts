@@ -15,4 +15,10 @@ export const config = {
     tenantIdKey: "tenantId",
     planConfigKey: "planConfig",
   },
+  midtrans: {
+    clientKey: process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY || "",
+    snapUrl:
+      process.env.NEXT_PUBLIC_MIDTRANS_SNAP_URL ||
+      "https://app.sandbox.midtrans.com/snap/snap.js",
+  },
 } as const;

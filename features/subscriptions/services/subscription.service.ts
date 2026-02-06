@@ -12,8 +12,6 @@ import {
 import { SUBSCRIPTION_ENDPOINTS } from "../subscription.endpoints";
 
 export const subscriptionService = {
-  // ==================== Existing Methods ====================
-
   getPlans: async (): Promise<GetPlansResponse> => {
     const response = await apiClient.get<ApiResponse<GetPlansResponse>>(
       SUBSCRIPTION_ENDPOINTS.PLANS,
@@ -45,11 +43,6 @@ export const subscriptionService = {
     return response.data;
   },
 
-  // ==================== Midtrans Checkout Methods ====================
-
-  /**
-   * Create checkout session and get Midtrans Snap token
-   */
   createCheckout: async (data: CheckoutRequest): Promise<CheckoutResponse> => {
     const response = await apiClient.post<ApiResponse<CheckoutResponse>>(
       SUBSCRIPTION_ENDPOINTS.CHECKOUT,
@@ -58,9 +51,6 @@ export const subscriptionService = {
     return response.data;
   },
 
-  /**
-   * Get payment history
-   */
   getPayments: async (): Promise<GetPaymentsResponse> => {
     const response = await apiClient.get<ApiResponse<GetPaymentsResponse>>(
       SUBSCRIPTION_ENDPOINTS.PAYMENTS,
@@ -68,9 +58,6 @@ export const subscriptionService = {
     return response.data;
   },
 
-  /**
-   * Cancel subscription (remains active until end date)
-   */
   cancelSubscription: async (): Promise<GetSubscriptionResponse> => {
     const response = await apiClient.post<ApiResponse<GetSubscriptionResponse>>(
       SUBSCRIPTION_ENDPOINTS.CANCEL,
@@ -78,9 +65,6 @@ export const subscriptionService = {
     return response.data;
   },
 
-  /**
-   * Toggle auto-renew setting
-   */
   toggleAutoRenew: async (
     data: AutoRenewRequest,
   ): Promise<GetSubscriptionResponse> => {
@@ -90,9 +74,6 @@ export const subscriptionService = {
     return response.data;
   },
 
-  /**
-   * Manual renew - creates new checkout for existing plan
-   */
   renewSubscription: async (): Promise<CheckoutResponse> => {
     const response = await apiClient.post<ApiResponse<CheckoutResponse>>(
       SUBSCRIPTION_ENDPOINTS.RENEW,
