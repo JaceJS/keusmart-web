@@ -1,17 +1,41 @@
 "use client";
 
+import { useState } from "react";
 import {
   CurrentPlanCard,
   PlanSelector,
+  BillingHistory,
+  BillingCycleToggle,
+  SubscriptionSettings,
+  SubscriptionStatusBanner,
   useCurrentSubscription,
+  useMidtransCheckout,
+  BillingCycle,
 } from "@/features/subscriptions";
+import { useAuth } from "@/features/auth";
 
 export default function BillingPage() {
-  const { subscription, isUpgrading, upgradePlan } = useCurrentSubscription();
+  const { subscription, refetch } = useCurrentSubscription();
+  const { refreshSession } = useAuth();
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
 
-  const handleSelectPlan = async (planId: string) => {
-    const success = await upgradePlan(planId);
-    if (success) {
+  const { checkout, isLoading: isCheckingOut } = useMidtransCheckout({
+    onSuccess: async () => {
+      await refetch();
+      await refreshSession();
+    },
+    onPending: async () => {
+      await refetch();
+    },
+  });
+
+  const handleSelectPlan = (planId: string) => {
+    checkout(planId, billingCycle);
+  };
+
+  const handleRenew = () => {
+    if (subscription?.planId) {
+      checkout(subscription.planId, billingCycle);
     }
   };
 
@@ -33,20 +57,33 @@ export default function BillingPage() {
         </p>
       </div>
 
+      {/* Status Banner */}
+      <SubscriptionStatusBanner
+        onUpgrade={scrollToPlanSelector}
+        onRenew={handleRenew}
+      />
+
       {/* Current Plan */}
       <CurrentPlanCard
         onUpgradeClick={scrollToPlanSelector}
         currentUsers={subscription?.usage?.users || 1}
-        // currentOutlets={1} // TODO: Get from API
       />
 
+      {/* Subscription Settings */}
+      <SubscriptionSettings onRenew={handleRenew} />
+
       {/* Plan Selector */}
-      <div id="plan-selector">
+      <div id="plan-selector" className="space-y-4">
+        <BillingCycleToggle value={billingCycle} onChange={setBillingCycle} />
         <PlanSelector
-          isUpgrading={isUpgrading}
+          isUpgrading={isCheckingOut}
+          billingCycle={billingCycle}
           onSelectPlan={handleSelectPlan}
         />
       </div>
+
+      {/* Payment History */}
+      <BillingHistory />
     </div>
   );
 }

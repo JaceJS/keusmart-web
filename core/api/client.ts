@@ -5,7 +5,6 @@ import { planConfigUtils } from "@/features/auth/utils/planConfig.utils";
 
 const API_BASE_URL = config.api.baseUrl;
 
-// Exported types for services to use
 export interface PaginatedMeta {
   page: number;
   limit: number;
@@ -19,7 +18,6 @@ export interface ApiResponse<T = unknown> {
   meta?: PaginatedMeta;
 }
 
-// Helper type for paginated responses after extraction
 export interface PaginatedResponse<T> {
   data: T[];
   meta: PaginatedMeta;
@@ -237,6 +235,17 @@ class ApiClient {
   private async unwrapResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
       const errorBody = await response.json().catch(() => ({}));
+
+      // Handle 403 subscription expired (freeze mode)
+      if (
+        response.status === 403 &&
+        errorBody.code === "SUBSCRIPTION_EXPIRED"
+      ) {
+        if (typeof window !== "undefined") {
+          window.location.href = "/settings/billing?expired=true";
+        }
+      }
+
       throw new ApiError(
         errorBody.message || "An error occurred",
         response.status,
